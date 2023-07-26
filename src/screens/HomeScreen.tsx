@@ -1,14 +1,10 @@
 import { StyleSheet, Text, View, Button } from "react-native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-interface HomeScreenProps {
-  navigation: NativeStackNavigationProp<any>;
-}
-
-export function HomeScreen({ navigation }: HomeScreenProps) {
+export function HomeScreen() {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>Home Screen</Text>
     </View>
   );
 }
@@ -16,8 +12,10 @@ export function HomeScreen({ navigation }: HomeScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  text: {
+    color: "#fff",
   },
 });
