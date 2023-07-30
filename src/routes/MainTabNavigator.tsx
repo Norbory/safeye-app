@@ -19,7 +19,7 @@ const MainTabNavigator = () => {
         tabBarShowLabel: false,
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#1FFFA9",
+          backgroundColor: "#42B6E6",
           borderTopRightRadius: 30,
           borderTopLeftRadius: 30,
         },
@@ -37,7 +37,7 @@ const MainTabNavigator = () => {
               style={[
                 styles.tabIconContainer,
                 {
-                  backgroundColor: focused ? "#1FFFA9" : "transparent",
+                  backgroundColor: focused ? "#42B6E6" : "transparent",
                   marginTop: focused ? -45 : 0,
                 },
               ]}
@@ -60,7 +60,7 @@ const MainTabNavigator = () => {
               style={[
                 styles.tabIconContainer,
                 {
-                  backgroundColor: focused ? "#1FFFA9" : "transparent",
+                  backgroundColor: focused ? "#42B6E6" : "transparent",
                   marginTop: focused ? -45 : 0,
                 },
               ]}
@@ -83,7 +83,7 @@ const MainTabNavigator = () => {
               style={[
                 styles.tabIconContainer,
                 {
-                  backgroundColor: focused ? "#1FFFA9" : "transparent",
+                  backgroundColor: focused ? "#42B6E6" : "transparent",
                   marginTop: focused ? -45 : 0,
                 },
               ]}
@@ -106,7 +106,7 @@ const MainTabNavigator = () => {
               style={[
                 styles.tabIconContainer,
                 {
-                  backgroundColor: focused ? "#1FFFA9" : "transparent",
+                  backgroundColor: focused ? "#42B6E6" : "transparent",
                   marginTop: focused ? -45 : 0,
                 },
               ]}
@@ -129,7 +129,7 @@ const MainTabNavigator = () => {
               style={[
                 styles.tabIconContainer,
                 {
-                  backgroundColor: focused ? "#1FFFA9" : "transparent",
+                  backgroundColor: focused ? "#42B6E6" : "transparent",
                   marginTop: focused ? -45 : 0,
                 },
               ]}
