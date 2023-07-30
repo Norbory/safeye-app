@@ -39,7 +39,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
       <Circle3 keyboardOpen={keyboardOpen} />
       <LogoTitle keyboardOpen={keyboardOpen} />
       <Image
-        source={require("../../assets/logo.png")}
+        source={require("../../assets/isotipo.png")}
         style={keyboardOpen ? styles.hidden : styles.image}
       />
       <View
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     height: 260,
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#1FFFA9",
+    backgroundColor: "#42B6E6",
     paddingVertical: 20,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 20,
     justifyContent: "center",
-    backgroundColor: "#1FFFA9",
+    backgroundColor: "#42B6E6",
     paddingVertical: 20,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -148,15 +148,10 @@ function LogoTitle({ keyboardOpen }: { keyboardOpen: boolean }) {
       style={
         keyboardOpen
           ? { flexDirection: "row", marginTop: "10%", marginLeft: "5%" }
-          : { flexDirection: "row", marginTop: "50%", marginLeft: "5%" }
+          : { flexDirection: "row", marginTop: "65%", marginLeft: "5%" }
       }
     >
-      <Text style={{ fontSize: 60, fontWeight: "bold", color: "#1FFFA9" }}>
-        SAF
-      </Text>
-      <Text style={{ fontSize: 60, fontWeight: "bold", color: "#FFF" }}>
-        EYE
-      </Text>
+      <Image source={require("../../assets/logotipo.png")} />
     </View>
   );
 }
@@ -175,7 +170,7 @@ function Circle1({ keyboardOpen }: { keyboardOpen: boolean }) {
               borderRadius: 30,
               backgroundColor: "#2182AB",
               position: "absolute",
-              top: 190,
+              top: 220,
               left: -11,
             }
       }
@@ -219,7 +214,7 @@ function Circle3({ keyboardOpen }: { keyboardOpen: boolean }) {
               borderRadius: 100,
               backgroundColor: "#2182AB",
               position: "absolute",
-              top: 65,
+              top: 60,
               right: -55,
             }
       }
