@@ -2,30 +2,6 @@ import React from "react";
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-// interface UserInfoProps {
-//   username: string;
-//   isActive: boolean;
-//   profileImage: any;
-// }
-
-// const UserInfoComponent: React.FC<UserInfoProps> = ({
-//   username,
-//   isActive,
-//   profileImage,
-// }) => {
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.usernameText}>{username}</Text>
-//       {isActive && (
-//         <View style={styles.activeContainer}>
-//           <Ionicons name="checkmark-circle" color="#1FFFA9" size={20} />
-//           <Text style={styles.activeText}>Active</Text>
-//         </View>
-//       )}
-//       <Image source={profileImage} style={styles.profileImage} />
-//     </View>
-//   );
-// };
 export type Props = {
     username: string;
     isActive: boolean;
@@ -54,12 +30,12 @@ const UserInfoComponent: React.FC<Props> = ({
     const styles = StyleSheet.create({
         container: {
           position: "absolute",
-          top: 20,
-          left: 0,
+          top: 30,
+          left: 5,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#252525",
+          // backgroundColor: "#252525",
           padding: 10,
         },
         container1: {

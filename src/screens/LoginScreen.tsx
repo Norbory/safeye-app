@@ -8,7 +8,9 @@ import {
   Image,
   Keyboard,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface LoginScreenProps {
   navigation: NativeStackNavigationProp<any>;
@@ -34,14 +36,11 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
 
   return (
     <View style={styles.container}>
-      <Circle1 keyboardOpen={keyboardOpen} />
-      <Circle2 keyboardOpen={keyboardOpen} />
-      <Circle3 keyboardOpen={keyboardOpen} />
       <LogoTitle keyboardOpen={keyboardOpen} />
-      <Image
+      {/* <Image
         source={require("../../assets/isotipo.png")}
         style={keyboardOpen ? styles.hidden : styles.image}
-      />
+      /> */}
       <View
         style={
           keyboardOpen
@@ -52,7 +51,17 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
         <Text style={styles.welcomeText}>Bienvenido</Text>
         <View style={styles.inputContainer}>
           <TextInput style={styles.input} placeholder="Usuario" />
-          <TextInput style={styles.input} placeholder="Contraseña" />
+          <TextInput style={styles.input} placeholder="Contraseña" secureTextEntry={true}/>
+          <Ionicons name="person" size={20} color="#49B4CB" style={
+            keyboardOpen
+              ? styles.hidden
+              : styles.icon
+            } />
+          <Ionicons name="lock-closed" size={20} color="#49B4CB" style={
+            keyboardOpen
+            ? styles.hidden
+            : styles.icon1
+          } />
         </View>
         <Pressable
           style={styles.button}
@@ -62,7 +71,14 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
         </Pressable>
         <Text style={styles.helpText}>Por favor complete todos los campos</Text>
       </View>
+      <LinearGradient
+        colors={["#2474B0", "white"]}
+        style={styles.gradient}
+        start={{ x: 0.5, y: 0.2 }} 
+        end={{ x: 0.5, y: 0.8 }}   
+      />
     </View>
+    
   );
 }
 
@@ -118,11 +134,11 @@ const styles = StyleSheet.create({
   input: {
     width: "80%",
     height: 40,
-    paddingLeft: 20,
+    paddingLeft: 42,
     backgroundColor: "#fff",
     fontWeight: "bold",
     fontSize: 18,
-    borderRadius: 5,
+    borderRadius: 10,
   },
   button: {
     width: 150,
@@ -140,6 +156,24 @@ const styles = StyleSheet.create({
   hidden: {
     display: "none",
   },
+  icon: {
+    position: "absolute",
+    left: 50,
+    top: 10,
+  },
+ icon1: {
+   position: "absolute",
+   left: 50,
+   top:54,
+ },
+ logo:{
+    width:300,
+    height: "50%"
+ },
+ gradient: {
+  ...StyleSheet.absoluteFillObject,
+  zIndex: -1,
+  },
 });
 
 function LogoTitle({ keyboardOpen }: { keyboardOpen: boolean }) {
@@ -147,77 +181,15 @@ function LogoTitle({ keyboardOpen }: { keyboardOpen: boolean }) {
     <View
       style={
         keyboardOpen
-          ? { flexDirection: "row", marginTop: "10%", marginLeft: "5%" }
-          : { flexDirection: "row", marginTop: "65%", marginLeft: "5%" }
+          ? {marginTop:"5%", marginLeft:"10%"}
+          : {marginTop:"60%", marginLeft:"10%"}
       }
     >
-      <Image source={require("../../assets/logotipo.png")} />
+      <Image 
+        source={require("../../assets/logotipo.png") }
+        style = {[styles.logo]}
+        resizeMode="contain"
+      />
     </View>
-  );
-}
-
-function Circle1({ keyboardOpen }: { keyboardOpen: boolean }) {
-  return (
-    <View
-      style={
-        keyboardOpen
-          ? {
-              display: "none",
-            }
-          : {
-              width: 60,
-              height: 60,
-              borderRadius: 30,
-              backgroundColor: "#2182AB",
-              position: "absolute",
-              top: 220,
-              left: -11,
-            }
-      }
-    />
-  );
-}
-
-function Circle2({ keyboardOpen }: { keyboardOpen: boolean }) {
-  return (
-    <View
-      style={
-        keyboardOpen
-          ? {
-              display: "none",
-            }
-          : {
-              width: 100,
-              height: 100,
-              borderRadius: 50,
-              backgroundColor: "#2182AB",
-              position: "absolute",
-              top: 60,
-              left: 75,
-            }
-      }
-    />
-  );
-}
-
-function Circle3({ keyboardOpen }: { keyboardOpen: boolean }) {
-  return (
-    <View
-      style={
-        keyboardOpen
-          ? {
-              display: "none",
-            }
-          : {
-              width: 200,
-              height: 200,
-              borderRadius: 100,
-              backgroundColor: "#2182AB",
-              position: "absolute",
-              top: 60,
-              right: -55,
-            }
-      }
-    />
   );
 }

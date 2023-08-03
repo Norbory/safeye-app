@@ -15,14 +15,13 @@ const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
   return (
-<<<<<<< HEAD
       <View style={{ flex: 1 }}>
         {<Tab.Navigator
           screenOptions={{
             tabBarShowLabel: false,
             headerShown: false,
             tabBarStyle: {
-              backgroundColor: "#42B6E6",
+              backgroundColor: "#49B4CB",
               borderTopRightRadius: 30,
               borderTopLeftRadius: 30,
             },
@@ -40,7 +39,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#42B6E6" : "transparent",
+                      backgroundColor: focused ? "#49B4CB" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -63,7 +62,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#42B6E6" : "transparent",
+                      backgroundColor: focused ? "#49B4CB" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -86,7 +85,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#42B6E6" : "transparent",
+                      backgroundColor: focused ? "#49B4CB" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -109,7 +108,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#42B6E6" : "transparent",
+                      backgroundColor: focused ? "#49B4CB" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -132,7 +131,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#42B6E6" : "transparent",
+                      backgroundColor: focused ? "#49B4CB" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -152,138 +151,6 @@ const MainTabNavigator = () => {
           isActive={true}
         />
       </View>
-=======
-    <Tab.Navigator
-      screenOptions={{
-        tabBarShowLabel: false,
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor: "#42B6E6",
-          borderTopRightRadius: 30,
-          borderTopLeftRadius: 30,
-        },
-        tabBarActiveTintColor: "#000",
-        tabBarInactiveTintColor: "#000",
-      }}
-      initialRouteName="Home"
-    >
-      <Tab.Screen
-        name="Support"
-        component={SupportScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <View
-              style={[
-                styles.tabIconContainer,
-                {
-                  backgroundColor: focused ? "#42B6E6" : "transparent",
-                  marginTop: focused ? -45 : 0,
-                },
-              ]}
-            >
-              <Ionicons
-                name="help-buoy"
-                color={color}
-                size={focused ? size + 15 : size}
-              />
-            </View>
-          ),
-        }}
-      ></Tab.Screen>
-      <Tab.Screen
-        name="Daily"
-        component={DailyScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <View
-              style={[
-                styles.tabIconContainer,
-                {
-                  backgroundColor: focused ? "#42B6E6" : "transparent",
-                  marginTop: focused ? -45 : 0,
-                },
-              ]}
-            >
-              <Ionicons
-                name="clipboard"
-                color={color}
-                size={focused ? size + 15 : size}
-              />
-            </View>
-          ),
-        }}
-      ></Tab.Screen>
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <View
-              style={[
-                styles.tabIconContainer,
-                {
-                  backgroundColor: focused ? "#42B6E6" : "transparent",
-                  marginTop: focused ? -45 : 0,
-                },
-              ]}
-            >
-              <Ionicons
-                name="home"
-                color={color}
-                size={focused ? size + 15 : size}
-              />
-            </View>
-          ),
-        }}
-      ></Tab.Screen>
-      <Tab.Screen
-        name="Incidents"
-        component={IncidentsScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <View
-              style={[
-                styles.tabIconContainer,
-                {
-                  backgroundColor: focused ? "#42B6E6" : "transparent",
-                  marginTop: focused ? -45 : 0,
-                },
-              ]}
-            >
-              <Ionicons
-                name="alert-circle"
-                color={color}
-                size={focused ? size + 15 : size}
-              />
-            </View>
-          ),
-        }}
-      ></Tab.Screen>
-      <Tab.Screen
-        name="Statistics"
-        component={StatisticsScreen}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <View
-              style={[
-                styles.tabIconContainer,
-                {
-                  backgroundColor: focused ? "#42B6E6" : "transparent",
-                  marginTop: focused ? -45 : 0,
-                },
-              ]}
-            >
-              <Ionicons
-                name="stats-chart"
-                color={color}
-                size={focused ? size + 15 : size}
-              />
-            </View>
-          ),
-        }}
-      ></Tab.Screen>
-    </Tab.Navigator>
->>>>>>> feature/support-screen
   );
 };
 
