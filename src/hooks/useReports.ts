@@ -10,7 +10,10 @@ export default function useReports() {
     const response = await axios.get(
       `${serverUrl}/api/reports/641631458381e6dbffdc3c51`
     );
-    const reports = response.data;
+    const reports = response.data.map((report: Report) => ({
+      ...report,
+      time: new Date(report.time),
+    }));
 
     setReports(reports);
   };
