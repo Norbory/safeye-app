@@ -84,10 +84,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   buttonContainer: {
-    width: "100%",
+    width: "90%",
+    alignSelf: "center",
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 20,
+    paddingTop: 40,
     flexDirection: "row",
   },
   button: {
