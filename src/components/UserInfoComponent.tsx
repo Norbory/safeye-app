@@ -35,15 +35,10 @@ const UserInfoComponent: React.FC<Props> = ({
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
-          // backgroundColor: "#252525",
           padding: 10,
         },
         container1: {
             flexDirection: "column",
-            // alignItems: "center",
-            // justifyContent: "center",
-            // backgroundColor: "#252525",
-            // padding: 10,
           },
         usernameText: {
           color: "#fff",
