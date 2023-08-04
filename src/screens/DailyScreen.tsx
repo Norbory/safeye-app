@@ -1,44 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
-import axios from "axios";
+import useReports from "../hooks/useReports";
+import { Report } from "../types";
 
 export function DailyScreen() {
-  interface Report {
-    _id: string;
-    company_id: string;
-    epp: string;
-    place: string;
-    time: string;
-    admonished: boolean;
-    supervisor: string;
-  }
-
-  const useReports = () => {
-    const [reports, setReports] = useState<Report[]>([]);
-    const serverUrl = "http://192.168.1.5:3000";
-
-    const fetchReports = async () => {
-      const response = await axios.get(
-        `${serverUrl}/api/reports/641631458381e6dbffdc3c51`
-      );
-      const reports = response.data;
-
-      setReports(reports);
-    };
-
-    useEffect(() => {
-      fetchReports();
-    }, []);
-
-    useEffect(() => {
-      console.log(reports);
-    }, [reports]);
-
-    return reports;
-  };
-
-  const reportList = useReports();
-  const firstReport = reportList.length > 0 ? reportList[0] : null;
+  const { reportList } = useReports();
 
   return (
     <View style={styles.container}>
