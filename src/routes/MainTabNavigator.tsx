@@ -147,7 +147,7 @@ const MainTabNavigator = () => {
           ></Tab.Screen>
         </Tab.Navigator>}
         <UserInfoComponent
-          username="Luis Lopez"
+          username="Luis"
           isActive={true}
         />
       </View>

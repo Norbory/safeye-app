@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
+import { View, Text, Image, StyleSheet} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export type Props = {
@@ -13,16 +13,14 @@ const UserInfoComponent: React.FC<Props> = ({
     }) => {
     return(
         <View style={styles.container}>
-            <Image source={require('../../assets/monito.jpg')} style={styles.profileImage} />
             <View style={styles.container1}>
-                <Text style={styles.usernameText}>{username}</Text>
-                {isActive && (
-                    <View style={styles.activeContainer}>
-                    <Ionicons name="checkmark-circle" color="#1FFFA9" size={20} />
-                    <Text style={styles.activeText}>Active</Text>
-                    </View>
-                )}
+                <Text style={styles.usernameText}>Hola, {username}</Text>
+                  <View style={styles.activeContainer}>
+                  <Ionicons name="ellipse" color={isActive ? "#1FFFA9" : "#F44343"} size={15} />
+                  <Text style={styles.activeText}>{isActive ? "conectado" : "desconectado"}</Text>
+                  </View>
             </View>
+            <Image source={require('../../assets/monito.jpg')} style={styles.profileImage} />
         </View>
     );
     };
@@ -30,8 +28,8 @@ const UserInfoComponent: React.FC<Props> = ({
     const styles = StyleSheet.create({
         container: {
           position: "absolute",
-          top: 30,
-          left: 5,
+          top: 40,
+          right: 15,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
@@ -39,27 +37,35 @@ const UserInfoComponent: React.FC<Props> = ({
         },
         container1: {
             flexDirection: "column",
+            marginRight:10,
           },
         usernameText: {
           color: "#fff",
-          fontSize: 14,
+          fontSize: 22,
           fontWeight: "bold",
           marginLeft: 10,
+          textShadowColor: "black",
+          textShadowOffset: { width: -1, height: 1 },
+          textShadowRadius: 1,
         },
         activeContainer: {
           flexDirection: "row",
           alignItems: "center",
+          justifyContent:"flex-end",
           marginLeft: 10,
         },
         activeText: {
           fontSize: 12,
-          color: "#1FFFA9",
+          color: "#F1FAEE",
           marginLeft: 5,
+          textShadowColor: "black",
+          textShadowOffset: { width: -1, height: 1 },
+          textShadowRadius: 1,
         },
         profileImage: {
-          width: 30,
-          height: 30,
-          borderRadius: 15,
+          width: 40,
+          height: 40,
+          borderRadius: 20,
         },
       });
 
