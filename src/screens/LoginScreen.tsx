@@ -44,7 +44,7 @@ export function LoginScreen() {
       signIn(
         {
           name: (await res).data.name,
-          lastName: (await res).data.lastName,
+          lastName: (await res).data.last,
           email: (await res).data.email,
         },
         (await res).headers["auth-token"],
