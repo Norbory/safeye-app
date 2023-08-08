@@ -7,11 +7,11 @@ import { useAuth } from "../hooks/useAuth";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-  const { isSignIn } = useAuth();
+  const { token } = useAuth();
 
   return (
     <Stack.Navigator initialRouteName="Login">
-      {isSignIn ? (
+      {token !== null ? (
         <Stack.Screen
           name="MainTabs"
           component={MainTabNavigator}

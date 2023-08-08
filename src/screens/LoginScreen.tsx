@@ -11,9 +11,12 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
 
 export function LoginScreen() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const { signIn } = useAuth();
 
   useEffect(() => {
@@ -31,6 +34,27 @@ export function LoginScreen() {
     };
   }, []);
 
+  const handleLogin = async () => {
+    try {
+      const res = axios.post("http://192.168.1.5:3000/api/signin", {
+        username,
+        password,
+      });
+      console.log(`Hola ${(await res).data.name}`);
+      signIn(
+        {
+          name: (await res).data.name,
+          lastName: (await res).data.lastName,
+          email: (await res).data.email,
+        },
+        (await res).headers["auth-token"],
+        (await res).data.company
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <LogoTitle keyboardOpen={keyboardOpen} />
@@ -47,11 +71,16 @@ export function LoginScreen() {
       >
         <Text style={styles.welcomeText}>Bienvenido</Text>
         <View style={styles.inputContainer}>
-          <TextInput style={styles.input} placeholder="Usuario" />
+          <TextInput
+            style={styles.input}
+            placeholder="Usuario"
+            onChange={(e) => setUsername(e.nativeEvent.text)}
+          />
           <TextInput
             style={styles.input}
             placeholder="Contraseña"
             secureTextEntry={true}
+            onChange={(e) => setPassword(e.nativeEvent.text)}
           />
           <Ionicons
             name="person"
@@ -66,7 +95,7 @@ export function LoginScreen() {
             style={keyboardOpen ? styles.hidden : styles.icon1}
           />
         </View>
-        <Pressable style={styles.button} onPress={() => signIn()}>
+        <Pressable style={styles.button} onPress={() => handleLogin()}>
           <Text style={styles.buttonText}>ENTRAR</Text>
         </Pressable>
         <Text style={styles.helpText}>Por favor complete todos los campos</Text>
