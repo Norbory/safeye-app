@@ -10,13 +10,16 @@ import {
   SupportScreen,
 } from "../screens";
 import UserInfoComponent from "../components/UserInfoComponent";
+import { useAuth } from "../hooks/useAuth";
 
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
+  const { user } = useAuth();
   return (
-      <View style={{ flex: 1 }}>
-        {<Tab.Navigator
+    <View style={{ flex: 1 }}>
+      {
+        <Tab.Navigator
           screenOptions={{
             tabBarShowLabel: false,
             headerShown: false,
@@ -145,12 +148,13 @@ const MainTabNavigator = () => {
               ),
             }}
           ></Tab.Screen>
-        </Tab.Navigator>}
-        <UserInfoComponent
-          username="Luis Lopez"
-          isActive={true}
-        />
-      </View>
+        </Tab.Navigator>
+      }
+      <UserInfoComponent
+        username={`${user.name} ${user.lastName}`}
+        isActive={true}
+      />
+    </View>
   );
 };
 

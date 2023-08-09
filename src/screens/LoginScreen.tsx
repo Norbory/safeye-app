@@ -9,15 +9,15 @@ import {
   Keyboard,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
+import { useAuth } from "../hooks/useAuth";
+import axios from "axios";
 
-interface LoginScreenProps {
-  navigation: NativeStackNavigationProp<any>;
-}
-
-export function LoginScreen({ navigation }: LoginScreenProps) {
+export function LoginScreen() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const { signIn } = useAuth();
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -33,6 +33,27 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
       keyboardDidShowListener.remove();
     };
   }, []);
+
+  const handleLogin = async () => {
+    try {
+      const res = axios.post("http://192.168.1.5:3000/api/signin", {
+        username,
+        password,
+      });
+      console.log(`Hola ${(await res).data.name}`);
+      signIn(
+        {
+          name: (await res).data.name,
+          lastName: (await res).data.last,
+          email: (await res).data.email,
+        },
+        (await res).headers["auth-token"],
+        (await res).data.company
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -50,23 +71,31 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
       >
         <Text style={styles.welcomeText}>Bienvenido</Text>
         <View style={styles.inputContainer}>
-          <TextInput style={styles.input} placeholder="Usuario" />
-          <TextInput style={styles.input} placeholder="Contraseña" secureTextEntry={true}/>
-          <Ionicons name="person" size={20} color="#49B4CB" style={
-            keyboardOpen
-              ? styles.hidden
-              : styles.icon
-            } />
-          <Ionicons name="lock-closed" size={20} color="#49B4CB" style={
-            keyboardOpen
-            ? styles.hidden
-            : styles.icon1
-          } />
+          <TextInput
+            style={styles.input}
+            placeholder="Usuario"
+            onChange={(e) => setUsername(e.nativeEvent.text)}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Contraseña"
+            secureTextEntry={true}
+            onChange={(e) => setPassword(e.nativeEvent.text)}
+          />
+          <Ionicons
+            name="person"
+            size={20}
+            color="#49B4CB"
+            style={keyboardOpen ? styles.hidden : styles.icon}
+          />
+          <Ionicons
+            name="lock-closed"
+            size={20}
+            color="#49B4CB"
+            style={keyboardOpen ? styles.hidden : styles.icon1}
+          />
         </View>
-        <Pressable
-          style={styles.button}
-          onPress={() => navigation.navigate("MainTabs")}
-        >
+        <Pressable style={styles.button} onPress={() => handleLogin()}>
           <Text style={styles.buttonText}>ENTRAR</Text>
         </Pressable>
         <Text style={styles.helpText}>Por favor complete todos los campos</Text>
@@ -74,11 +103,10 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
       <LinearGradient
         colors={["#2474B0", "white"]}
         style={styles.gradient}
-        start={{ x: 0.5, y: 0.2 }} 
-        end={{ x: 0.5, y: 0.8 }}   
+        start={{ x: 0.5, y: 0.2 }}
+        end={{ x: 0.5, y: 0.8 }}
       />
     </View>
-    
   );
 }
 
@@ -161,18 +189,18 @@ const styles = StyleSheet.create({
     left: 50,
     top: 10,
   },
- icon1: {
-   position: "absolute",
-   left: 50,
-   top:54,
- },
- logo:{
-    width:300,
-    height: "50%"
- },
- gradient: {
-  ...StyleSheet.absoluteFillObject,
-  zIndex: -1,
+  icon1: {
+    position: "absolute",
+    left: 50,
+    top: 54,
+  },
+  logo: {
+    width: 300,
+    height: "50%",
+  },
+  gradient: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: -1,
   },
 });
 
@@ -181,13 +209,13 @@ function LogoTitle({ keyboardOpen }: { keyboardOpen: boolean }) {
     <View
       style={
         keyboardOpen
-          ? {marginTop:"5%", marginLeft:"10%"}
-          : {marginTop:"60%", marginLeft:"10%"}
+          ? { marginTop: "5%", marginLeft: "10%" }
+          : { marginTop: "60%", marginLeft: "10%" }
       }
     >
-      <Image 
-        source={require("../../assets/logotipo.png") }
-        style = {[styles.logo]}
+      <Image
+        source={require("../../assets/logotipo.png")}
+        style={[styles.logo]}
         resizeMode="contain"
       />
     </View>
