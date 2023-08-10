@@ -1,8 +1,7 @@
 import React from "react";
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import AppLoading from 'expo-app-loading';
-import { useFonts, Poppins_800ExtraBold } from "@expo-google-fonts/poppins";
+import { useFonts } from 'expo-font';
 
 interface CardProps {
   backgroundImage: string;
@@ -11,37 +10,20 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ backgroundImage, onGreenButtonPress, onRedButtonPress}) => {
-  const [fontsLoaded] = useFonts({ Poppins_800ExtraBold });
-
+  const [fontsLoaded] = useFonts({
+    'Poppins-Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+  });
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return null;
   }
 
   return (
     <View style={[styles.card, {backgroundColor:"#cbcdd1"}]}>
       <ImageBackground source={{ uri: backgroundImage }} resizeMode="stretch" style={styles.image} imageStyle={styles.cardImage}></ImageBackground>
       <View style={styles.letras}>
-        <Text style={styles.texto}>
-        {fontsLoaded ? (
-        <Text style={{ fontFamily: "Poppins_800ExtraBold" }}>Sala de maquinas</Text>
-      ) : (
-        "Sala de maquinas"
-      )}
-        </Text>
-        <Text style={styles.texto}>
-        {fontsLoaded ? (
-        <Text style={{ fontFamily: "Poppins_800ExtraBold" }}>Casco</Text>
-      ) : (
-        "Casco"
-      )}
-        </Text>
-        <Text style={styles.texto} >
-        {fontsLoaded ? (
-        <Text style={{ fontFamily: "Poppins_800ExtraBold" }}>18:00</Text>
-      ) : (
-        "18:00"
-      )}
-        </Text>
+        <Text style={styles.texto}>Sala de maquinas</Text>
+        <Text style={styles.texto}>Casco</Text>
+        <Text style={styles.texto}>18:00</Text>
       </View>
       <View style={styles.data}>
         <TouchableOpacity
@@ -106,6 +88,7 @@ const styles = StyleSheet.create({
     borderRadius:10,
   },
   texto:{
+    fontFamily:"Poppins-Bold",
     color:"#F1FAEE",
     fontSize: 18,
     textShadowColor: "black",

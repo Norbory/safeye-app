@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useFonts } from 'expo-font';
 
 export type Props = {
     username: string;
@@ -11,6 +12,12 @@ const UserInfoComponent: React.FC<Props> = ({
     username,
     isActive,
     }) => {
+      const [fontsLoaded] = useFonts({
+        'Poppins-Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+      });
+      if (!fontsLoaded) {
+        return null;
+      }
     return(
         <View style={styles.container}>
             <View style={styles.container1}>
@@ -40,6 +47,7 @@ const UserInfoComponent: React.FC<Props> = ({
             marginRight:10,
           },
         usernameText: {
+          fontFamily:"Poppins-Bold",
           color: "#fff",
           fontSize: 22,
           fontWeight: "bold",
@@ -55,6 +63,7 @@ const UserInfoComponent: React.FC<Props> = ({
           marginLeft: 10,
         },
         activeText: {
+          fontFamily:"Poppins-Bold",
           fontSize: 12,
           color: "#F1FAEE",
           marginLeft: 5,
