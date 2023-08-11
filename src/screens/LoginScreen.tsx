@@ -13,11 +13,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 
+import { BASE_URL } from "../config";
+import { getSocket } from "../socket";
+
 export function LoginScreen() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
   const { signIn } = useAuth();
+  const socket = getSocket();
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -36,7 +41,7 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const res = axios.post("http://192.168.1.5:3000/api/signin", {
+      const res = axios.post(`${BASE_URL}/api/signin`, {
         username,
         password,
       });
@@ -48,8 +53,9 @@ export function LoginScreen() {
           email: (await res).data.email,
         },
         (await res).headers["auth-token"],
-        (await res).data.company
+        (await res).data.company_id
       );
+      socket?.emit("login", (await res).data.company_id);
     } catch (error) {
       console.log(error);
     }
