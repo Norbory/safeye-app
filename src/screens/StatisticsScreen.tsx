@@ -1,8 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import { 
   StyleSheet, 
-  StatusBar, 
-  Text, 
+  Button, 
+  View, 
   ScrollView 
 } from "react-native";
 import { 
@@ -16,6 +16,8 @@ import {
 } from 'victory-native';
 
 export function StatisticsScreen() {
+  const [selectedLine, setSelectedLine] = useState("todas");
+
   // Datos para la tabla
   const data= [
     {
@@ -39,6 +41,10 @@ export function StatisticsScreen() {
       status:{aprobados: 2, descartados:2}
     }
   ];
+
+  const handleLineButtonClick = (line: any) => {
+    setSelectedLine(line);
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -87,15 +93,20 @@ export function StatisticsScreen() {
           />
         </VictoryStack>
       </VictoryChart>
-      <VictoryChart width={400} height={400}>
+      <View style={{ flexDirection: "row", justifyContent: "space-around", paddingTop:"5%"}}>
+        <Button title="Helmet" onPress={() => handleLineButtonClick("primera linea")}/>
+        <Button title="Gloves" onPress={() => handleLineButtonClick("segunda linea")} />
+        <Button title="All" onPress={() => handleLineButtonClick("todas")} />
+      </View>
+      <VictoryChart width={400} height={400} >
         <VictoryAxis
           label="Dia"
           style={{
-            axisLabel: { padding: 30, fill: "white" },
-            tickLabels: { fill: "white" },
+            axisLabel: { padding: 40, fill: "white" },
+            tickLabels: { fill: "white", padding: 20 },
             axis: { stroke: "white" },
           }}
-          tickLabelComponent={<VictoryLabel angle={-60} dy={5} dx={-10}/>}
+          tickLabelComponent={<VictoryLabel angle={-60} dy={8} dx={-8}/>}
         />
         <VictoryAxis dependentAxis
           style={{
@@ -108,87 +119,41 @@ export function StatisticsScreen() {
             data: { strokeWidth: 3, fillOpacity: 0.4 }
           }}
         >
+          {selectedLine === "primera linea" || selectedLine === "todas" ? (
           <VictoryArea
             style={{
               data: { fill: "cyan", stroke: "cyan" }
             }}
             data={[
-              { x: "Lunes", y: 2 },
-              { x: "Martes", y: 3 },
-              { x: "Miercoles", y: 5 },
-              { x: "Jueves", y: 4 },
-              { x: "Viernes", y: 7 },
-              { x: "Sabado", y: 7 },
-              { x: "Domingo", y: 4 }
+              { x: "Monday", y: 2 },
+              { x: "Tuesday", y: 3 },
+              { x: "Wednesday", y: 5 },
+              { x: "Thursday", y: 4 },
+              { x: "Friday", y: 7 },
+              { x: "Saturday", y: 7 },
+              { x: "Sunday", y: 4 }
             ]}
           />
+          ) : null}
+          {selectedLine === "segunda linea" || selectedLine === "todas" ? (
           <VictoryArea
             style={{
               data: { fill: "magenta", stroke: "magenta" }
             }}
             data={[
-              { x: "Lunes", y: 3 },
-              { x: "Martes", y: 2 },
-              { x: "Miercoles", y: 6 },
-              { x: "Jueves", y: 2 },
-              { x: "Viernes", y: 6 },
-              { x: "Sabado", y: 5 },
-              { x: "Domingo", y: 4 }
+              { x: "Monday", y: 3 },
+              { x: "Tuesday", y: 2 },
+              { x: "Wednesday", y: 6 },
+              { x: "Thursday", y: 2 },
+              { x: "Friday", y: 6 },
+              { x: "Saturday", y: 5 },
+              { x: "Sunday", y: 4 }
             ]}
           />
+          ) : null}
         </VictoryGroup>
       </VictoryChart>
-      <VictoryChart width={400} height={400}>
-        <VictoryAxis
-          label="Dia"
-          style={{
-            axisLabel: { padding: 100, fill: "white" },
-            tickLabels: { fill: "white" },
-            axis: { stroke: "white" },
-          }}
-          tickLabelComponent={<VictoryLabel angle={-60} dy={5} dx={-10}/>}
-        />
-        <VictoryAxis dependentAxis
-          style={{
-            tickLabels: { fill: "white" },
-            axis: { stroke: "white" }
-          }}
-        />
-        <VictoryGroup
-          style={{
-            data: { strokeWidth: 3, fillOpacity: 0.4 }
-          }}
-        >
-          <VictoryArea
-            style={{
-              data: { fill: "cyan", stroke: "cyan" }
-            }}
-            data={[
-              { x: "Lunes", y: 2 },
-              { x: "Martes", y: 3 },
-              { x: "Miercoles", y: 5 },
-              { x: "Jueves", y: 4 },
-              { x: "Viernes", y: 7 },
-              { x: "Sabado", y: 7 },
-              { x: "Domingo", y: 4 }
-            ]}
-          />
-          <VictoryArea
-            style={{
-              data: { fill: "magenta", stroke: "magenta" }
-            }}
-            data={[
-              { x: "Lunes", y: 3 },
-              { x: "Martes", y: 2 },
-              { x: "Miercoles", y: 6 },
-              { x: "Jueves", y: 2 },
-              { x: "Viernes", y: 6 },
-              { x: "Sabado", y: 5 },
-              { x: "Domingo", y: 4 }
-            ]}
-          />
-        </VictoryGroup>
-      </VictoryChart>
+      <View style={{height:40}}></View>
     </ScrollView>
   );
 }
@@ -196,6 +161,6 @@ export function StatisticsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight,
+    marginTop:"20%",
   },
 });
