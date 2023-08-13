@@ -1,27 +1,57 @@
-import React, { useEffect } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Report } from "../types";
 
 import { getSocket } from "../socket";
 
 export function HomeScreen() {
   const socket = getSocket();
-
-  // Reporte de prueba para el socket
-  const testReport = {
-    company_id: "test",
-    place: "Sala de Máquinas",
-    epp: "Casco",
-    time: Date(),
-  };
+  const [reports, setReports] = useState<Report[]>([]);
 
   useEffect(() => {
-    socket?.emit("incident", testReport);
-  }, []);
+    // Recibe los reportes del socket
+    const handleReport = (report: Report) => {
+      console.log(report);
+      setReports((prevReports) => [...prevReports, report]);
+    };
+
+    socket?.on("sendReport", handleReport);
+
+    return () => {
+      socket?.off("incident", handleReport);
+    };
+  }, [socket]);
+
+  // Renderiza los reportes recibidos
+  const renderReports = () => {
+    return reports.map((report, index) => {
+      const date = new Date(report.time);
+      const time = `${date.getHours()}:${String(date.getMinutes()).padStart(
+        2,
+        "0"
+      )}`;
+      return (
+        <Text style={styles.text} key={index}>
+          {index + 1}. {report.epp} - {time} - {report.place}
+        </Text>
+      );
+    });
+  };
 
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Home Screen</Text>
+      {
+        // Muestra los reportes recibidos
+        reports.length === 0 ? (
+          <Text style={styles.text}>No hay reportes</Text>
+        ) : (
+          <View>
+            <Text style={styles.text}>Reportes:</Text>
+            {renderReports()}
+          </View>
+        )
+      }
     </View>
   );
 }
