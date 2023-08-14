@@ -17,7 +17,7 @@ export function IncidentsScreen() {
           "0"
         )}`;
         return (
-          <Text style={styles.reportText} key={report._id}>
+          <Text style={styles.reportText} key={index}>
             {index + 1}. {report.epp} - {time} - {report.place}
           </Text>
         );
@@ -35,7 +35,7 @@ export function IncidentsScreen() {
           "0"
         )}`;
         return (
-          <Text style={styles.reportText} key={report._id}>
+          <Text style={styles.reportText} key={index}>
             {index + 1}. {report.epp} - {time} - {report.place}
           </Text>
         );

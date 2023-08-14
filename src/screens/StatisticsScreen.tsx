@@ -8,17 +8,19 @@ export function StatisticsScreen() {
   const socket = getSocket();
   // Reporte de prueba para el socket
   const testReport1 = {
-    company_id: "test",
+    company_id: "641631458381e6dbffdc3c51",
     place: "Sala de Máquinas",
     epp: "Casco",
     time: Date(),
+    supervisor: "64163171c5516d50663e1e8b",
   };
 
   const testReport2 = {
-    company_id: "test",
+    company_id: "641631458381e6dbffdc3c51",
     place: "Sala de Máquinas",
     epp: "Chaleco",
     time: Date(),
+    supervisor: "64163171c5516d50663e1e8b",
   };
 
   useEffect(() => {
