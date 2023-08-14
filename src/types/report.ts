@@ -4,5 +4,9 @@ export interface Report {
   place: string;
   time: Date;
   admonished: boolean;
-  supervisor: string;
+  supervisor: {
+    _id: string;
+    name: string;
+    surname: string;
+  };
 }

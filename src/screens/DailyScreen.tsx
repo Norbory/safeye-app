@@ -11,15 +11,16 @@ export function DailyScreen() {
       <Text style={styles.title}>Resumen de incidentes</Text>
       <ScrollView style={{ width: "100%", height: "100%" }}>
         {reportList.map((report: Report, index) => (
-          <View key={report._id} style={styles.reportContainer}>
+          <View key={index} style={styles.reportContainer}>
             <Text style={styles.reportTitle}>Incidente {index + 1}</Text>
             <Text style={styles.reportText}>Elemento: {report.epp}</Text>
             <Text style={styles.reportText}>Zona: {report.place}</Text>
             <Text style={styles.reportText}>
               Estado: {report.admonished ? "Amonestado" : "Descartado"}
             </Text>
-            <Text style={styles.reportText} key={report._id}>
-              Supervisor: {report.supervisor}
+            <Text style={styles.reportText}>
+              Supervisor:
+              {" " + report.supervisor?.name + " " + report.supervisor?.surname}
             </Text>
           </View>
         ))}
