@@ -12,7 +12,6 @@ export function StatisticsScreen() {
     place: "Sala de Máquinas",
     epp: "Casco",
     time: Date(),
-    supervisor: "64163171c5516d50663e1e8b",
   };
 
   const testReport2 = {
@@ -20,7 +19,6 @@ export function StatisticsScreen() {
     place: "Sala de Máquinas",
     epp: "Chaleco",
     time: Date(),
-    supervisor: "64163171c5516d50663e1e8b",
   };
 
   useEffect(() => {

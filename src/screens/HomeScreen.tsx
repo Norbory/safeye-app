@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
+import { useAuth } from "../hooks/useAuth";
 
 import { getSocket } from "../socket";
 
@@ -9,6 +10,7 @@ export function HomeScreen() {
   const socket = getSocket();
   const [reports, setReports] = useState<Report[]>([]);
   const { createReport } = useReports();
+  const { user } = useAuth();
 
   useEffect(() => {
     // Recibe los reportes del socket

@@ -48,6 +48,7 @@ export function LoginScreen() {
       console.log(`Hola ${(await res).data.name}`);
       signIn(
         {
+          _id: (await res).data._id,
           name: (await res).data.name,
           lastName: (await res).data.last,
           email: (await res).data.email,

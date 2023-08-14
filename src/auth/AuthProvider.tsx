@@ -3,6 +3,7 @@ import { AuthContext } from "./AuthContext";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState({
+    _id: "",
     name: "",
     lastName: "",
     email: "",
@@ -11,6 +12,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [company, setCompany] = useState("");
   const signIn = (
     user: {
+      _id: string;
       name: string;
       lastName: string;
       email: string;
@@ -24,6 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
   const signOut = () => {
     setUser({
+      _id: "",
       name: "",
       lastName: "",
       email: "",

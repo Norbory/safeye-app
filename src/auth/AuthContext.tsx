@@ -2,6 +2,7 @@ import { createContext } from "react";
 
 interface IAuthContextProps {
   user: {
+    _id: string;
     name: string;
     lastName: string;
     email: string;
@@ -10,6 +11,7 @@ interface IAuthContextProps {
   company: string;
   signIn: (
     user: {
+      _id: string;
       name: string;
       lastName: string;
       email: string;
@@ -22,6 +24,7 @@ interface IAuthContextProps {
 
 export const AuthContext = createContext<IAuthContextProps>({
   user: {
+    _id: "",
     name: "",
     lastName: "",
     email: "",

@@ -22,17 +22,19 @@ export default function useReports() {
 
   const createReport = async (report: Report) => {
     try {
-      const response = await axios.post(
-        `${serverUrl}/api/create-report`,
-        report
-      );
+      // Guardar el reporte en la base de datos con el id del usuario
+      console.log("ID del usuario:", user._id);
+      const response = await axios.post(`${serverUrl}/api/create-report`, {
+        ...report,
+        supervisor: user._id,
+      });
       const newReport = {
         ...response.data,
         time: new Date(response.data.time),
       };
       setReports([...reports, newReport]);
     } catch (error) {
-      console.log("Error al crear el reporte:", error);
+      console.log("Error al crear el reporte:", error, report);
     }
   };
 
