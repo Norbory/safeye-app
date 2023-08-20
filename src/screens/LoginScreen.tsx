@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
+import {LOGO} from "../constantes/images"
 
 export function LoginScreen() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -36,7 +37,7 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const res = axios.post("http://192.168.1.51:3000/api/signin", {
+      const res = axios.post("http://192.168.1.44:3000/api/signin", {
         username,
         password,
       });
@@ -214,7 +215,7 @@ function LogoTitle({ keyboardOpen }: { keyboardOpen: boolean }) {
       }
     >
       <Image
-        source={require("../../assets/logotipo.png")}
+        source={LOGO}
         style={[styles.logo]}
         resizeMode="contain"
       />

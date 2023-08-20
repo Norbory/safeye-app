@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import {StyleSheet, StatusBar, SafeAreaView, ScrollView, View, Text} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
+import {
+        DEFAULT_BACKGROUND_IMAGE,
+        ALTERNATE_BACKGROUND_IMAGE,
+        LAST_IMG,
+        LIST_CASO
+      } from "../constantes/images"
 // import EmptyCardImage from "../../assets/empty.png";
 
 export function HomeScreen() {
@@ -9,16 +15,38 @@ export function HomeScreen() {
   const [cardsData, setCardsData] = useState([
     {
       id: 1,
-      backgroundImage: "https://www.eloficial.ec/wp-content/uploads/2014/02/casco_s.png",
+      backgroundImage: DEFAULT_BACKGROUND_IMAGE,
+      zona:"Sala de maquinas",
+      epp:"CASCO",
+      tiempo:"18:00 p.m."
     },
     {
       id: 2,
-      backgroundImage: "https://prosinfer.com/wp-content/uploads/slider2/articulos-de-seguridad-industrial-lima-peru-minas-construccion-compressor.png",
+      backgroundImage: ALTERNATE_BACKGROUND_IMAGE,
+      zona:"Sala de quimicos",
+      epp:"CASCO",
+      tiempo:"20:24 p.m."
     },
   ]);
 
   const handleRedButtonPress = (id: number) => {
     const updatedCardsData = cardsData.filter((card) => card.id !== id);
+    setCardsData(updatedCardsData);
+  };
+
+  const handleImagePress = (id: number) => {
+    // Cambiar la imagen de fondo al presionar la carta
+    const updatedCardsData = cardsData.map((card) => {
+      if (card.id === id) {
+        // Cambiar la imagen de fondo aquí
+        return {
+          ...card,
+          backgroundImage: LIST_CASO[0], // Reemplaza NEW_IMAGE_URI por la nueva URI de la imagen
+        };
+      }
+      return card;
+    });
+
     setCardsData(updatedCardsData);
   };
 
@@ -31,13 +59,21 @@ export function HomeScreen() {
               backgroundImage={cardData.backgroundImage}
               onGreenButtonPress={() => {}}
               onRedButtonPress={() => handleRedButtonPress(cardData.id)}
+              onImagePress={() => {}}
+              zona={cardData.zona}
+              epp={cardData.epp}
+              tiempo={cardData.tiempo}
             />
           ))}
         {cardsData.length === 0 && (
           <Card
-              backgroundImage={"https://static.thenounproject.com/png/357658-200.png"}
+              backgroundImage={LAST_IMG}
               onGreenButtonPress={() => {}}
               onRedButtonPress={() => {}}
+              onImagePress={() => {}}
+              zona={""}
+              epp={""}
+              tiempo={""}
             />
         )}
         {cardsData.length > 0 && (

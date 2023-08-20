@@ -7,6 +7,8 @@ import {
       } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useFonts } from 'expo-font';
+import { IUSER } from '../constantes/images'
+import { POPPINS } from "../constantes/fonts";
 
 export type Props = {
     username: string;
@@ -18,7 +20,7 @@ const UserInfoComponent: React.FC<Props> = ({
     isActive,
     }) => {
       const [fontsLoaded] = useFonts({
-        'Poppins-Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+        'Poppins-Bold': POPPINS,
       });
       if (!fontsLoaded) {
         return null;
@@ -32,7 +34,7 @@ const UserInfoComponent: React.FC<Props> = ({
                   <Text style={styles.activeText}>{isActive ? "conectado" : "desconectado"}</Text>
                   </View>
             </View>
-            <Image source={require('../../assets/monito.jpg')} style={styles.profileImage} />
+            <Image source={IUSER} style={styles.profileImage} />
         </View>
     );
     };

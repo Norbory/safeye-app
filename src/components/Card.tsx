@@ -2,17 +2,27 @@ import React from "react";
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from 'expo-font';
+import { POPPINS } from "../constantes/fonts";
 
 interface CardProps {
   backgroundImage: string;
   onGreenButtonPress: () => void;
   onRedButtonPress: () => void;
+  onImagePress: () => void;
+  zona: string;
+  epp: string;
+  tiempo: string;
 }
 
-const Card: React.FC<CardProps> = ({ backgroundImage, onGreenButtonPress, onRedButtonPress}) => {
+const Card: React.FC<CardProps> = ({ backgroundImage, onGreenButtonPress, onRedButtonPress,onImagePress, zona, epp, tiempo}) => {
   const [fontsLoaded] = useFonts({
-    'Poppins-Bold': require('../../assets/fonts/Poppins-Bold.ttf'),
+    'Poppins-Bold': POPPINS,
   });
+
+  const handleImagePress = () => {
+    onImagePress(); 
+  };
+
   if (!fontsLoaded) {
     return null;
   }
@@ -21,9 +31,9 @@ const Card: React.FC<CardProps> = ({ backgroundImage, onGreenButtonPress, onRedB
     <View style={[styles.card, {backgroundColor:"#cbcdd1"}]}>
       <ImageBackground source={{ uri: backgroundImage }} resizeMode="stretch" style={styles.image} imageStyle={styles.cardImage}></ImageBackground>
       <View style={styles.letras}>
-        <Text style={styles.texto}>Sala de maquinas</Text>
-        <Text style={styles.texto}>Casco</Text>
-        <Text style={styles.texto}>18:00</Text>
+        <Text style={styles.texto}>{zona}</Text>
+        <Text style={styles.texto}>{epp}</Text>
+        <Text style={styles.texto}>{tiempo}</Text>
       </View>
       <View style={styles.data}>
         <TouchableOpacity
