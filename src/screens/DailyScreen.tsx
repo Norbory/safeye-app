@@ -1,14 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  ScrollView,
+  Button
+} from "react-native";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
+import RNHTMLtoPDF from "react-native-html-to-pdf";
 
 export function DailyScreen() {
   const { reportList } = useReports();
 
+  const handleDownloadPDF = async () => {
+    // Convertir el contenido HTML en PDF
+    let options = {
+      html: "<h1>Reporte de incidentes semanales</h1><h2>Incidente #138HJSF78J</h2><p>Zona: Sala de maquinas</p><p>EPP: Casco</p>",
+      fileName: "formulario.pdf",
+      directory: "Documents",
+    };
+
+    const file = await RNHTMLtoPDF.convert(options);
+
+    // Proporcionar el enlace para descargar el PDF
+    console.log("Archivo PDF generado:", file.filePath);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Resumen de incidentes</Text>
+      <Button title="Descargar PDF" onPress={handleDownloadPDF} />
       <ScrollView style={{ width: "100%", height: "100%" }}>
         {reportList.map((report: Report, index) => (
           <View key={report._id} style={styles.reportContainer}>
