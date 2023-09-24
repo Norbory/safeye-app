@@ -4,13 +4,14 @@ import {
   Text, 
   View, 
   ScrollView,
-  Button
+  TouchableOpacity
 } from "react-native";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import {HTML} from "../constantes/html";
+import { Ionicons } from "@expo/vector-icons";
 
 
 export function DailyScreen() {
@@ -28,7 +29,10 @@ export function DailyScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Resumen de incidentes</Text>
-      <Button title="Descargar PDF" onPress={generatePDF} />
+      <TouchableOpacity onPress={generatePDF} style={styles.buttonContainer}>
+        <Text style={styles.tbutton}>DESCARGAR</Text>
+        <Ionicons name="download" size={25} color="#fff" style={styles.iconShadow} />
+      </TouchableOpacity>
       <ScrollView style={{ width: "100%", height: "100%" }}>
         {reportList.map((report: Report, index) => (
           <View key={report._id} style={styles.reportContainer}>
@@ -82,5 +86,40 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 12,
     fontWeight: "400",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "absolute",
+    right:10,
+    bottom: 30,
+    alignSelf: "flex-end",
+    backgroundColor: "#49B4CB",
+    borderRadius: 30,
+    padding: 12,
+    shadowColor: "#252525",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  iconShadow: {
+    marginLeft: 3,
+    shadowColor: "#252525",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  tbutton: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
