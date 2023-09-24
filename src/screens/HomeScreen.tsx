@@ -9,7 +9,7 @@ import {
         LIST_CASO
       } from "../constantes/images"
 // import EmptyCardImage from "../../assets/empty.png";
-
+import CustomModal from "../components/Window";
 export function HomeScreen() {
   
   const [cardsData, setCardsData] = useState([
@@ -28,10 +28,16 @@ export function HomeScreen() {
       tiempo:"20:24 p.m."
     },
   ]);
+  const [isModalVisible, setModalVisible] = useState(false); // Agrega el estado para el modal
 
   const handleRedButtonPress = (id: number) => {
     const updatedCardsData = cardsData.filter((card) => card.id !== id);
     setCardsData(updatedCardsData);
+  };
+
+  const handleGreenButtonPress = () => {
+    setModalVisible(true);
+    console.log(isModalVisible);
   };
 
   const handleImagePress = (id: number) => {
@@ -57,7 +63,7 @@ export function HomeScreen() {
             <Card
               key={index}
               backgroundImage={cardData.backgroundImage}
-              onGreenButtonPress={() => {}}
+              onGreenButtonPress={() => handleGreenButtonPress()}
               onRedButtonPress={() => handleRedButtonPress(cardData.id)}
               onImagePress={() => {}}
               zona={cardData.zona}
@@ -89,6 +95,12 @@ export function HomeScreen() {
           </View>
         )}
       </ScrollView>
+      {isModalVisible && (
+  <CustomModal
+    isModalVisible={isModalVisible}
+    onClose={() => setModalVisible(false)}
+  />
+)}
     </SafeAreaView>
   );
 }
