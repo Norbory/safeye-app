@@ -1,7 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import MarginedTextInput from './Text_Box';
 
 const CustomModal = ({ isModalVisible, onClose }) => {
+
+ //Funcion para hacer que cuando se toque afuera del cuadro de texto se cierre 
+ const [textInputFocused, setTextInputFocused] = useState(false);
+
+  const handleTextBlur = () => {
+    setTextInputFocused(false);
+  };
+
+  const handleTextFocus = () => {
+    setTextInputFocused(true);
+  };
+
+  // Funcion para poner salto de pagina en el texto 
+  const [textValue, setTextValue] = useState('');
+
+  const handleTextChange = (text) => {
+    // Establecer un límite de caracteres por fila (por ejemplo, 20 caracteres)
+    const charactersPerLine = 10;
+
+    // Dividir el texto en líneas de acuerdo al límite de caracteres
+    const lines = text.match(new RegExp(`.{1,${charactersPerLine}}`, 'g'));
+
+    // Reunir las líneas con saltos de línea
+    const formattedText = lines.join('\n');
+
+    setTextValue(formattedText);
+  };
+
   const [envioModal1, setEnvioModal1] = useState(false);
   const [envioModal2, setEnvioModal2] = useState(false);
 
@@ -65,72 +94,93 @@ const CustomModal = ({ isModalVisible, onClose }) => {
         closeAllModals(); // Cerrar todos los modales adicionales y los interruptores
         onClose();
       }}>
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>Alo chupetin</Text>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Observaciones</Text>
 
-          {/* Interruptor 1 (Switch) */}
-          <View style={styles.switchContainer}>
-            <Text style={styles.switchLabel}>Interruptor 1</Text>
-            <Switch
-              value={switchValue1}
-              onValueChange={(value) => handleSwitch1Change(value)}
-            />
-          </View>
+            <View style={styles.rowContainer}>
+              <View style={styles.leftColumn}>
+                <Text style={styles.modalText}>Nombre:</Text>
+              </View>
+              <View style={styles.rightColumn}>
+                {/* Cuadro de texto */}
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Ingrese su nombre..."
+                  onChangeText={(text) => {
+                    // Manejar el texto ingresado
+                  }}
+                />
+              </View>
+            </View>
 
-          {/* Mostrar contenido 1 si modal1Visible es verdadero */}
-          {modal1Visible ? (
-            <ModalContent_1
-              onClose={() => {
-                setModal1Visible(false);
-                setSwitchValue1(false); // Cerrar el modal 1 y el interruptor 1
+            {/* Interruptor 1 (Switch) */}
+            <View style={styles.switchContainer}>
+              <Text style={styles.switchLabel}>Actos subestandares</Text>
+              <Switch
+                value={switchValue1}
+                onValueChange={(value) => handleSwitch1Change(value)}
+              />
+            </View>
+
+            {/* Mostrar contenido 1 si modal1Visible es verdadero */}
+            {modal1Visible ? (
+              <ModalContent_1
+                onClose={() => {
+                  setModal1Visible(false);
+                  setSwitchValue1(false); // Cerrar el modal 1 y el interruptor 1
+                }}
+                setenvioCompleteModal1={setenvioCompleteModal1}
+                setEnvioModal1={setEnvioModal1}
+                modalNumber={1}
+              />
+            ) : null}
+
+            {/* Interruptor 2 (Switch) */}
+            <View style={styles.switchContainer}>
+              <Text style={styles.switchLabel}>Condiciones subestandares</Text>
+              <Switch
+                value={switchValue2}
+                onValueChange={(value) => handleSwitch2Change(value)}
+              />
+            </View>
+
+            {/* Mostrar contenido 2 si modal2Visible es verdadero */}
+            {modal2Visible ? (
+              <ModalContent_2
+                onClose={() => {
+                  setModal2Visible(false);
+                  setSwitchValue2(false); // Cerrar el modal 2 y el interruptor 2
+                }}
+                setenvioCompleteModal2={setenvioCompleteModal2}
+                setEnvioModal2={setEnvioModal2}
+                modalNumber={2}
+              />
+            ) : null}
+
+            {/* Logica para cuadro de texto */}
+            <MarginedTextInput margin={20} characterLimit={200} />
+
+            <Button
+              title="Enviar"
+              onPress={() => {
+                // Cerrar este modal individual
+                onClose();
               }}
-              setenvioCompleteModal1={setenvioCompleteModal1}
-              setEnvioModal1={setEnvioModal1}
-              modalNumber={1}
+              disabled={!envioCompleteModal1 || !envioCompleteModal2}
             />
-          ) : null}
-
-          {/* Interruptor 2 (Switch) */}
-          <View style={styles.switchContainer}>
-            <Text style={styles.switchLabel}>Interruptor 2</Text>
-            <Switch
-              value={switchValue2}
-              onValueChange={(value) => handleSwitch2Change(value)}
-            />
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {
+                closeAllModals(); // Cerrar todos los modales adicionales y los interruptores
+                onClose();
+              }}>
+              <Text style={styles.textStyle}>Close</Text>
+            </Pressable>
           </View>
-
-          {/* Mostrar contenido 2 si modal2Visible es verdadero */}
-          {modal2Visible ? (
-            <ModalContent_2
-              onClose={() => {
-                setModal2Visible(false);
-                setSwitchValue2(false); // Cerrar el modal 2 y el interruptor 2
-              }}
-              setenvioCompleteModal2={setenvioCompleteModal2}
-              setEnvioModal2={setEnvioModal2}
-              modalNumber={2}
-            />
-          ) : null}
-          
-          <Button
-            title="Enviar"
-            onPress={() => {
-              // Cerrar este modal individual
-              onClose();
-            }}
-            disabled={!envioCompleteModal1 || !envioCompleteModal2}
-          />
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => {
-              closeAllModals(); // Cerrar todos los modales adicionales y los interruptores
-              onClose();
-            }}>
-            <Text style={styles.textStyle}>Hide Modal</Text>
-          </Pressable>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -351,6 +401,51 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     marginBottom: 10, // Espacio entre el cuadro de texto y los interruptores
+  },rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center', // Alinea verticalmente en el centro
+    marginBottom: 5, // Espacio entre la fila y otros elementos
+  },
+  leftColumn: {
+    flex: 2, // Toma el 50% del ancho disponible
+  },
+  rightColumn: {
+    flex: 2, // Toma el 50% del ancho disponible
+    marginLeft: 5, // Espacio entre el texto y el cuadro de texto
+  },
+  centeredView_BoxText: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0)', // Fondo semi transparente
+  },
+  modalView_BoxText: {
+    backgroundColor: '',
+    borderRadius: 1,
+    padding: 20,
+    alignItems: 'center',
+    width: '80%',
+    height: 250,
+  },
+  titleContainer_BoxText: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  modalTitle_BoxText: {
+    flex:1,
+    fontWeight: 'bold',
+    marginRight: 10,
+  },
+  textInput_BoxText: {
+    flex:1,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 20,
+    height: 200, // Altura fija para la caja de texto
   },
 });
 
