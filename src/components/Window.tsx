@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput } from 'react-native';
-
-
 
 const CustomModal = ({ isModalVisible, onClose }) => {
   const [envioModal1, setEnvioModal1] = useState(false);
   const [envioModal2, setEnvioModal2] = useState(false);
 
-
-
-
+  const [envioCompleteModal1, setenvioCompleteModal1] = useState(false);
+  const [envioCompleteModal2, setenvioCompleteModal2] = useState(false);
+  
   const [switchValue1, setSwitchValue1] = useState(false);
   const [switchValue2, setSwitchValue2] = useState(false);
 
@@ -29,6 +27,26 @@ const CustomModal = ({ isModalVisible, onClose }) => {
     setModal2Visible(value); // Abrir o cerrar el modal 2
   };
 
+  // Efecto secundario para controlar switchValue2 basado en envioModal2
+  useEffect(() => {
+    if (envioModal2) {
+      // Si envioModal2 es true, establece switchValue2 en true
+      setSwitchValue2(true);
+    } else {
+      // Si envioModal2 es false, establece switchValue2 en false
+      setSwitchValue2(false);
+    }
+  }, [envioModal2]);
+
+  useEffect(() => {
+    if (envioModal1) {
+      // Si envioModal2 es true, establece switchValue2 en true
+      setSwitchValue1(true);
+    } else {
+      // Si envioModal2 es false, establece switchValue2 en false
+      setSwitchValue1(false);
+    }
+  }, [envioModal1]);
 
   // Función para cerrar todos los modales adicionales y los interruptores
   const closeAllModals = () => {
@@ -67,6 +85,7 @@ const CustomModal = ({ isModalVisible, onClose }) => {
                 setModal1Visible(false);
                 setSwitchValue1(false); // Cerrar el modal 1 y el interruptor 1
               }}
+              setenvioCompleteModal1={setenvioCompleteModal1}
               setEnvioModal1={setEnvioModal1}
               modalNumber={1}
             />
@@ -88,6 +107,7 @@ const CustomModal = ({ isModalVisible, onClose }) => {
                 setModal2Visible(false);
                 setSwitchValue2(false); // Cerrar el modal 2 y el interruptor 2
               }}
+              setenvioCompleteModal2={setenvioCompleteModal2}
               setEnvioModal2={setEnvioModal2}
               modalNumber={2}
             />
@@ -96,11 +116,10 @@ const CustomModal = ({ isModalVisible, onClose }) => {
           <Button
             title="Enviar"
             onPress={() => {
-              // Aquí puedes realizar alguna acción con los valores de los interruptores y el cuadro de texto
               // Cerrar este modal individual
               onClose();
             }}
-            disabled = {!envioModal1 || !envioModal2}
+            disabled={!envioCompleteModal1 || !envioCompleteModal2}
           />
           <Pressable
             style={[styles.button, styles.buttonClose]}
@@ -116,8 +135,9 @@ const CustomModal = ({ isModalVisible, onClose }) => {
   );
 };
 
+
 // Componente para el contenido del modal individual
-const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1 }) => {
+const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, setenvioCompleteModal1 }) => {
   const [switchValue1, setSwitchValue1] = useState(false);
   const [switchValue2, setSwitchValue2] = useState(false);
   const [switchValue3, setSwitchValue3] = useState(false);
@@ -171,6 +191,7 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1 }) => 
               console.log('Interruptor 3:', switchValue3);
               console.log('Texto ingresado:', textInputValue);
               setEnvioModal1(true);
+              setenvioCompleteModal1(true);
               // Cerrar este modal individual
               onClose();
             }}
@@ -189,7 +210,7 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1 }) => 
   );
 };
 // Componente para el contenido del modal individual
-const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2 }) => {
+const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenvioCompleteModal2 }) => {
   const [switchValue1, setSwitchValue1] = useState(false);
   const [switchValue2, setSwitchValue2] = useState(false);
   const [switchValue3, setSwitchValue3] = useState(false);
@@ -243,6 +264,7 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2 }) => {
               console.log('Interruptor 3:', switchValue3);
               console.log('Texto ingresado:', textInputValue);
               setEnvioModal2(true);
+              setenvioCompleteModal2(true);
               // Cerrar este modal individual
               onClose();
             }}
