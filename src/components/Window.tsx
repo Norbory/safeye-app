@@ -21,10 +21,12 @@ const CustomModal = ({ isModalVisible, onClose }) => {
     setModal2Visible(value); // Abrir o cerrar el modal 2
   };
 
-  // Función para cerrar todos los modales adicionales
+  // Función para cerrar todos los modales adicionales y los interruptores
   const closeAllModals = () => {
     setModal1Visible(false);
     setModal2Visible(false);
+    setSwitchValue1(false);
+    setSwitchValue2(false);
   };
 
   return (
@@ -33,6 +35,7 @@ const CustomModal = ({ isModalVisible, onClose }) => {
       transparent={true}
       visible={isModalVisible}
       onRequestClose={() => {
+        closeAllModals(); // Cerrar todos los modales adicionales y los interruptores
         onClose();
       }}>
       <View style={styles.centeredView}>
@@ -51,7 +54,10 @@ const CustomModal = ({ isModalVisible, onClose }) => {
           {/* Mostrar contenido 1 si modal1Visible es verdadero */}
           {modal1Visible ? (
             <ModalContent
-              onClose={() => setModal1Visible(false)}
+              onClose={() => {
+                setModal1Visible(false);
+                setSwitchValue1(false); // Cerrar el modal 1 y el interruptor 1
+              }}
               modalNumber={1}
             />
           ) : null}
@@ -68,7 +74,10 @@ const CustomModal = ({ isModalVisible, onClose }) => {
           {/* Mostrar contenido 2 si modal2Visible es verdadero */}
           {modal2Visible ? (
             <ModalContent
-              onClose={() => setModal2Visible(false)}
+              onClose={() => {
+                setModal2Visible(false);
+                setSwitchValue2(false); // Cerrar el modal 2 y el interruptor 2
+              }}
               modalNumber={2}
             />
           ) : null}
@@ -76,7 +85,7 @@ const CustomModal = ({ isModalVisible, onClose }) => {
           <Pressable
             style={[styles.button, styles.buttonClose]}
             onPress={() => {
-              closeAllModals(); // Cerrar todos los modales adicionales
+              closeAllModals(); // Cerrar todos los modales adicionales y los interruptores
               onClose();
             }}>
             <Text style={styles.textStyle}>Hide Modal</Text>
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modal1: {
-    backgroundColor: '#FDDDD1', // Color de fondo personalizado para Modal 1
+    backgroundColor: '#FDC6D1', // Color de fondo personalizado para Modal 1
   },
   modal2: {
     backgroundColor: '#D1FDC6', // Color de fondo personalizado para Modal 2
@@ -168,23 +177,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
-  },
-  inputContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  input: {
-    flex: 1,
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingLeft: 10,
-  },
-  inputText: {
-    marginLeft: 10,
   },
   switchContainer: {
     flexDirection: 'row',
