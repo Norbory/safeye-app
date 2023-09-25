@@ -87,101 +87,100 @@ const CustomModal = ({ isModalVisible, onClose }) => {
 
   return (
     <Modal
-      animationType="slide"
-      transparent={true}
-      visible={isModalVisible}
-      onRequestClose={() => {
-        closeAllModals(); // Cerrar todos los modales adicionales y los interruptores
-        onClose();
-      }}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Observaciones</Text>
+    animationType="slide"
+    transparent={true}
+    visible={isModalVisible}
+    onRequestClose={() => {
+      closeAllModals();
+      onClose();
+    }}
+  >
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>Observaciones</Text>
 
-            <View style={styles.rowContainer}>
-              <View style={styles.leftColumn}>
-                <Text style={styles.modalText}>Nombre:</Text>
-              </View>
-              <View style={styles.rightColumn}>
-                {/* Cuadro de texto */}
-                <TextInput
-                  style={styles.textInput}
-                  placeholder="Ingrese su nombre..."
-                  onChangeText={(text) => {
-                    // Manejar el texto ingresado
-                  }}
-                />
-              </View>
+          <View style={styles.rowContainer}>
+            <View style={styles.leftColumn}>
+              <Text style={styles.modalText}>Nombre:</Text>
             </View>
-
-            {/* Interruptor 1 (Switch) */}
-            <View style={styles.switchContainer}>
-              <Text style={styles.switchLabel}>Actos subestandares</Text>
-              <Switch
-                value={switchValue1}
-                onValueChange={(value) => handleSwitch1Change(value)}
-              />
-            </View>
-
-            {/* Mostrar contenido 1 si modal1Visible es verdadero */}
-            {modal1Visible ? (
-              <ModalContent_1
-                onClose={() => {
-                  setModal1Visible(false);
-                  setSwitchValue1(false); // Cerrar el modal 1 y el interruptor 1
+            <View style={styles.rightColumn}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Ingrese su nombre..."
+                onChangeText={(text) => {
+                  // Manejar el texto ingresado
                 }}
-                setenvioCompleteModal1={setenvioCompleteModal1}
-                setEnvioModal1={setEnvioModal1}
-                modalNumber={1}
-              />
-            ) : null}
-
-            {/* Interruptor 2 (Switch) */}
-            <View style={styles.switchContainer}>
-              <Text style={styles.switchLabel}>Condiciones subestandares</Text>
-              <Switch
-                value={switchValue2}
-                onValueChange={(value) => handleSwitch2Change(value)}
               />
             </View>
-
-            {/* Mostrar contenido 2 si modal2Visible es verdadero */}
-            {modal2Visible ? (
-              <ModalContent_2
-                onClose={() => {
-                  setModal2Visible(false);
-                  setSwitchValue2(false); // Cerrar el modal 2 y el interruptor 2
-                }}
-                setenvioCompleteModal2={setenvioCompleteModal2}
-                setEnvioModal2={setEnvioModal2}
-                modalNumber={2}
-              />
-            ) : null}
-
-            {/* Logica para cuadro de texto */}
-            <MarginedTextInput margin={20} characterLimit={200} />
-
-            <Button
-              title="Enviar"
-              onPress={() => {
-                // Cerrar este modal individual
-                onClose();
-              }}
-              disabled={!envioCompleteModal1 || !envioCompleteModal2}
-            />
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => {
-                closeAllModals(); // Cerrar todos los modales adicionales y los interruptores
-                onClose();
-              }}>
-              <Text style={styles.textStyle}>Close</Text>
-            </Pressable>
           </View>
+
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Actos subestandares</Text>
+            <Switch
+              value={switchValue1}
+              onValueChange={(value) => handleSwitch1Change(value)}
+            />
+          </View>
+
+          {modal1Visible ? (
+            <ModalContent_1
+              onClose={() => {
+                setModal1Visible(false);
+                setSwitchValue1(false);
+              }}
+              setenvioCompleteModal1={setenvioCompleteModal1}
+              setEnvioModal1={setEnvioModal1}
+              modalNumber={1}
+            />
+          ) : null}
+
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Condiciones subestandares</Text>
+            <Switch
+              value={switchValue2}
+              onValueChange={(value) => handleSwitch2Change(value)}
+            />
+          </View>
+
+          {modal2Visible ? (
+            <ModalContent_2
+              onClose={() => {
+                setModal2Visible(false);
+                setSwitchValue2(false);
+              }}
+              setenvioCompleteModal2={setenvioCompleteModal2}
+              setEnvioModal2={setEnvioModal2}
+              modalNumber={2}
+            />
+          ) : null}
+
+          <MarginedTextInput margin={20} characterLimit={200} />
+
+          <Button
+            title="Enviar"
+            onPress={() => {
+              onClose();
+            }}
+            disabled={!envioCompleteModal1 || !envioCompleteModal2}
+          />
+          
+          {/* Nuevo View para separar los botones */}
+          <View style={styles.buttonSeparator} />
+
+          <Pressable
+            style={[styles.button, styles.buttonClose]}
+            onPress={() => {
+              closeAllModals();
+              onClose();
+            }}
+          >
+            <Text style={styles.textStyle}>Cerrar</Text>
+          </Pressable>
         </View>
-      </TouchableWithoutFeedback>
-    </Modal>
+      </View>
+    </TouchableWithoutFeedback>
+  </Modal>
   );
 };
 
@@ -447,6 +446,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     height: 200, // Altura fija para la caja de texto
   },
+  
 });
 
 export default CustomModal;
