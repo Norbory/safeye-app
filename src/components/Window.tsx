@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import MarginedTextInput from './Text_Box';
-
+import MarginedTextInput_Modal1 from './Text_Box_Modal1';
+import MarginedTextInput_Modal2 from './Text_Box_Modal2';
 const CustomModal = ({ isModalVisible, onClose }) => {
 
  //Funcion para hacer que cuando se toque afuera del cuadro de texto se cierre 
@@ -18,18 +19,6 @@ const CustomModal = ({ isModalVisible, onClose }) => {
   // Funcion para poner salto de pagina en el texto 
   const [textValue, setTextValue] = useState('');
 
-  const handleTextChange = (text) => {
-    // Establecer un límite de caracteres por fila (por ejemplo, 20 caracteres)
-    const charactersPerLine = 10;
-
-    // Dividir el texto en líneas de acuerdo al límite de caracteres
-    const lines = text.match(new RegExp(`.{1,${charactersPerLine}}`, 'g'));
-
-    // Reunir las líneas con saltos de línea
-    const formattedText = lines.join('\n');
-
-    setTextValue(formattedText);
-  };
 
   const [envioModal1, setEnvioModal1] = useState(false);
   const [envioModal2, setEnvioModal2] = useState(false);
@@ -204,35 +193,30 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
       onRequestClose={() => {
         onClose();
       }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.centeredView, modalStyles]}>
         <View style={styles.modalView}>
           <Text style={styles.modalText}>Contenido del Modal {modalNumber}</Text>
 
           {/* Agregar 3 interruptores */}
           <View style={styles.switchContainer}>
-            <Text style={styles.switchLabel}>Interruptor 1</Text>
+            <Text style={styles.switchLabel}>Operar equipo sin autorización</Text>
             <Switch value={switchValue1} onValueChange={setSwitchValue1} />
           </View>
           <View style={styles.switchContainer}>
-            <Text style={styles.switchLabel}>GAAAA 2</Text>
+            <Text style={styles.switchLabel}>Uso inadecuado del EPP</Text>
             <Switch value={switchValue2} onValueChange={setSwitchValue2} />
           </View>
           <View style={styles.switchContainer}>
-            <Text style={styles.switchLabel}>Interruptor 3</Text>
+            <Text style={styles.switchLabel}>Uso de equipos y/o herramientas defectosas</Text>
             <Switch value={switchValue3} onValueChange={setSwitchValue3} />
           </View>
 
-          {/* Agregar cuadro de texto */}
-          <TextInput
-            style={styles.textInput}
-            placeholder="Escribe algo..."
-            onChangeText={(text) => setTextInputValue(text)}
-            value={textInputValue}
-          />
+          <MarginedTextInput_Modal1 margin={20} characterLimit={200} />
 
           {/* Agregar botón de enviar */}
           <Button
-            title="Enviar"
+            title="Enviar acto"
             onPress={() => {
               // Aquí puedes realizar alguna acción con los valores de los interruptores y el cuadro de texto
               console.log('Interruptor 1:', switchValue1);
@@ -245,7 +229,7 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
               onClose();
             }}
           />
-
+          <View style={styles.buttonSeparator} />
           <Pressable
             style={[styles.button, styles.buttonClose]}
             onPress={() => {
@@ -255,6 +239,7 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
           </Pressable>
         </View>
       </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -277,6 +262,7 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
       onRequestClose={() => {
         onClose();
       }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.centeredView, modalStyles]}>
         <View style={styles.modalView}>
           <Text style={styles.modalText}>Contenido del Modal {modalNumber}</Text>
@@ -295,17 +281,11 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
             <Switch value={switchValue3} onValueChange={setSwitchValue3} />
           </View>
 
-          {/* Agregar cuadro de texto */}
-          <TextInput
-            style={styles.textInput}
-            placeholder="Escribe algo..."
-            onChangeText={(text) => setTextInputValue(text)}
-            value={textInputValue}
-          />
+          <MarginedTextInput_Modal2 margin={20} characterLimit={200} />
 
           {/* Agregar botón de enviar */}
           <Button
-            title="Enviar"
+            title="Enviar Condición"
             onPress={() => {
               // Aquí puedes realizar alguna acción con los valores de los interruptores y el cuadro de texto
               console.log('Interruptor 1:', switchValue1);
@@ -318,7 +298,7 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
               onClose();
             }}
           />
-
+          <View style={styles.buttonSeparator} />
           <Pressable
             style={[styles.button, styles.buttonClose]}
             onPress={() => {
@@ -328,6 +308,7 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
           </Pressable>
         </View>
       </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };
@@ -446,7 +427,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     height: 200, // Altura fija para la caja de texto
   },
-  
+  buttonSeparator: {
+    margin: 1,
+  }
 });
 
 export default CustomModal;
