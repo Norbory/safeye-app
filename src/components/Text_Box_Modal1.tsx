@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Text, StyleSheet, Switch } from 'react-native';
 
 const MarginedTextInput_Modal1 = ({ margin, characterLimit }) => {
 
   const [text, setText] = useState('');
   const [linesWithMargins, setLinesWithMargins] = useState([]);
+  const [switchValue1, setSwitchValue1] = useState(false);
 
   useEffect(() => {
     // Dividir el texto en líneas con el margen dado
@@ -20,7 +21,11 @@ const MarginedTextInput_Modal1 = ({ margin, characterLimit }) => {
 
   return (
       <View style={styles.container}>
-        <Text style={styles.textMargin}>Otro:</Text>
+        <View style={styles.switchContainer}>
+          <Text style={styles.textMargin}>Otro:</Text>
+          <Switch value={switchValue1} onValueChange={setSwitchValue1} />
+        </View>
+        
         <TextInput
           style={styles.textInput}
           multiline={true}
@@ -49,6 +54,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 

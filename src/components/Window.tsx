@@ -248,6 +248,9 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
   const [switchValue1, setSwitchValue1] = useState(false);
   const [switchValue2, setSwitchValue2] = useState(false);
   const [switchValue3, setSwitchValue3] = useState(false);
+  const [switchValue4, setSwitchValue4] = useState(false);
+  const [switchValue5, setSwitchValue5] = useState(false);
+  const [switchValue6, setSwitchValue6] = useState(false);
   const [textInputValue, setTextInputValue] = useState('');
 
   // Estilos específicos para cada modal
@@ -269,16 +272,28 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
 
           {/* Agregar 3 interruptores */}
           <View style={styles.switchContainer}>
-            <Text style={styles.switchLabel}>Interruptor 1</Text>
+            <Text style={styles.switchLabel}>Falta de orden y limpieza en el área de trabajo</Text>
             <Switch value={switchValue1} onValueChange={setSwitchValue1} />
           </View>
           <View style={styles.switchContainer}>
-            <Text style={styles.switchLabel}>Interruptor 2</Text>
+            <Text style={styles.switchLabel}>Falta de señalización</Text>
             <Switch value={switchValue2} onValueChange={setSwitchValue2} />
           </View>
           <View style={styles.switchContainer}>
-            <Text style={styles.switchLabel}>Interruptor 3</Text>
+            <Text style={styles.switchLabel}>Gases comprimidos mal almacenados</Text>
             <Switch value={switchValue3} onValueChange={setSwitchValue3} />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>EPP deteriorado</Text>
+            <Switch value={switchValue3} onValueChange={setSwitchValue4} />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Ventilación deficiente</Text>
+            <Switch value={switchValue3} onValueChange={setSwitchValue5} />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Equipos o herramientas en mal estado</Text>
+            <Switch value={switchValue3} onValueChange={setSwitchValue6} />
           </View>
 
           <MarginedTextInput_Modal2 margin={20} characterLimit={200} />
