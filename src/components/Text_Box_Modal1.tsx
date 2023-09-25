@@ -30,6 +30,7 @@ const MarginedTextInput_Modal1 = ({ margin, characterLimit }) => {
           style={styles.textInput}
           multiline={true}
           placeholder="Detalla aquí..."
+          placeholderTextColor="#95A5A6"
           onChangeText={handleTextChange}
           value={text}
         />
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
   textMargin: {
     marginRight: 8, // Espacio entre el texto y el margen derecho
     marginBottom: 8, // Espacio entre las líneas de texto
+    color: 'white',
   },
   textInput: {
     width: '100%',
@@ -54,6 +56,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
+    color: 'white',
   },
   switchContainer: {
     flexDirection: 'row',

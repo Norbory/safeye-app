@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import MarginedTextInput from './Text_Box';
 import MarginedTextInput_Modal1 from './Text_Box_Modal1';
 import MarginedTextInput_Modal2 from './Text_Box_Modal2';
@@ -97,6 +97,7 @@ const CustomModal = ({ isModalVisible, onClose }) => {
               <TextInput
                 style={styles.textInput}
                 placeholder="Ingrese su nombre..."
+                placeholderTextColor="#95A5A6"
                 onChangeText={(text) => {
                   // Manejar el texto ingresado
                 }}
@@ -198,15 +199,16 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
 
   return (
     <Modal
-      animationType="slide"
-      transparent={true}
+      animationType="fade"
       visible={isVisible} // Utiliza la prop isVisible para controlar la visibilidad del modal
       onRequestClose={() => {
         onClose();
       }}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.centeredView, modalStyles]}>
         <View style={styles.modalView}>
+       
           <Text style={styles.modalText}>Observaciones</Text>
           <Text style={styles.modalText}>Actos subestandares</Text>
 
@@ -275,13 +277,15 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
             onPress={() => {
               onClose(); // Cerrar este modal individual
             }}>
-            <Text style={styles.buttonText}>Cerrar Modal</Text>
+            <Text style={styles.buttonText}>Regresar</Text>
           </Pressable>
           </View>
           
         </View>
+        
       </View>
       </TouchableWithoutFeedback>
+      </ScrollView>
     </Modal>
   );
 };
@@ -301,7 +305,7 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
 
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={isVisible} // Utiliza la prop isVisible para controlar la visibilidad del modal
       onRequestClose={() => {
@@ -366,7 +370,7 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
             onPress={() => {
               onClose(); // Cerrar este modal individual
             }}>
-            <Text style={styles.buttonText}>Cerrar Modal</Text>
+            <Text style={styles.buttonText}>Regresar</Text>
           </Pressable>
           </View>
         </View>
@@ -381,14 +385,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 22,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Fondo semitransparente
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#1A5276',
     borderRadius: 20,
     padding: 35,
     alignItems: 'center',
-    shadowColor: '#000',
+    shadowColor: '#17202A',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -398,10 +403,12 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modal1: {
-    backgroundColor: '#FDC6D1', // Color de fondo personalizado para Modal 1
+    backgroundColor: '#17202A', // Color de fondo personalizado para Modal 1
+    shadowColor: '#17202A',
   },
   modal2: {
-    backgroundColor: '#D1FDC6', // Color de fondo personalizado para Modal 2
+    backgroundColor: '#17202A', // Color de fondo personalizado para Modal 1
+    shadowColor: '#17202A',
   },
   buttonClose: {
     backgroundColor: '#2196F3',
@@ -409,6 +416,7 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
+    color: 'white',
   },
   button: {
     width: 150,
@@ -420,7 +428,7 @@ const styles = StyleSheet.create({
 
   },
   textStyle: {
-    color: '#fff',
+    color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
@@ -433,6 +441,7 @@ const styles = StyleSheet.create({
   switchLabel: {
     flex: 1,
     marginRight: 10,
+    color: 'white',
   },
   additionalScreenText: {
     fontSize: 16,
@@ -440,9 +449,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   textInput: {
+    color: 'white',
     width: '100%',
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: 'white',
     borderRadius: 5,
     padding: 5,
     marginBottom: 10, // Espacio entre el cuadro de texto y los interruptores
@@ -465,7 +475,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0)', // Fondo semi transparente
   },
   modalView_BoxText: {
-    backgroundColor: '',
     borderRadius: 1,
     padding: 20,
     alignItems: 'center',
@@ -516,6 +525,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  scrollViewContent: {
+    backgroundColor: '#17202A' 
+  },
+  
 });
 
 export default CustomModal;
