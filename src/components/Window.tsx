@@ -179,6 +179,13 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
   const [switchValue1, setSwitchValue1] = useState(false);
   const [switchValue2, setSwitchValue2] = useState(false);
   const [switchValue3, setSwitchValue3] = useState(false);
+  const [switchValue4, setSwitchValue4] = useState(false);
+  const [switchValue5, setSwitchValue5] = useState(false);
+  const [switchValue6, setSwitchValue6] = useState(false);
+  const [switchValue7, setSwitchValue7] = useState(false);
+  const [switchValue8, setSwitchValue8] = useState(false);
+  const [switchValue9, setSwitchValue9] = useState(false);
+
   const [textInputValue, setTextInputValue] = useState('');
 
   // Estilos específicos para cada modal
@@ -196,7 +203,8 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.centeredView, modalStyles]}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Contenido del Modal {modalNumber}</Text>
+          <Text style={styles.modalText}>Observaciones</Text>
+          <Text style={styles.modalText}>Actos subestandares</Text>
 
           {/* Agregar 3 interruptores */}
           <View style={styles.switchContainer}>
@@ -210,6 +218,30 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
           <View style={styles.switchContainer}>
             <Text style={styles.switchLabel}>Uso de equipos y/o herramientas defectosas</Text>
             <Switch value={switchValue3} onValueChange={setSwitchValue3} />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Adoptar posición inadecuada para hacer una tarea</Text>
+            <Switch value={switchValue4} onValueChange={setSwitchValue4} />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Uso incorrecto de equipos y/o herramientas</Text>
+            <Switch value={switchValue5} onValueChange={setSwitchValue5} />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Incumplimiento del procedimiento de trabajo</Text>
+            <Switch value={switchValue6} onValueChange={setSwitchValue6} />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Conducir a excesiva velocidad</Text>
+            <Switch value={switchValue7} onValueChange={setSwitchValue7} />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Iniciar actividades sin antes realizar el permiso de trabajo</Text>
+            <Switch value={switchValue8} onValueChange={setSwitchValue8} />
+          </View>
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchLabel}>Iniciar actividad sin contar con la firma del supervisor</Text>
+            <Switch value={switchValue9} onValueChange={setSwitchValue9} />
           </View>
 
           <MarginedTextInput_Modal1 margin={20} characterLimit={200} />
@@ -268,7 +300,9 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.centeredView, modalStyles]}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Contenido del Modal {modalNumber}</Text>
+          <Text style={styles.modalText}>Observaciones</Text>
+          <Text style={styles.modalText}>Condiciones subestandares</Text>
+
 
           {/* Agregar 3 interruptores */}
           <View style={styles.switchContainer}>
@@ -285,15 +319,15 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
           </View>
           <View style={styles.switchContainer}>
             <Text style={styles.switchLabel}>EPP deteriorado</Text>
-            <Switch value={switchValue3} onValueChange={setSwitchValue4} />
+            <Switch value={switchValue4} onValueChange={setSwitchValue4} />
           </View>
           <View style={styles.switchContainer}>
             <Text style={styles.switchLabel}>Ventilación deficiente</Text>
-            <Switch value={switchValue3} onValueChange={setSwitchValue5} />
+            <Switch value={switchValue5} onValueChange={setSwitchValue5} />
           </View>
           <View style={styles.switchContainer}>
             <Text style={styles.switchLabel}>Equipos o herramientas en mal estado</Text>
-            <Switch value={switchValue3} onValueChange={setSwitchValue6} />
+            <Switch value={switchValue6} onValueChange={setSwitchValue6} />
           </View>
 
           <MarginedTextInput_Modal2 margin={20} characterLimit={200} />
