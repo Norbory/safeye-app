@@ -145,27 +145,31 @@ const CustomModal = ({ isModalVisible, onClose }) => {
           ) : null}
 
           <MarginedTextInput margin={20} characterLimit={200} />
-
-          <Button
-            title="Enviar"
+          <View style={styles.rowContainer}> 
+          <Pressable
+            style = {styles.buttonSend}
             onPress={() => {
               onClose();
             }}
             disabled={!envioCompleteModal1 || !envioCompleteModal2}
-          />
+          >
+            <Text style={styles.buttonText}>Enviar Reporte</Text>
+          </Pressable>
           
           {/* Nuevo View para separar los botones */}
           <View style={styles.buttonSeparator} />
 
           <Pressable
-            style={[styles.button, styles.buttonClose]}
+            style = {styles.buttonDelete}
             onPress={() => {
               closeAllModals();
               onClose();
             }}
           >
-            <Text style={styles.textStyle}>Cerrar</Text>
+            <Text style={styles.buttonText}>Cerrar</Text>
           </Pressable>
+          </View>
+          
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -247,8 +251,9 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
           <MarginedTextInput_Modal1 margin={20} characterLimit={200} />
 
           {/* Agregar botón de enviar */}
-          <Button
-            title="Enviar acto"
+          <View style={styles.rowContainer}>
+          <Pressable
+            style={styles.buttonSend}
             onPress={() => {
               // Aquí puedes realizar alguna acción con los valores de los interruptores y el cuadro de texto
               console.log('Interruptor 1:', switchValue1);
@@ -257,18 +262,23 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
               console.log('Texto ingresado:', textInputValue);
               setEnvioModal1(true);
               setenvioCompleteModal1(true);
+              
               // Cerrar este modal individual
               onClose();
             }}
-          />
+          >
+            <Text style={styles.buttonText}>Enviar Condición</Text>
+          </Pressable>
           <View style={styles.buttonSeparator} />
           <Pressable
-            style={[styles.button, styles.buttonClose]}
+            style={styles.buttonDelete}
             onPress={() => {
               onClose(); // Cerrar este modal individual
             }}>
-            <Text style={styles.textStyle}>Cerrar Modal</Text>
+            <Text style={styles.buttonText}>Cerrar Modal</Text>
           </Pressable>
+          </View>
+          
         </View>
       </View>
       </TouchableWithoutFeedback>
@@ -333,8 +343,9 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
           <MarginedTextInput_Modal2 margin={20} characterLimit={200} />
 
           {/* Agregar botón de enviar */}
-          <Button
-            title="Enviar Condición"
+          <View style={styles.rowContainer}>
+          <Pressable
+             style={styles.buttonSend}
             onPress={() => {
               // Aquí puedes realizar alguna acción con los valores de los interruptores y el cuadro de texto
               console.log('Interruptor 1:', switchValue1);
@@ -346,15 +357,18 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
               // Cerrar este modal individual
               onClose();
             }}
-          />
+          > 
+            <Text style={styles.buttonText}>Enviar Condición</Text>
+          </Pressable>
           <View style={styles.buttonSeparator} />
           <Pressable
-            style={[styles.button, styles.buttonClose]}
+            style={styles.buttonDelete}
             onPress={() => {
               onClose(); // Cerrar este modal individual
             }}>
-            <Text style={styles.textStyle}>Cerrar Modal</Text>
+            <Text style={styles.buttonText}>Cerrar Modal</Text>
           </Pressable>
+          </View>
         </View>
       </View>
       </TouchableWithoutFeedback>
@@ -403,12 +417,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#49B4CB',
     alignItems: 'center',
     justifyContent: 'center',
+
   },
   textStyle: {
     color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
   },
   switchContainer: {
     flexDirection: 'row',
@@ -478,7 +494,28 @@ const styles = StyleSheet.create({
   },
   buttonSeparator: {
     margin: 1,
-  }
+  },
+  buttonSend: {
+    width: 150,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: "#FA8072",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  buttonDelete: {
+    width: 150,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: "#E74C3C",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 export default CustomModal;

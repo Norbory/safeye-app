@@ -6,13 +6,31 @@ const SwitchRow = () => {
   const [switch2, setSwitch2] = useState(false);
   const [switch3, setSwitch3] = useState(false);
 
+  const handleSwitch1Change = (value) => {
+    setSwitch1(value);
+    setSwitch2(false); // Desactiva switch2
+    setSwitch3(false); // Desactiva switch3
+  };
+
+  const handleSwitch2Change = (value) => {
+    setSwitch2(value);
+    setSwitch1(false); // Desactiva switch1
+    setSwitch3(false); // Desactiva switch3
+  };
+
+  const handleSwitch3Change = (value) => {
+    setSwitch3(value);
+    setSwitch1(false); // Desactiva switch1
+    setSwitch2(false); // Desactiva switch2
+  };
+
   return (
     <View style={styles.rowContainer}>
       <View style={styles.switchContainer}>
         <Text style={styles.labelText}>SI</Text>
         <Switch
           value={switch1}
-          onValueChange={(value) => setSwitch1(value)}
+          onValueChange={(value) => handleSwitch1Change(value)}
         />
       </View>
 
@@ -20,7 +38,7 @@ const SwitchRow = () => {
         <Text style={styles.labelText}>NO</Text>
         <Switch
           value={switch2}
-          onValueChange={(value) => setSwitch2(value)}
+          onValueChange={(value) => handleSwitch2Change(value)}
         />
       </View>
 
@@ -28,7 +46,7 @@ const SwitchRow = () => {
         <Text style={styles.labelText}>NA</Text>
         <Switch
           value={switch3}
-          onValueChange={(value) => setSwitch3(value)}
+          onValueChange={(value) => handleSwitch3Change(value)}
         />
       </View>
     </View>
@@ -50,7 +68,7 @@ const styles = StyleSheet.create({
   labelText: {
     fontSize: 12,
     marginRight: 1, // Espacio entre el texto y el interruptor (ajustado a 5) aumento se separa, si disminuyo 
-    marginLeft: 1, // espacio entre interruptor y letra
+    marginLeft: 1, // Espacio entre el interruptor y la letra
   },
 });
 
