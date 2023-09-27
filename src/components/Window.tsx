@@ -225,7 +225,7 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
       onRequestClose={() => {
         onClose();
       }}>
-      <ScrollView contentContainerStyle={styles.scrollViewContentMain}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.centeredView, modalStyles]}>
         <View style={styles.modalView}>
