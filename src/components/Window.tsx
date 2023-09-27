@@ -3,7 +3,15 @@ import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput, To
 import MarginedTextInput from './Text_Box';
 import MarginedTextInput_Modal1 from './Text_Box_Modal1';
 import MarginedTextInput_Modal2 from './Text_Box_Modal2';
-const CustomModal = ({ isModalVisible, onClose }) => {
+const CustomModal = ({ setisButtonSend, isModalVisible, onClose }) => {
+
+  const [buttonSendPressed, setButtonSendPressed] = useState(false);
+
+  const handleChangeSend = () => {
+    if (buttonSendPressed === true){
+      setisButtonSend(true);
+    }
+  };
 
  //Funcion para hacer que cuando se toque afuera del cuadro de texto se cierre 
  const [textInputFocused, setTextInputFocused] = useState(false);
@@ -44,7 +52,9 @@ const CustomModal = ({ isModalVisible, onClose }) => {
     setSwitchValue2(value);
     setModal2Visible(value); // Abrir o cerrar el modal 2
   };
-
+  const onClosefinalChange = (value) => {
+    setisButtonSend(value);
+  }
   // Efecto secundario para controlar switchValue2 basado en envioModal2
   useEffect(() => {
     if (envioModal2) {
@@ -75,8 +85,9 @@ const CustomModal = ({ isModalVisible, onClose }) => {
   };
 
   return (
+    
     <Modal
-    animationType="slide"
+    animationType="fade"
     transparent={true}
     visible={isModalVisible}
     onRequestClose={() => {
@@ -84,8 +95,10 @@ const CustomModal = ({ isModalVisible, onClose }) => {
       onClose();
     }}
   >
+   
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.centeredView}>
+      <ScrollView contentContainerStyle={styles.scrollViewContentMain}>
         <View style={styles.modalView}>
           <Text style={styles.modalText}>Observaciones</Text>
 
@@ -144,17 +157,21 @@ const CustomModal = ({ isModalVisible, onClose }) => {
               modalNumber={2}
             />
           ) : null}
-
+          
           <MarginedTextInput margin={20} characterLimit={200} />
+          
           <View style={styles.rowContainer}> 
+          <View style={styles.buttonContainer}>
           <Pressable
-            style = {styles.buttonSend}
+            style = {[styles.buttonSend, (!envioCompleteModal1 || !envioCompleteModal2) && styles.disabledButton]}
             onPress={() => {
+              onClosefinalChange(true);
+
               onClose();
             }}
             disabled={!envioCompleteModal1 || !envioCompleteModal2}
           >
-            <Text style={styles.buttonText}>Enviar Reporte</Text>
+            <Text style={[styles.buttonText, (!envioCompleteModal1 || !envioCompleteModal2) && styles.disabledButtonText]}>Enviar Reporte</Text>
           </Pressable>
           
           {/* Nuevo View para separar los botones */}
@@ -166,12 +183,16 @@ const CustomModal = ({ isModalVisible, onClose }) => {
               closeAllModals();
               onClose();
             }}
+            
           >
             <Text style={styles.buttonText}>Cerrar</Text>
           </Pressable>
           </View>
           
+          </View>
+          
         </View>
+        </ScrollView>
       </View>
     </TouchableWithoutFeedback>
   </Modal>
@@ -204,7 +225,7 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
       onRequestClose={() => {
         onClose();
       }}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView contentContainerStyle={styles.scrollViewContentMain}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.centeredView, modalStyles]}>
         <View style={styles.modalView}>
@@ -254,6 +275,7 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
 
           {/* Agregar botón de enviar */}
           <View style={styles.rowContainer}>
+          <View style={styles.buttonContainer}>
           <Pressable
             style={styles.buttonSend}
             onPress={() => {
@@ -279,6 +301,8 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
             }}>
             <Text style={styles.buttonText}>Regresar</Text>
           </Pressable>
+          </View>
+          
           </View>
           
         </View>
@@ -313,6 +337,7 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
       }}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={[styles.centeredView, modalStyles]}>
+      <ScrollView contentContainerStyle={styles.scrollViewContent2}>
         <View style={styles.modalView}>
           <Text style={styles.modalText}>Observaciones</Text>
           <Text style={styles.modalText}>Condiciones subestandares</Text>
@@ -348,6 +373,7 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
 
           {/* Agregar botón de enviar */}
           <View style={styles.rowContainer}>
+          <View style={styles.buttonContainer}>
           <Pressable
              style={styles.buttonSend}
             onPress={() => {
@@ -373,9 +399,13 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
             <Text style={styles.buttonText}>Regresar</Text>
           </Pressable>
           </View>
+          
+          </View>
         </View>
+        </ScrollView>
       </View>
       </TouchableWithoutFeedback>
+      
     </Modal>
   );
 };
@@ -419,8 +449,9 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   button: {
-    width: 150,
-    height: 40,
+    flex: 1,
+    maxWidth: '45%',
+    maxHeight: '50%',
     borderRadius: 10,
     backgroundColor: '#49B4CB',
     alignItems: 'center',
@@ -430,6 +461,7 @@ const styles = StyleSheet.create({
   textStyle: {
     color: 'white',
     fontSize: 20,
+    fontFamily: 'Poppins-Bold',
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
@@ -505,10 +537,11 @@ const styles = StyleSheet.create({
     margin: 1,
   },
   buttonSend: {
-    width: 150,
-    height: 40,
+    flex: 1,
+    maxHeight: '100%',
+    maxWidth: '100%',
     borderRadius: 10,
-    backgroundColor: "#252525",
+    backgroundColor: "#31CF5A",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -518,17 +551,40 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   buttonDelete: {
-    width: 150,
-    height: 40,
+    flex: 1,
+    maxHeight: '100%',
+    maxWidth: '100%',
     borderRadius: 10,
-    backgroundColor: "#252525",
+    backgroundColor: "#DF344B",
     alignItems: "center",
     justifyContent: "center",
+  },
+  scrollViewContentMain:{
+    width: 350, // Establece el ancho deseado
+    height: 50, // Establece la altura deseada
+    backgroundColor: 'transparent',
+    alignItems: 'center', // Alinea el contenido en el centro verticalmente
+    justifyContent: 'center', // Centra el contenido horizontalmente
+    flexGrow: 1, 
   },
   scrollViewContent: {
     backgroundColor: '#17202A' 
   },
-  
+  scrollViewContent2: {
+    backgroundColor: '#17202A' 
+  },
+  disabledButton: {
+    backgroundColor: "#909490", 
+  },
+
+  disabledButtonText: {
+    color: "#B2AFAF", 
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20, // Espacio entre los elementos y los botones
+  },
 });
 
 export default CustomModal;
