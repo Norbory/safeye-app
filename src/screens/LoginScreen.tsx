@@ -12,7 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
-import {LOGO} from "../constantes/images"
+import {LOGO} from "../constantes/images";
+import NetworkInfo from "react-native-network-info"
 
 export function LoginScreen() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -37,7 +38,7 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const res = axios.post("http://192.168.18.33:3000/api/signin", {
+      const res = axios.post("http://192.168.1.73:3000/api/signin", {
         username,
         password,
       });

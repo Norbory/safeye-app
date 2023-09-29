@@ -33,7 +33,7 @@ export function DailyScreen() {
         <Text style={styles.tbutton}>DESCARGAR</Text>
         <Ionicons name="download" size={25} color="#fff" style={styles.iconShadow} />
       </TouchableOpacity>
-      <ScrollView style={{ width: "100%", height: "100%" }}>
+      <ScrollView style={{ width: "100%", height: "100%"}}>
         {reportList.map((report: Report, index) => (
           <View key={report._id} style={styles.reportContainer}>
             <Text style={styles.reportTitle}>Incidente {index + 1}</Text>
