@@ -1,25 +1,32 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View,Linking } from "react-native";
 
 export function SupportScreen() {
   return (
     <View style={styles.container}>
+      <ScrollView style={{ width: "100%", height: "100%" }}>
+
+      
       <Text style={styles.title}>Soporte Técnico</Text>
       <Text style={styles.subtitle}>Preguntas usuales</Text>
       <Text style={styles.question}>Como exportar el reporte</Text>
       <Text style={styles.text}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eleifend,
-        sapien non egestas lobortis, diam libero euismod augue, eu sodales ipsum
-        augue interdum urna. Nam vulputate nunc vitae sodales interdum. Aliquam
-        congue lorem enim, et dapibus dolor ultricies non.
+        Para exportar el reporte, debe dirigirse a la pantalla de reportes y
+        presionar un incidente en especifico, esto abrirá los detalles del
+        incidente y en la parte inferior de la pantalla se encontrará un botón
+        con el texto "Descargar", al presionarlo se descargará el reporte en
+        formato PDF.
       </Text>
-      <Text style={styles.question}>Con quien me comunico</Text>
-      <Text style={styles.text}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent lacus
-        justo, auctor sit amet laoreet et, condimentum eu ex. Lorem ipsum dolor
-        sit amet, consectetur adipiscing elit. Vivamus vitae quam mattis, congue
-        lorem nec, aliquet sem. Maecenas nunc massa, commodo et mi ac, varius
-        pulvinar nunc. Curabitur auctor elit in dolor elementum sodales.
-      </Text>
+      <Text style={styles.question}>Con quién me comunico</Text>
+        <Text style={styles.text}>
+          Para obtener soporte técnico, puedes comunicarte con Consultoría Carranza de las siguientes maneras:
+          {"\n\n"}
+          📧 Teléfono: 511-4601863{"\n"}
+          📧 Correo electrónico: ayuda@consultoriacarranza.com.pe{"\n"}
+          📧 Sitio web: <Text onPress={() => Linking.openURL("https://consultoriacarranza.com.pe")}>https://consultoriacarranza.com.pe</Text>{"\n"}
+          📧 Facebook: <Text onPress={() => Linking.openURL("https://www.facebook.com/consultoriacarranza.eirl")}>https://www.facebook.com/consultoriacarranza.eirl</Text>{"\n"}
+          📧 LinkedIn: <Text onPress={() => Linking.openURL("https://www.linkedin.com/company/consultoria-carranza-eirl/")}>https://www.linkedin.com/company/consultoria-carranza-eirl/</Text>{"\n"}
+        </Text>
+      </ScrollView>
     </View>
   );
 }
