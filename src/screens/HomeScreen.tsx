@@ -40,7 +40,7 @@ export function HomeScreen() {
     setModalVisible(true);
   };
 
-  const updateIsButtonSend = (value) => {
+  const updateIsButtonSend = (value : any) => {
     setisButtonSend(value);
   };
 

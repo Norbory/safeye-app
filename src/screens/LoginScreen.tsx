@@ -38,7 +38,7 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const res = axios.post("http://192.168.1.73:3000/api/signin", {
+      const res = axios.post("http://192.168.1.34:3000/api/signin", {
         username,
         password,
       });
