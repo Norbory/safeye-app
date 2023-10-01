@@ -8,9 +8,9 @@ export default function useReports() {
   const fetchReports = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.0.34:8080/company/650df2be619f40beeecb9c00/incidents`
+        `http://192.168.1.73:8080/company/65199ec6cb4d6bc2da6f49ae/incidents`
       );
-      console.log(response);
+      //console.log(response);
       const transformedReports = response.data.map((report: Report) => ({
         ID_area: report.ID_area,
         ID_Cam: report.ID_Cam,

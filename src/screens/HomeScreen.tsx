@@ -9,24 +9,34 @@ import {
   LIST_CASO
 } from "../constantes/images";
 import CustomModal from "../components/Window";
+import useReports from "../hooks/useReports";
+import { Report } from "../types";
+
 
 export function HomeScreen() {
+  const reportList = useReports();
+
   const [cardsData, setCardsData] = useState([
     {
       id: 1,
       backgroundImage: DEFAULT_BACKGROUND_IMAGE,
       zona: "Sala de maquinas",
-      epp: "CASCO",
+      epp: ["CASCO"],
       tiempo: "18:00 p.m."
-    },
-    {
-      id: 2,
-      backgroundImage: ALTERNATE_BACKGROUND_IMAGE,
-      zona: "Sala de quimicos",
-      epp: "CASCO",
-      tiempo: "20:24 p.m."
-    },
+    }
   ]);
+
+  useEffect(() => {
+  const updatedCardsData = reportList.map((report: Report, index: number) => ({
+    id: index + 1,
+    backgroundImage: report.imageUrls[0],
+    zona: report.areaName,
+    epp: report.EPPs,
+    tiempo: report.date,
+  }));
+
+  setCardsData(updatedCardsData);
+}, [reportList]);
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [isButtonSend, setisButtonSend] = useState(false);
@@ -58,16 +68,16 @@ export function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal={true} style={styles.scrollView}>
-        {cardsData.map((cardData, index) => (
+        {cardsData.map(( cardsData,  index) => (
           <Card
             key={index}
-            backgroundImage={cardData.backgroundImage}
+            backgroundImage={cardsData.backgroundImage}
             onGreenButtonPress={() => handleGreenButtonPress()}
-            onRedButtonPress={() => handleRedButtonPress(cardData.id)}
+            onRedButtonPress={() => handleRedButtonPress(cardsData.id)}
             onImagePress={() => {}}
-            zona={cardData.zona}
-            epp={cardData.epp}
-            tiempo={cardData.tiempo}
+            zona={cardsData.zona}
+            epp={cardsData.epp}
+            tiempo={cardsData.tiempo}
           />
         ))}
         {cardsData.length === 0 && (
@@ -77,7 +87,7 @@ export function HomeScreen() {
             onRedButtonPress={() => {}}
             onImagePress={() => {}}
             zona={""}
-            epp={""}
+            epp={[""]}
             tiempo={""}
           />
         )}

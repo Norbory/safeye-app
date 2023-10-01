@@ -14,10 +14,14 @@ import {
   VictoryArea, 
   VictoryGroup 
 } from 'victory-native';
+import useReports from "../hooks/useReports";
+import { Report } from "../types";
+
 
 export function StatisticsScreen() {
   const [selectedLine, setSelectedLine] = useState("todas");
-
+  const reportList = useReports();
+  
   // Datos para la tabla
   const data= [
     {

@@ -10,7 +10,7 @@ interface CardProps {
   onRedButtonPress: () => void;
   onImagePress: () => void;
   zona: string;
-  epp: string;
+  epp: Array<string>;
   tiempo: string;
 }
 
