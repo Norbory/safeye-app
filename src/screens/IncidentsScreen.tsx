@@ -1,120 +1,148 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable,FlatList  } from "react-native";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
 
+
 export function IncidentsScreen() {
-  const [setseeAdmonished, setSetseeAdmonished] = useState(true);
-  const { reportList } = useReports();
+  const [seeAdmonished, setSeeAdmonished] = useState(true);
+  const reportList = useReports();
 
-  // Renderiza lista de reportes con la propiedad admonished en true
-  const renderAdmonished = () => {
-    return reportList.map((report: Report, index) => {
-      if (report.admonished) {
-        const date = new Date(report.time);
-        const time = `${date.getHours()}:${String(date.getMinutes()).padStart(
-          2,
-          "0"
-        )}`;
-        return (
-          <Text style={styles.reportText} key={report._id}>
-            {index + 1}. {report.epp} - {time} - {report.place}
-          </Text>
-        );
-      }
-    });
+  const renderAdmonishedItem = ({ item, index }: { item: Report; index: number }) => {
+    const date = new Date(item.date);
+    const time = `${date.getHours()}:${String(date.getMinutes()).padStart(
+      2,
+      "0"
+    )}`;
+    return (
+      <View style={styles.listItem}>
+        <View style={styles.listItemContent}>
+          <Text style={styles.listItemNumber}>{index + 1}.</Text>
+          <View style={styles.listItemInfo}>
+            <Text style={styles.listItemEPPs}>{item.EPPs.join(", ")}</Text>
+            <Text style={styles.listItemArea}>{item.areaName}</Text>
+            <Text style={styles.listItemTime}>{time}</Text>
+          </View>
+        </View>
+      </View>
+    );
   };
 
-  // Renderiza lista de reportes con la propiedad admonished en false
-  const renderDicarted = () => {
-    return reportList.map((report: Report, index) => {
-      if (!report.admonished) {
-        const date = new Date(report.time);
-        const time = `${date.getHours()}:${String(date.getMinutes()).padStart(
-          2,
-          "0"
-        )}`;
-        return (
-          <Text style={styles.reportText} key={report._id}>
-            {index + 1}. {report.epp} - {time} - {report.place}
-          </Text>
-        );
-      }
-    });
-  };
+  const filteredReports = seeAdmonished
+    ? reportList.filter((report) => report.Reported)
+    : reportList.filter((report) => !report.Reported);
 
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
         <Pressable
-          style={styles.button}
-          onPress={() => setSetseeAdmonished(true)}
+          style={[styles.button, seeAdmonished && styles.selectedButton]}
+          onPress={() => setSeeAdmonished(true)}
         >
           <Text style={styles.buttonText}>Amonestados</Text>
         </Pressable>
         <Pressable
-          style={styles.button}
-          onPress={() => setSetseeAdmonished(false)}
+          style={[styles.button, !seeAdmonished && styles.selectedButton]}
+          onPress={() => setSeeAdmonished(false)}
         >
           <Text style={styles.buttonText}>Descartados</Text>
         </Pressable>
       </View>
-      {setseeAdmonished ? (
-        <>
-          <Text style={styles.title}>Amonestados</Text>
-          {renderAdmonished()}
-        </>
-      ) : (
-        <>
-          <Text style={styles.title}>Descartados</Text>
-          {renderDicarted()}
-        </>
-      )}
+      <FlatList
+        data={filteredReports}
+        keyExtractor={(item) => item._id}
+        renderItem={renderAdmonishedItem}
+        ListEmptyComponent={() => (
+          <Text style={styles.emptyText}>No hay reportes</Text>
+        )}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  listItem: {
+    backgroundColor: "#fff",
+    padding: 16,
+    marginBottom: 8,
+    borderRadius: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  
+  listItemContent: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  
+  listItemNumber: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginRight: 8,
+  },
+  
+  listItemInfo: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  
+  listItemEPPs: {
+    fontSize: 12,
+    color: "#333",
+  },
+  
+  listItemTime: {
+    fontSize: 12,
+    color: "#333",
+    marginLeft: 8,
+  },
+  listItemArea: {
+    fontSize: 14,
+    fontWeight: "bold", // Agregado para hacer el texto en negrita
+    color: "#333",
+    marginLeft: 8,
+  },
   container: {
     flex: 1,
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "flex-start",
     paddingTop: 100,
     paddingBottom: 60,
     paddingHorizontal: 20,
   },
   buttonContainer: {
-    width: "90%",
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    paddingTop: 40,
     flexDirection: "row",
+    justifyContent: "center",
+    paddingVertical: 20,
   },
   button: {
-    width: 150,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: "#49B4CB",
+    flex: 1,
+    paddingVertical: 10,
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#49B4CB",
+  },
+  selectedButton: {
+    backgroundColor: "#007bff",
   },
   buttonText: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
   },
-  title: {
-    color: "#fff",
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 20,
+  listItemText: {
+    fontSize: 16,
   },
-  reportText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "400",
-    marginBottom: 12,
+  emptyText: {
+    alignSelf: "center",
+    fontSize: 16,
+    marginTop: 20,
   },
 });
