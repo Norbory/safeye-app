@@ -21,7 +21,7 @@ export function HomeScreen() {
       id: 1,
       backgroundImage: DEFAULT_BACKGROUND_IMAGE,
       zona: "Sala de maquinas",
-      epp: ["CASCO"],
+      epp: "",
       tiempo: "18:00 p.m."
     }
   ]);
@@ -31,7 +31,7 @@ export function HomeScreen() {
     id: index + 1,
     backgroundImage: report.imageUrls[0],
     zona: report.areaName,
-    epp: report.EPPs,
+    epp: report.EPPs.join("   "),
     tiempo: report.date,
   }));
 
@@ -87,7 +87,7 @@ export function HomeScreen() {
             onRedButtonPress={() => {}}
             onImagePress={() => {}}
             zona={""}
-            epp={[""]}
+            epp={""}
             tiempo={""}
           />
         )}
