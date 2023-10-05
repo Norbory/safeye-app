@@ -12,8 +12,8 @@ import {
   VictoryChart, 
   VictoryAxis,
   VictoryStack, 
-  VictoryLabel, 
-  VictoryArea, 
+  VictoryLabel,
+  VictoryPie, 
   VictoryGroup 
 } from 'victory-native';
 import useReports from "../hooks/useReports";
@@ -21,90 +21,35 @@ import { Report } from "../types";
 
 
 export function StatisticsScreen() {
-  const [data,setData] = useState([
-    {
-      EPP: "Casco", 
-      status:{aprobados: 0, descartados:0}
-    },
-    {
-      EPP: "Mandil", 
-      status:{aprobados: 0, descartados:0}
-    },
-    {
-      EPP: "Guantes",
-      status:{aprobados: 0, descartados:0}
-    },
-    {
-      EPP: "Lentes", 
-      status:{aprobados: 0, descartados:0}
-    },
-    {
-      EPP: "Orejeras", 
-      status:{aprobados: 0, descartados:0}
-    },
-    {
-      EPP: "Respirador", 
-      status:{aprobados: 0, descartados:0}
-    }
-  ]);
-  
-  const [selectedLine, setSelectedLine] = useState("todas");
-  const reportList = useReports();
-  
-  // Datos para la tabla
-  useEffect(() => {
-    const updateData = [
-      {
-        EPP: "Casco", 
-        status:{aprobados: 0, descartados:0}
-      },
-      {
-        EPP: "Mandil", 
-        status:{aprobados: 0, descartados:0}
-      },
-      {
-        EPP: "Guantes",
-        status:{aprobados: 0, descartados:0}
-      },
-      {
-        EPP: "Lentes", 
-        status:{aprobados: 0, descartados:0}
-      },
-      {
-        EPP: "Orejeras", 
-        status:{aprobados: 0, descartados:0}
-      },
-      {
-        EPP: "Respirador", 
-        status:{aprobados: 0, descartados:0}
-      }
-    ];
-      if (reportList.length > 0) {
-        reportList.forEach((report: Report) => {
-          const epps = report.EPPs;
-          epps.forEach((epp: string) => {
-            for (let i=0; i<6; i++){
-              if(updateData[i].EPP === epp){
-                if(report.Reported===true){
-                  updateData[i].status.aprobados++
-                } else{
-                  updateData[i].status.descartados++
-                }
-              }
-            }
-          });
-        });
-      }
-      setData(updateData);
-  }, [reportList]);
+  const [seeAdmonished, setSeeAdmonished] = useState(true);
 
-  const handleLineButtonClick = (line: any) => {
-    setSelectedLine(line);
+  const reportList = useReports();
+
+  const filteredReports = seeAdmonished
+  ? reportList.filter((report) => report.Reported)
+  : reportList.filter((report) => !report.Reported);
+
+  const ContadorA = (epp: string, reports: Report[]) => {
+    let cuenta = 0;
+    reports.forEach((item) => {
+      const epps = item.EPPs;
+      if ((epps.includes(epp)) && (item.Reported === true)) {cuenta++;}
+    });
+    return cuenta;
+  };
+
+  const ContadorD = (epp: string, reports: Report[]) => {
+    let cuenta = 0;
+    reports.forEach((item) => {
+      const epps = item.EPPs;
+      if ((epps.includes(epp)) && (!item.Reported)) {cuenta+=1;}
+    });
+    return cuenta;
   };
 
   return (
     <ScrollView style={styles.container}>
-      <VictoryChart domainPadding={10}>
+      <VictoryChart domainPadding={2}>
         <VictoryLabel
           text="Estadísticas de Incidencias de la semana"
           x={195}
@@ -123,179 +68,70 @@ export function StatisticsScreen() {
         <VictoryAxis dependentAxis
           label="Incidencias"
           style={{
-            axisLabel: { padding: 25, fill: "white" },
+            axisLabel: { padding: 32, fill: "white" },
             tickLabels: { fill: "white" },
             axis: { stroke: "white" }
           }}
         />
         <VictoryStack
-          colorScale={["green", "red"]}
+          colorScale={["green", "tomato"]}
         >
           <VictoryBar 
-            data={data}
-            x="EPP"
-            y={["status","aprobados"]}
-            labels={({ datum }) => datum.status.aprobados}
+            data={[
+              {x:"Casco", y:ContadorA("Casco",reportList)},
+              {x:"Mandil", y:ContadorA("Mandil",reportList)},
+              {x:"Guantes", y:ContadorA("Guantes",reportList)},
+              {x:"Lentes", y:ContadorA("Lentes",reportList)},
+              {x:"Orejeras", y:ContadorA("Orejeras",reportList)},
+              {x:"Respirador", y:ContadorA("Respirador",reportList)}
+            ]}
             labelComponent={<VictoryLabel dy={25} />}
             style={{ labels: { fill: "white",}}}
           />
           <VictoryBar 
-            data={data}
-            x="EPP"
-            y={["status","descartados"]}
-            labels={({ datum }) => datum.status.descartados}
+            data={[
+              {x:"Casco", y:ContadorD("Casco",reportList)},
+              {x:"Mandil", y:ContadorD("Mandil",reportList)},
+              {x:"Guantes", y:ContadorD("Guantes",reportList)},
+              {x:"Lentes", y:ContadorD("Lentes",reportList)},
+              {x:"Orejeras", y:ContadorD("Orejeras",reportList)},
+              {x:"Respirador", y:ContadorD("Respirador",reportList)}
+            ]}
             labelComponent={<VictoryLabel dy={25} />}
             style={{ labels: { fill: "white" } }}
           />
         </VictoryStack>
       </VictoryChart>
-      <View style={{ flexDirection: "row", justifyContent: "space-around", paddingTop:"5%"}}>
-        <Pressable style={styles.button} onPress={() => handleLineButtonClick("primera linea")}>
-          <Text>Casco</Text>
-        </Pressable>
-        <Pressable style={styles.button} onPress={() => handleLineButtonClick("segunda linea")}>
-          <Text>Mandil</Text>
-        </Pressable>
-        <Pressable style={styles.button} onPress={() => handleLineButtonClick("tercera linea")}>
-          <Text>Guantes</Text>
-        </Pressable>
-      </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-around", paddingTop:"5%"}}>
-      <Pressable style={styles.button} onPress={() => handleLineButtonClick("cuarta linea")}>
-          <Text>Lentes</Text>
-        </Pressable>
-        <Pressable style={styles.button} onPress={() => handleLineButtonClick("quinta linea")}>
-          <Text>Orejeras</Text>
-        </Pressable>
-        <Pressable style={styles.button} onPress={() => handleLineButtonClick("sexta linea")}>
-          <Text>Respirador</Text>
-        </Pressable>
-      </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-around", paddingTop:"5%"}}>
-        <Pressable style={styles.button} onPress={() => handleLineButtonClick("todas")}>
-          <Text>Todos</Text>
-        </Pressable>
-      </View>
-
-      <VictoryChart width={400} height={400} >
-        <VictoryAxis
-          label="Dia"
-          style={{
-            axisLabel: { padding: 30, fill: "white" },
-            tickLabels: { fill: "white", padding: 20 },
-            axis: { stroke: "white" },
-          }}
-          tickLabelComponent={<VictoryLabel dy={-10}/>}
-        />
-        <VictoryAxis dependentAxis
-          style={{
-            tickLabels: { fill: "white" },
-            axis: { stroke: "white" }
-          }}
-        />
-        <VictoryGroup
-          style={{
-            data: { strokeWidth: 3, fillOpacity:0 }
-          }}
-        >
-          {selectedLine === "primera linea" || selectedLine === "todas" ? (
-          <VictoryArea
-            style={{
-              data: {stroke: "cyan" }
-            }}
-            data={[
-              { x: "Lu", y: 2 },
-              { x: "Ma", y: 3 },
-              { x: "Mi", y: 5 },
-              { x: "Ju", y: 4 },
-              { x: "Vi", y: 7 },
-              { x: "Sa", y: 7 },
-              { x: "Do", y: 4 }
-            ]}
-          />
-          ) : null}
-          {selectedLine === "segunda linea" || selectedLine === "todas" ? (
-          <VictoryArea
-            style={{
-              data: {stroke: "magenta" }
-            }}
-            data={[
-              { x: "Lu", y: 3 },
-              { x: "Ma", y: 2 },
-              { x: "Mi", y: 6 },
-              { x: "Ju", y: 2 },
-              { x: "Vi", y: 6 },
-              { x: "Sa", y: 5 },
-              { x: "Do", y: 4 }
-            ]}
-          />
-          ) : null}
-          {selectedLine === "tercera linea" || selectedLine === "todas" ? (
-          <VictoryArea
-            style={{
-              data: {stroke: "white" }
-            }}
-            data={[
-              { x: "Lu", y: 2 },
-              { x: "Ma", y: 1 },
-              { x: "Mi", y: 4 },
-              { x: "Ju", y: 2 },
-              { x: "Vi", y: 7 },
-              { x: "Sa", y: 2 },
-              { x: "Do", y: 4 }
-            ]}
-          />
-          ) : null}
-          {selectedLine === "cuarta linea" || selectedLine === "todas" ? (
-          <VictoryArea
-            style={{
-              data: {stroke: "tomato" }
-            }}
-            data={[
-              { x: "Lu", y: 2 },
-              { x: "Ma", y: 2 },
-              { x: "Mi", y: 3 },
-              { x: "Ju", y: 3 },
-              { x: "Vi", y: 2 },
-              { x: "Sa", y: 3 },
-              { x: "Do", y: 5 }
-            ]}
-          />
-          ) : null}
-          {selectedLine === "quinta linea" || selectedLine === "todas" ? (
-          <VictoryArea
-            style={{
-              data: {stroke: "gold" }
-            }}
-            data={[
-              { x: "Lu", y: 1 },
-              { x: "Ma", y: 9 },
-              { x: "Mi", y: 1 },
-              { x: "Ju", y: 4 },
-              { x: "Vi", y: 3 },
-              { x: "Sa", y: 2 },
-              { x: "Do", y: 4 }
-            ]}
-          />
-          ) : null}
-          {selectedLine === "sexta linea" || selectedLine === "todas" ? (
-          <VictoryArea
-            style={{
-              data: {stroke: "orange" }
-            }}
-            data={[
-              { x: "Lu", y: 2 },
-              { x: "Ma", y: 1 },
-              { x: "Mi", y: 5 },
-              { x: "Ju", y: 1 },
-              { x: "Vi", y: 4 },
-              { x: "Sa", y: 3 },
-              { x: "Do", y: 8 }
-            ]}
-          />
-          ) : null}
-        </VictoryGroup>
-      </VictoryChart>
+      <Text style={{
+          textAlign: "center", // Centrar el texto horizontalmente
+          color: "white", // Cambiar el color del texto a blanco
+          fontSize: 24, // Establecer el tamaño de fuente deseado
+          fontWeight: "bold", // Otras propiedades de estilo como negrita, cursiva, etc.
+          marginBottom: 10,
+        }}>
+        Grafica de incidentes
+        </Text>
+      <VictoryPie
+        colorScale={["tomato", "orange", "gold", "cyan", "navy", "black" ]}
+        data={[
+          {x:1, y:ContadorD("Casco",reportList)+ContadorA("Casco",reportList), label:`Casco`},
+          {x:2, y:ContadorD("Mandil",reportList)+ContadorA("Mandil",reportList), label:"Mandil"},
+          {x:3, y:ContadorD("Guantes",reportList)+ContadorA("Guantes",reportList), label:"Guantes"},
+          {x:4, y:ContadorD("Lentes",reportList)+ContadorA("Lentes",reportList), label:"Lentes"},
+          {x:5, y:ContadorD("Orejeras",reportList)+ContadorA("Orejeras",reportList), label:"Orejeras"},
+          {x:6, y:ContadorD("Respirador",reportList)+ContadorA("Respirador",reportList), label:"Respirador"},
+        ]}
+        labelRadius={({ innerRadius }) => innerRadius + 50 }
+        radius={({ datum }) => 80 + datum.y * 20}
+        innerRadius={50}
+        style={{
+          labels: {
+            fill: "white", // Cambiar el color del texto de las etiquetas a blanco
+            fontSize: 16, // Establecer el tamaño de fuente deseado para las etiquetas
+            fontWeight: "normal" // Establecer la fuente como normal
+          } 
+        }}
+      />
       <View style={{height:20}}></View>
     </ScrollView>
   );
