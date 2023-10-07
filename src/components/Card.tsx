@@ -3,6 +3,8 @@ import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from "react
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from 'expo-font';
 import { POPPINS } from "../constantes/fonts";
+import useReports from "../hooks/useReports";
+import { Report } from "../types";
 
 interface CardProps {
   backgroundImage: string;

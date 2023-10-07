@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, StatusBar, SafeAreaView, ScrollView, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
@@ -40,13 +40,17 @@ export function HomeScreen() {
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [isButtonSend, setisButtonSend] = useState(false);
+  const selectedCardRef = useRef(null); 
+  const idRef = useRef(null); 
 
   const handleRedButtonPress = (id: number) => {
     const updatedCardsData = cardsData.filter((card) => card.id !== id);
     setCardsData(updatedCardsData);
   };
 
-  const handleGreenButtonPress = () => {
+  const handleGreenButtonPress = (id: number) => {
+    selectedCardRef.current = { ...cardsData.find((card) => card.id === id) }; 
+    idRef.current = id; 
     setModalVisible(true);
   };
 
@@ -56,15 +60,20 @@ export function HomeScreen() {
 
   useEffect(() => {
     if (isButtonSend) {
-      // Si isButtonSend es true, elimina las cartas correspondientes
-      cardsData.forEach((cardData) => {
-        handleRedButtonPress(cardData.id);
-      });
+      if (idRef.current !== null) {
+        const updatedCardsData = cardsData.filter((card) => card.id !== idRef.current);
+        setCardsData(updatedCardsData);
+      }
+  
+      if (selectedCardRef.current) {
+        console.log("Tarjeta seleccionada:", selectedCardRef.current);
+        console.log("ID seleccionado:", idRef.current);
+      }
+  
       setModalVisible(false);
       setisButtonSend(false);
     }
   }, [isButtonSend, cardsData]);
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal={true} style={styles.scrollView}>
@@ -72,7 +81,7 @@ export function HomeScreen() {
           <Card
             key={index}
             backgroundImage={cardsData.backgroundImage}
-            onGreenButtonPress={() => handleGreenButtonPress()}
+            onGreenButtonPress={() => handleGreenButtonPress(cardsData.id)}
             onRedButtonPress={() => handleRedButtonPress(cardsData.id)}
             onImagePress={() => {}}
             zona={cardsData.zona}
