@@ -3,8 +3,6 @@ import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from "react
 import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from 'expo-font';
 import { POPPINS } from "../constantes/fonts";
-import useReports from "../hooks/useReports";
-import { Report } from "../types";
 
 interface CardProps {
   backgroundImage: string;
@@ -62,7 +60,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf:"center",
     borderRadius: 20,
-    marginTop:"4%",
+    // marginTop:"4%",
     marginHorizontal:10,
     flexDirection:"column",
     backgroundColor: "white",

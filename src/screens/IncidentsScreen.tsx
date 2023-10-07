@@ -29,8 +29,8 @@ export function IncidentsScreen() {
   };
 
   const filteredReports = seeAdmonished
-    ? reportList.filter((report) => report.Reported)
-    : reportList.filter((report) => !report.Reported);
+    ? reportList.filter((report) => report.Deleted).filter((report) => report.Reported)
+    : reportList.filter((report) => report.Deleted).filter((report) => !report.Reported);
 
   return (
     <View style={styles.container}>

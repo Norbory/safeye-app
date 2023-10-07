@@ -38,7 +38,7 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const res = axios.post(`${IP}:3000/api/signin`, {
+      const res = axios.post(`https://k18gs1mk-3000.brs.devtunnels.ms/api/signin`, {
         username,
         password,
       });

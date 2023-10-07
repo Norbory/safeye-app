@@ -25,10 +25,6 @@ export function StatisticsScreen() {
 
   const reportList = useReports();
 
-  const filteredReports = seeAdmonished
-  ? reportList.filter((report) => report.Reported)
-  : reportList.filter((report) => !report.Reported);
-
   const ContadorA = (epp: string, reports: Report[]) => {
     let cuenta = 0;
     reports.forEach((item) => {
@@ -78,24 +74,24 @@ export function StatisticsScreen() {
         >
           <VictoryBar 
             data={[
-              {x:"Casco", y:ContadorA("Casco",reportList)},
-              {x:"Mandil", y:ContadorA("Mandil",reportList)},
-              {x:"Guantes", y:ContadorA("Guantes",reportList)},
-              {x:"Lentes", y:ContadorA("Lentes",reportList)},
-              {x:"Orejeras", y:ContadorA("Orejeras",reportList)},
-              {x:"Respirador", y:ContadorA("Respirador",reportList)}
+              {x:"Casco", y:ContadorA("Casco",reportList.filter((report) => report.Deleted))},
+              {x:"Mandil", y:ContadorA("Mandil",reportList.filter((report) => report.Deleted))},
+              {x:"Guantes", y:ContadorA("Guantes",reportList.filter((report) => report.Deleted))},
+              {x:"Lentes", y:ContadorA("Lentes",reportList.filter((report) => report.Deleted))},
+              {x:"Orejeras", y:ContadorA("Orejeras",reportList.filter((report) => report.Deleted))},
+              {x:"Respirador", y:ContadorA("Respirador",reportList.filter((report) => report.Deleted))}
             ]}
             labelComponent={<VictoryLabel dy={25} />}
             style={{ labels: { fill: "white",}}}
           />
           <VictoryBar 
             data={[
-              {x:"Casco", y:ContadorD("Casco",reportList)},
-              {x:"Mandil", y:ContadorD("Mandil",reportList)},
-              {x:"Guantes", y:ContadorD("Guantes",reportList)},
-              {x:"Lentes", y:ContadorD("Lentes",reportList)},
-              {x:"Orejeras", y:ContadorD("Orejeras",reportList)},
-              {x:"Respirador", y:ContadorD("Respirador",reportList)}
+              {x:"Casco", y:ContadorD("Casco",reportList.filter((report) => report.Deleted))},
+              {x:"Mandil", y:ContadorD("Mandil",reportList.filter((report) => report.Deleted))},
+              {x:"Guantes", y:ContadorD("Guantes",reportList.filter((report) => report.Deleted))},
+              {x:"Lentes", y:ContadorD("Lentes",reportList.filter((report) => report.Deleted))},
+              {x:"Orejeras", y:ContadorD("Orejeras",reportList.filter((report) => report.Deleted))},
+              {x:"Respirador", y:ContadorD("Respirador",reportList.filter((report) => report.Deleted))}
             ]}
             labelComponent={<VictoryLabel dy={25} />}
             style={{ labels: { fill: "white" } }}
@@ -114,12 +110,12 @@ export function StatisticsScreen() {
       <VictoryPie
         colorScale={["tomato", "orange", "gold", "cyan", "navy", "black" ]}
         data={[
-          {x:1, y:ContadorD("Casco",reportList)+ContadorA("Casco",reportList), label:`Casco`},
-          {x:2, y:ContadorD("Mandil",reportList)+ContadorA("Mandil",reportList), label:"Mandil"},
-          {x:3, y:ContadorD("Guantes",reportList)+ContadorA("Guantes",reportList), label:"Guantes"},
-          {x:4, y:ContadorD("Lentes",reportList)+ContadorA("Lentes",reportList), label:"Lentes"},
-          {x:5, y:ContadorD("Orejeras",reportList)+ContadorA("Orejeras",reportList), label:"Orejeras"},
-          {x:6, y:ContadorD("Respirador",reportList)+ContadorA("Respirador",reportList), label:"Respirador"},
+          {x:1, y:ContadorD("Casco",reportList.filter((report) => report.Deleted))+ContadorA("Casco",reportList.filter((report) => report.Deleted)), label:`Casco`},
+          {x:2, y:ContadorD("Mandil",reportList.filter((report) => report.Deleted))+ContadorA("Mandil",reportList.filter((report) => report.Deleted)), label:"Mandil"},
+          {x:3, y:ContadorD("Guantes",reportList.filter((report) => report.Deleted))+ContadorA("Guantes",reportList.filter((report) => report.Deleted)), label:"Guantes"},
+          {x:4, y:ContadorD("Lentes",reportList.filter((report) => report.Deleted))+ContadorA("Lentes",reportList.filter((report) => report.Deleted)), label:"Lentes"},
+          {x:5, y:ContadorD("Orejeras",reportList.filter((report) => report.Deleted))+ContadorA("Orejeras",reportList.filter((report) => report.Deleted)), label:"Orejeras"},
+          {x:6, y:ContadorD("Respirador",reportList.filter((report) => report.Deleted))+ContadorA("Respirador",reportList.filter((report) => report.Deleted)), label:"Respirador"},
         ]}
         labelRadius={({ innerRadius }) => innerRadius + 50 }
         radius={({ datum }) => 80 + datum.y * 20}

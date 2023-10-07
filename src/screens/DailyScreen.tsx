@@ -32,7 +32,7 @@ export function DailyScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Resumen de incidentes</Text>
       <ScrollView style={{ width: "100%", height: "100%" }}>
-      {reportList.map((report: Report, index: number) => (
+      {reportList.filter((report) => report.Deleted).map((report: Report, index: number) => (
         <View key={report._id} style={styles.reportContainer}>
           <Text style={styles.reportTitle}>Incidente {index + 1}</Text>
           <Text style={styles.reportText}>Area: {report.areaName}</Text>

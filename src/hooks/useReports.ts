@@ -9,7 +9,7 @@ export default function useReports() {
   const fetchReports = async () => {
     try {
       const response = await axios.get(
-        `${IP}:8080/company/65199ec6cb4d6bc2da6f49ae/incidents`
+        `https://k18gs1mk-8080.brs.devtunnels.ms/company/65199ec6cb4d6bc2da6f49ae/incidents`
       );
       //console.log(response);
       const transformedReports = response.data.map((report: Report) => ({

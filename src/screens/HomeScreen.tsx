@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import moment from 'moment';
 import { StyleSheet, StatusBar, SafeAreaView, ScrollView, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
@@ -11,6 +12,8 @@ import {
 import CustomModal from "../components/Window";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
+import axios from "axios";
+import {IP} from "../constantes/secret";
 
 
 export function HomeScreen() {
@@ -20,9 +23,11 @@ export function HomeScreen() {
     {
       id: 1,
       backgroundImage: DEFAULT_BACKGROUND_IMAGE,
-      zona: "Sala de maquinas",
+      zona: "",
       epp: "",
-      tiempo: "18:00 p.m."
+      tiempo: "",
+      deleted: true,
+      _id: ""
     }
   ]);
 
@@ -32,7 +37,9 @@ export function HomeScreen() {
     backgroundImage: report.imageUrls[0],
     zona: report.areaName,
     epp: report.EPPs.join("   "),
-    tiempo: report.date,
+    tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY H:mm'),
+    deleted: report.Deleted,
+    _id: report._id
   }));
 
   setCardsData(updatedCardsData);
@@ -43,9 +50,22 @@ export function HomeScreen() {
   const selectedCardRef = useRef(null); 
   const idRef = useRef(null); 
 
-  const handleRedButtonPress = (id: number) => {
-    const updatedCardsData = cardsData.filter((card) => card.id !== id);
-    setCardsData(updatedCardsData);
+  // const handleRedButtonPress = (id: number) => {
+  //   const updatedCardsData = cardsData.filter((card) => card.id !== id);
+  //   setCardsData(updatedCardsData
+  // };
+
+  const handleRedButtonPress = async (id: number) => {
+    const selectedCard = cardsData.find((card) => card.id === id);
+    if (selectedCard) {
+      try {
+        await axios.put(`https://k18gs1mk-8080.brs.devtunnels.ms/company/65199ec6cb4d6bc2da6f49ae/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
+        selectedCard.deleted = true;
+        setCardsData([...cardsData]);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   const handleGreenButtonPress = (id: number) => {
@@ -54,9 +74,9 @@ export function HomeScreen() {
     setModalVisible(true);
   };
 
-  const updateIsButtonSend = (value : any) => {
-    setisButtonSend(value);
-  };
+  // const updateIsButtonSend = (value : any) => 
+  //   setisButtonSend(value);
+  // };
 
   useEffect(() => {
     if (isButtonSend) {
@@ -74,10 +94,15 @@ export function HomeScreen() {
       setisButtonSend(false);
     }
   }, [isButtonSend, cardsData]);
+
+  const activeCardsData = cardsData.filter((cardData) => !cardData.deleted);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal={true} style={styles.scrollView}>
-        {cardsData.map(( cardsData,  index) => (
+        {cardsData
+          .filter((cardData) => !cardData.deleted)// Filtra las tarjetas que no están marcadas como eliminad
+          .map((cardsData, index) => (
           <Card
             key={index}
             backgroundImage={cardsData.backgroundImage}
@@ -100,16 +125,16 @@ export function HomeScreen() {
             tiempo={""}
           />
         )}
-        {cardsData.length > 0 && (
+        {activeCardsData.length > 0 && (
           <View style={styles.notificacion}>
             <Ionicons
               name={"ellipse-sharp"}
               size={50}
-              color={cardsData.length > 0 ? "#F44343" : "#cbcdd1"}
+              color={activeCardsData.length > 0 ? "#F44343" : "#cbcdd1"}
               style={styles.noti}
             />
             <Text style={styles.number}>
-              {cardsData.length}
+              {activeCardsData.length}
             </Text>
           </View>
         )}
@@ -150,7 +175,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     color: "#F1FAEE",
     fontSize: 32,
-    right: 18,
+    right: 13,
     top: 2
   },
 });
