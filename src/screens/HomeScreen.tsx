@@ -18,6 +18,21 @@ import {IP} from "../constantes/secret";
 
 export function HomeScreen() {
   const reportList = useReports();
+  const [nombreE, setNombreE] = useState("");
+  const id = '65199ec6cb4d6bc2da6f49ae';
+
+  useEffect(() => {
+    const getName = async () => {
+      try {
+        const response = await axios.get(`https://k18gs1mk-8080.brs.devtunnels.ms/company/${id}`);
+        const nombreDeLaEmpresa = response.data.Name;
+        setNombreE(nombreDeLaEmpresa);
+      } catch (error) {
+        console.error("Error al obtener el nombre:", error);
+      }
+    };
+    getName();
+  }, []);
 
   const [cardsData, setCardsData] = useState([
     {
@@ -49,11 +64,6 @@ export function HomeScreen() {
   const [isButtonSend, setisButtonSend] = useState(false);
   const selectedCardRef = useRef(null); 
   const idRef = useRef(null); 
-
-  // const handleRedButtonPress = (id: number) => {
-  //   const updatedCardsData = cardsData.filter((card) => card.id !== id);
-  //   setCardsData(updatedCardsData
-  // };
 
   const handleRedButtonPress = async (id: number) => {
     const selectedCard = cardsData.find((card) => card.id === id);
@@ -100,6 +110,7 @@ export function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal={true} style={styles.scrollView}>
+        <Text style={styles.empresa}>{nombreE}</Text>
         {cardsData
           .filter((cardData) => !cardData.deleted)// Filtra las tarjetas que no están marcadas como eliminad
           .map((cardsData, index) => (
@@ -178,4 +189,12 @@ const styles = StyleSheet.create({
     right: 13,
     top: 2
   },
+  empresa:{
+    position: "absolute",
+    color: "#F1FAEE",
+    fontSize: 20,
+    fontWeight: "bold",
+    top: 8,
+    left:10
+  }
 });

@@ -43,12 +43,59 @@ export function StatisticsScreen() {
     return cuenta;
   };
 
+  const cascoY = ContadorD("Casco", reportList.filter((report) => report.Deleted)) + ContadorA("Casco", reportList.filter((report) => report.Deleted));
+  const mandilY = ContadorD("Mandil", reportList.filter((report) => report.Deleted)) + ContadorA("Mandil", reportList.filter((report) => report.Deleted));
+  const guantesY = ContadorD("Guantes", reportList.filter((report) => report.Deleted)) + ContadorA("Guantes", reportList.filter((report) => report.Deleted));
+  const lentesY = ContadorD("Lentes", reportList.filter((report) => report.Deleted)) + ContadorA("Lentes", reportList.filter((report) => report.Deleted));
+  const orejerasY = ContadorD("Orejeras", reportList.filter((report) => report.Deleted)) + ContadorA("Orejeras", reportList.filter((report) => report.Deleted));
+  const respiradorY = ContadorD("Respirador", reportList.filter((report) => report.Deleted)) + ContadorA("Respirador", reportList.filter((report) => report.Deleted));
+  const totalitale = cascoY+mandilY+guantesY+lentesY+orejerasY+respiradorY
+
+  const porcentaje = (epp:string)=>{
+    let porcen;
+    switch(epp){
+      case("Casco"):
+        porcen = Math.round(cascoY * 100/ totalitale);
+        break;
+      
+      case("Mandil"):
+        porcen = Math.round(mandilY * 100/ totalitale);
+        break;
+      
+      case("Guantes"):
+        porcen = Math.round(guantesY * 100/ totalitale);
+        break;
+      
+      case("Lentes"):
+        porcen = Math.round(lentesY * 100/ totalitale);
+        break;
+      
+      case("Orejeras"):
+        porcen = Math.round(orejerasY * 100/ totalitale);
+        break;
+      
+      case("Respirador"):
+        porcen = Math.round(respiradorY * 100/ totalitale);
+        break;
+      
+    }
+    return porcen;
+  }
+
+  const data = [
+    { x: ".", y: cascoY, label: cascoY !== 0 ? `Casco ${porcentaje("Casco")}%` : "" },
+    { x: ".", y: mandilY, label: mandilY !== 0 ? `Mandil ${porcentaje("Mandil")}%` : "" },
+    { x: ".", y: guantesY, label: guantesY !== 0 ? `Guantes ${porcentaje("Guantes")}%` : "" },
+    { x: ".", y: lentesY, label: lentesY !== 0 ? `Lentes ${porcentaje("Lentes")}%` : "" },
+    { x: ".", y: orejerasY, label: orejerasY !== 0 ? `Orejeras ${porcentaje("Orejeras")}%` : "" },
+    { x: ".", y: respiradorY, label: respiradorY !== 0 ? `Respirador ${porcentaje("Respirador")}%` : "" },
+  ];
   return (
     <ScrollView style={styles.container}>
-      <VictoryChart domainPadding={2}>
+      <VictoryChart domainPadding={3}>
         <VictoryLabel
           text="Estadísticas de Incidencias de la semana"
-          x={195}
+          x={205}
           y={30}
           textAnchor="middle"
           style={{ fill: "white" }}
@@ -64,7 +111,7 @@ export function StatisticsScreen() {
         <VictoryAxis dependentAxis
           label="Incidencias"
           style={{
-            axisLabel: { padding: 32, fill: "white" },
+            axisLabel: { padding: 25, fill: "white" },
             tickLabels: { fill: "white" },
             axis: { stroke: "white" }
           }}
@@ -108,17 +155,9 @@ export function StatisticsScreen() {
         Grafica de incidentes
         </Text>
       <VictoryPie
-        colorScale={["tomato", "orange", "gold", "cyan", "navy", "black" ]}
-        data={[
-          {x:1, y:ContadorD("Casco",reportList.filter((report) => report.Deleted))+ContadorA("Casco",reportList.filter((report) => report.Deleted)), label:`Casco`},
-          {x:2, y:ContadorD("Mandil",reportList.filter((report) => report.Deleted))+ContadorA("Mandil",reportList.filter((report) => report.Deleted)), label:"Mandil"},
-          {x:3, y:ContadorD("Guantes",reportList.filter((report) => report.Deleted))+ContadorA("Guantes",reportList.filter((report) => report.Deleted)), label:"Guantes"},
-          {x:4, y:ContadorD("Lentes",reportList.filter((report) => report.Deleted))+ContadorA("Lentes",reportList.filter((report) => report.Deleted)), label:"Lentes"},
-          {x:5, y:ContadorD("Orejeras",reportList.filter((report) => report.Deleted))+ContadorA("Orejeras",reportList.filter((report) => report.Deleted)), label:"Orejeras"},
-          {x:6, y:ContadorD("Respirador",reportList.filter((report) => report.Deleted))+ContadorA("Respirador",reportList.filter((report) => report.Deleted)), label:"Respirador"},
-        ]}
+        colorScale={["#007BFF", "#00D68F", "#FFD700", "#D2B48C", "#FFA500"]}
+        data={data}
         labelRadius={({ innerRadius }) => innerRadius + 50 }
-        radius={({ datum }) => 80 + datum.y * 20}
         innerRadius={50}
         style={{
           labels: {
@@ -128,7 +167,7 @@ export function StatisticsScreen() {
           } 
         }}
       />
-      <View style={{height:20}}></View>
+      {/* <View style={{height:20}}></View> */}
     </ScrollView>
   );
 }
