@@ -1,11 +1,74 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import MarginedTextInput from './Text_Box';
 import MarginedTextInput_Modal1 from './Text_Box_Modal1';
 import MarginedTextInput_Modal2 from './Text_Box_Modal2';
-const CustomModal = ({ setisButtonSend, isModalVisible, onClose }) => {
+
+const API_URL = 'https://k18gs1mk-8080.brs.devtunnels.ms/company/llenar-pdf';
+
+const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
 
   const [buttonSendPressed, setButtonSendPressed] = useState(false);
+
+  const [switches, setSwitchValues] = useState({
+  
+      incidentId:"6521bf00e2fa8ecb0b92d733",
+      Nombre: "Nombre aquí",
+      DNI: "DNI aquí",
+      Cargo: "Cargo aquí",
+      Firma: "Firma aquí",
+      Fecha: "Fecha aquí",
+      Hora: "Hora aquí",
+      Contrata: "Contrata aquí",
+      ActosSubestandares: {
+          Marked: false,
+          CheckA: true,
+          CheckB: true,
+          CheckC: false,
+          CheckD: true,
+          CheckE: false,
+          CheckF: true,
+          CheckG: true,
+          CheckH: false,
+          CheckI: true,
+          Otros: true,
+          OtrosTexto: "Texto aquí"
+      },
+      DetalleActo: "Detalle aquí",
+      CondicionesSubestandares: {
+          Marked: true,
+          Check1: true,
+          Check2: true,
+          Check3: true,
+          Check4: true,
+          Check5: true,
+          Check6: true,
+          Otros: true,
+          OtrosTexto: "AAA aquí"
+      },
+      DetalleCondicion: "Detalle aquí",
+      Correción: "Correción aquí",
+      CheckList: {
+          Check1: true,
+          Check2: true,
+          Check3: true
+      },
+      Observador: "Observador aquígaaa"
+  })
+
+  const sendSwitchDataToServer = (value) => {
+    axios
+      .post(API_URL, value)
+      .then((response) => {
+        // Handle the API response here
+        console.log('API Response:', response.data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error('API Error:', error);
+      });
+  };
 
   const handleChangeSend = () => {
     if (buttonSendPressed === true){
@@ -132,6 +195,7 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose }) => {
                 setModal1Visible(false);
                 setSwitchValue1(false);
               }}
+              setSwitchValues = {setSwitchValues}
               setenvioCompleteModal1={setenvioCompleteModal1}
               setEnvioModal1={setEnvioModal1}
               modalNumber={1}
@@ -152,6 +216,7 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose }) => {
                 setModal2Visible(false);
                 setSwitchValue2(false);
               }}
+              setSwitchValues = {setSwitchValues}
               setenvioCompleteModal2={setenvioCompleteModal2}
               setEnvioModal2={setEnvioModal2}
               modalNumber={2}
@@ -166,8 +231,8 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose }) => {
             style = {[styles.buttonSend, (!envioCompleteModal1 || !envioCompleteModal2) && styles.disabledButton]}
             onPress={() => {
               onClosefinalChange(true);
-
               onClose();
+              sendSwitchDataToServer(switches);
             }}
             disabled={!envioCompleteModal1 || !envioCompleteModal2}
           >
@@ -201,7 +266,7 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose }) => {
 
 
 // Componente para el contenido del modal individual
-const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, setenvioCompleteModal1 }) => {
+const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, setenvioCompleteModal1, setSwitchValues }) => {
   const [switchValue1, setSwitchValue1] = useState(false);
   const [switchValue2, setSwitchValue2] = useState(false);
   const [switchValue3, setSwitchValue3] = useState(false);
@@ -284,6 +349,7 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
               console.log('Interruptor 2:', switchValue2);
               console.log('Interruptor 3:', switchValue3);
               console.log('Texto ingresado:', textInputValue);
+              //Actualizar los switches
               setEnvioModal1(true);
               setenvioCompleteModal1(true);
               
@@ -314,7 +380,7 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
   );
 };
 // Componente para el contenido del modal individual
-const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenvioCompleteModal2 }) => {
+const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenvioCompleteModal2, setSwitchValues }) => {
   const [switchValue1, setSwitchValue1] = useState(false);
   const [switchValue2, setSwitchValue2] = useState(false);
   const [switchValue3, setSwitchValue3] = useState(false);
