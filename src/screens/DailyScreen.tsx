@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    color: "#FFF", // Texto oscuro
+    color: "#252525", // Texto oscuro
     fontSize: 24, // Tamaño de fuente ligeramente mayor
     fontWeight: "bold",
     marginBottom: 20,

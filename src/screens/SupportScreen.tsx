@@ -4,8 +4,6 @@ export function SupportScreen() {
   return (
     <View style={styles.container}>
       <ScrollView style={{ width: "100%", height: "100%" }}>
-
-      
       <Text style={styles.title}>Soporte Técnico</Text>
       <Text style={styles.subtitle}>Preguntas usuales</Text>
       <Text style={styles.question}>Como exportar el reporte</Text>
@@ -40,27 +38,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    color: "#fff",
+    color: "#252525",
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
   },
   subtitle: {
-    color: "#fff",
+    color: "#252525",
     fontSize: 20,
     fontWeight: "bold",
     alignSelf: "flex-start",
     marginBottom: 20,
   },
   question: {
-    color: "#fff",
+    color: "#252525",
     fontSize: 20,
     fontWeight: "bold",
     alignSelf: "flex-start",
     marginLeft: 20,
   },
   text: {
-    color: "#fff",
+    color: "#252525",
     fontSize: 16,
     lineHeight: 24,
     fontWeight: "400",

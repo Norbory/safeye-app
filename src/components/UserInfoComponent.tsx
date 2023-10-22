@@ -9,6 +9,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { useFonts } from 'expo-font';
 import { IUSER } from '../constantes/images'
 import { POPPINS } from "../constantes/fonts";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type Props = {
     username: string;
@@ -28,11 +29,7 @@ const UserInfoComponent: React.FC<Props> = ({
     return(
         <View style={styles.container}>
             <View style={styles.container1}>
-                <Text style={styles.usernameText}>Hola, {username}</Text>
-                  <View style={styles.activeContainer}>
-                  <Ionicons name="ellipse" color={isActive ? "#1FFFA9" : "#F44343"} size={15} />
-                  <Text style={styles.activeText}>{isActive ? "conectado" : "desconectado"}</Text>
-                  </View>
+              <Text style={styles.usernameText}>Hola, {username}</Text>
             </View>
             <Image source={IUSER} style={styles.profileImage} />
         </View>
@@ -55,26 +52,11 @@ const UserInfoComponent: React.FC<Props> = ({
           },
         usernameText: {
           fontFamily:"Poppins-Bold",
-          color: "#fff",
-          fontSize: 22,
+          color: "#252525",
+          fontSize: 16,
           fontWeight: "bold",
-          marginLeft: 10,
-          textShadowColor: "black",
-          textShadowOffset: { width: -1, height: 1 },
-          textShadowRadius: 1,
-        },
-        activeContainer: {
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent:"flex-end",
-          marginLeft: 10,
-        },
-        activeText: {
-          fontFamily:"Poppins-Bold",
-          fontSize: 12,
-          color: "#F1FAEE",
-          marginLeft: 5,
-          textShadowColor: "black",
+          marginRight: -8,
+          textShadowColor: "rgba(0,0,0,0.3)",
           textShadowOffset: { width: -1, height: 1 },
           textShadowRadius: 1,
         },
