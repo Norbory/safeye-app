@@ -5,19 +5,21 @@ import {
   Text, 
   View, 
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Pressable,
+  Modal,
+  ImageBackground
 } from "react-native";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import {HTML} from "../constantes/html";
-import { Ionicons } from "@expo/vector-icons";
-
 
 export function DailyScreen() {
   const reportList = useReports();
-
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
 
   let generatePDF = async () => {
     const file = await printToFileAsync({ 
@@ -26,14 +28,34 @@ export function DailyScreen() {
     });
 
     await shareAsync(file.uri);
+    setSelectedReport(null); 
+    setModalVisible(false);
+  };
+
+  {/* Agrego el Modal */}
+  let showCard = (report:Report) => {
+    setSelectedReport(report);
+    setModalVisible(true);
+  };
+
+  let closeModal = () => {
+    setSelectedReport(null); 
+    setModalVisible(false);
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Resumen de incidentes</Text>
       <ScrollView style={{ width: "100%", height: "100%" }}>
+
+      {/* Lista de incidentes Tarjetas */}
       {reportList.filter((report) => report.Deleted).map((report: Report, index: number) => (
-        <View key={report._id} style={styles.reportContainer}>
+        <View key={report._id}>
+        <Pressable 
+          key={report._id} 
+          style={styles.reportContainer}
+          onPress={() => showCard(report)}
+        >
           <Text style={styles.reportTitle}>Incidente {index + 1}</Text>
           <Text style={styles.reportText}>Area: {report.areaName}</Text>
           <Text style={styles.reportText}>
@@ -48,15 +70,47 @@ export function DailyScreen() {
             {moment(report.date).utcOffset(-5).format('D/M/YYYY H:mm')}
           </Text> 
           </View>
+        </Pressable>
         </View>
       ))}
   </ScrollView>
-
       {reportList.length < 1 && <Text>No hay reportes</Text>}
-      <TouchableOpacity onPress={generatePDF} style={styles.buttonContainer}>
-        <Text style={styles.tbutton}>DESCARGAR</Text>
-        <Ionicons name="download" size={25} color="#fff" style={styles.iconShadow} />
-      </TouchableOpacity>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.titleText}>Incidente</Text>
+
+            {/* Contenedor para la imagen, área y EPPs */}
+            <View style={styles.imageAreaEPPContainer}>
+              <ImageBackground source={{ uri: selectedReport?.imageUrls[0] }} style={styles.reportImage}></ImageBackground>
+
+              <View style={styles.reportDetails}>
+                <Text style={styles.modalText}>Área: {selectedReport?.areaName}</Text>
+                <Text style={styles.modalText}>EPPs: {selectedReport?.EPPs.join(", ")}</Text>
+              </View>
+            </View>
+
+            {/* Contenedor para los botones en una fila */}
+            <View style={styles.botones}>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => generatePDF()}>
+                <Text style={styles.textStyle}>Descargar reporte</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => closeModal()}>
+                <Text style={styles.textStyle}>Salir</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -67,7 +121,6 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
   },
-
   dateText: {
     fontWeight: 'bold',
   },
@@ -80,7 +133,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   title: {
-    color: "#FFF", // Texto oscuro
+    color: "#252525", // Texto oscuro
     fontSize: 24, // Tamaño de fuente ligeramente mayor
     fontWeight: "bold",
     marginBottom: 20,
@@ -114,25 +167,6 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     marginBottom: 3, // Menor espacio entre elementos
   },
-  buttonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    position: "absolute",
-    right: 20, // Alineado a la derecha
-    bottom: 5,
-    backgroundColor: "#49B4CB",
-    borderRadius: 30,
-    paddingVertical: 12, // Espaciado vertical
-    paddingHorizontal: 20, // Espaciado horizontal
-    shadowColor: "#252525",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
   iconShadow: {
     marginLeft: 3,
     shadowColor: "#252525",
@@ -144,18 +178,75 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
-  tbutton: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   reportedStyle: {
     color: 'green', // Cambia el color según tus preferencias
     fontSize: 16,
   },
-
   notReportedStyle: {
     color: 'red', // Cambia el color según tus preferencias
     fontSize: 16,
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginHorizontal:3
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'left',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  titleText:{
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 20
+  },
+  imageAreaEPPContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  reportImage: {
+    width: 100,
+    height: 160, 
+    marginRight: 10,
+  },
+  reportDetails: {
+    flex: 1,
+    justifyContent:'flex-start'
+  },
+  botones: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 20,
+  },
 });

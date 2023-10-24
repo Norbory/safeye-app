@@ -127,10 +127,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     alignItems: "center",
-    backgroundColor: "#49B4CB",
+    backgroundColor: "rgba(0,0,0,0.6)",
   },
   selectedButton: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#38a3a5",
   },
   buttonText: {
     color: "#fff",

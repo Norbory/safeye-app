@@ -24,9 +24,7 @@ const MainTabNavigator = () => {
             tabBarShowLabel: false,
             headerShown: false,
             tabBarStyle: {
-              backgroundColor: "#49B4CB",
-              borderTopRightRadius: 30,
-              borderTopLeftRadius: 30,
+              backgroundColor: "#0A3559"
             },
             tabBarActiveTintColor: "#DADCDE",
             tabBarInactiveTintColor: "#252525",
@@ -42,7 +40,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#0A3559" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -65,7 +63,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#0A3559" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -88,7 +86,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#0A3559" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -111,7 +109,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#0A3559" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -134,7 +132,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#0A3559" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}

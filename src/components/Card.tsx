@@ -29,7 +29,7 @@ const Card: React.FC<CardProps> = ({ backgroundImage, onGreenButtonPress, onRedB
 
   return (
     <View style={[styles.card, {backgroundColor:"#cbcdd1"}]}>
-      <ImageBackground source={{ uri: backgroundImage }} resizeMode="stretch" style={styles.image} imageStyle={styles.cardImage}></ImageBackground>
+      <ImageBackground source={{ uri: backgroundImage }} resizeMode="cover" style={styles.image} imageStyle={styles.cardImage}></ImageBackground>
       <View style={styles.letras}>
         <Text style={styles.texto}>{zona}</Text>
         <Text style={styles.texto}>{epp}</Text>

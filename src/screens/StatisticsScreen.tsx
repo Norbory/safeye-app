@@ -14,14 +14,13 @@ import {
   VictoryStack, 
   VictoryLabel,
   VictoryPie, 
-  VictoryGroup 
+  VictoryLegend 
 } from 'victory-native';
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
 
 
 export function StatisticsScreen() {
-  const [seeAdmonished, setSeeAdmonished] = useState(true);
 
   const reportList = useReports();
 
@@ -92,28 +91,37 @@ export function StatisticsScreen() {
   ];
   return (
     <ScrollView style={styles.container}>
-      <VictoryChart domainPadding={3}>
+      {/* Grafica de barras */}
+      <VictoryChart domainPadding={12}>
+        <VictoryLegend x={105} y={50}
+          orientation="horizontal"
+          gutter={30}
+          style={{ border: { stroke: "#252525" } }}
+          data={[
+            { name: "Descartados", symbol:{fill:"tomato"}}, { name: "Amonestados", symbol:{fill:"green"}}
+          ]}
+        />
         <VictoryLabel
           text="Estadísticas de Incidencias de la semana"
-          x={205}
+          x={198}
           y={30}
           textAnchor="middle"
-          style={{ fill: "white" }}
+          style={{ fill: "#252525", fontSize:18, fontWeight: "bold" }}
         />
         <VictoryAxis
           label="EPPs"
           style={{
-            axisLabel: { padding: 30, fill: "white" },
-            tickLabels: { fill: "white" },
-            axis: { stroke: "white" }
+            axisLabel: { padding: 30, fill: "#252525" },
+            tickLabels: { fill: "#252525", fontSize: 10 },
+            axis: { stroke: "#252525" }
           }}
         />
         <VictoryAxis dependentAxis
           label="Incidencias"
           style={{
-            axisLabel: { padding: 25, fill: "white" },
-            tickLabels: { fill: "white" },
-            axis: { stroke: "white" }
+            axisLabel: { padding: 30, fill: "#252525" },
+            tickLabels: { fill: "#252525" },
+            axis: { stroke: "#252525" }
           }}
         />
         <VictoryStack
@@ -128,8 +136,7 @@ export function StatisticsScreen() {
               {x:"Orejeras", y:ContadorA("Orejeras",reportList.filter((report) => report.Deleted))},
               {x:"Respirador", y:ContadorA("Respirador",reportList.filter((report) => report.Deleted))}
             ]}
-            labelComponent={<VictoryLabel dy={25} />}
-            style={{ labels: { fill: "white",}}}
+            style={{}}
           />
           <VictoryBar 
             data={[
@@ -140,17 +147,19 @@ export function StatisticsScreen() {
               {x:"Orejeras", y:ContadorD("Orejeras",reportList.filter((report) => report.Deleted))},
               {x:"Respirador", y:ContadorD("Respirador",reportList.filter((report) => report.Deleted))}
             ]}
-            labelComponent={<VictoryLabel dy={25} />}
-            style={{ labels: { fill: "white" } }}
+            style={{}}
           />
         </VictoryStack>
       </VictoryChart>
+
+      {/* Grafica de pie */}
       <Text style={{
-          textAlign: "center", // Centrar el texto horizontalmente
-          color: "white", // Cambiar el color del texto a blanco
-          fontSize: 24, // Establecer el tamaño de fuente deseado
-          fontWeight: "bold", // Otras propiedades de estilo como negrita, cursiva, etc.
-          marginBottom: 10,
+          textAlign: "center",
+          color: "#252525", 
+          fontSize: 18, 
+          fontWeight: "bold",
+          marginTop:10,
+          marginBottom: -40,
         }}>
         Grafica de incidentes
         </Text>
@@ -161,13 +170,12 @@ export function StatisticsScreen() {
         innerRadius={50}
         style={{
           labels: {
-            fill: "white", // Cambiar el color del texto de las etiquetas a blanco
-            fontSize: 16, // Establecer el tamaño de fuente deseado para las etiquetas
-            fontWeight: "normal" // Establecer la fuente como normal
+            fill: "#252525", 
+            fontSize: 16, 
+            fontWeight: "normal" 
           } 
         }}
       />
-      {/* <View style={{height:20}}></View> */}
     </ScrollView>
   );
 }
@@ -176,12 +184,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop:"20%",
-  },
-  button: {
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: '#4390c6',
-  },
+  }
 });
