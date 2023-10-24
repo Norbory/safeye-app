@@ -4,22 +4,33 @@ import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput, To
 import MarginedTextInput from './Text_Box';
 import MarginedTextInput_Modal1 from './Text_Box_Modal1';
 import MarginedTextInput_Modal2 from './Text_Box_Modal2';
+import { format, parseISO } from 'date-fns';
+
 
 const API_URL = 'https://k18gs1mk-8080.brs.devtunnels.ms/company/llenar-pdf';
 
 const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
+      const dia = 0;
+    const hora = 0;
+
+    useEffect(() => {
+      const timeZone = 'America/Lima';
+      const now = new Date();
+    const dia = format(now, 'dd/MM/yyyy', {timeZone});
+    const hora = format(now, 'HH:mm:ss', {timeZone});
+    }, []);
 
   const [buttonSendPressed, setButtonSendPressed] = useState(false);
 
   const [switches, setSwitchValues] = useState({
   
       incidentId:"6521bf00e2fa8ecb0b92d733",
-      Nombre: "Nombre aquí",
-      DNI: "DNI aquí",
-      Cargo: "Cargo aquí",
-      Firma: "Firma aquí",
-      Fecha: "Fecha aquí",
-      Hora: "Hora aquí",
+      Nombre: "Angelo Mandros",
+      DNI: "6768653",
+      Cargo: "Jefe de TI",
+      Firma: "FA",
+      Fecha: dia,
+      Hora: hora,
       Contrata: "Contrata aquí",
       ActosSubestandares: {
           Marked: false,
@@ -89,6 +100,7 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
 
   // Funcion para poner salto de pagina en el texto 
   const [textValue, setTextValue] = useState('');
+  const [textValue2, setTextValue2] = useState('');
 
 
   const [envioModal1, setEnvioModal1] = useState(false);
@@ -109,6 +121,9 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
     setSwitchValue1(value);
     setModal1Visible(value); // Abrir o cerrar el modal 1
   };
+  const [switch1, setSwitch1] = useState(false);
+  const [switch2, setSwitch2] = useState(false);
+  const [switch3, setSwitch3] = useState(false);
 
   // Función para manejar el cambio del interruptor 2
   const handleSwitch2Change = (value) => {
@@ -174,9 +189,8 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
                 style={styles.textInput}
                 placeholder="Ingrese su nombre..."
                 placeholderTextColor="#95A5A6"
-                onChangeText={(text) => {
-                  // Manejar el texto ingresado
-                }}
+                onChangeText={setTextValue}
+                value={textValue}
               />
             </View>
           </View>
@@ -223,15 +237,28 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
             />
           ) : null}
           
-          <MarginedTextInput margin={20} characterLimit={200} />
+          <MarginedTextInput margin={20} text={textValue2} setText={setTextValue2} characterLimit={200} switch1 ={switch1} switch2={switch2} switch3={switch3} />
           
           <View style={styles.rowContainer}> 
           <View style={styles.buttonContainer}>
           <Pressable
             style = {[styles.buttonSend, (!envioCompleteModal1 || !envioCompleteModal2) && styles.disabledButton]}
             onPress={() => {
+              console.log('Nombre', textValue);
+              console.log('Correcion', textValue2)
               onClosefinalChange(true);
               onClose();
+              console.log('Switch sí:', switch1)
+              setSwitchValues(prevState => ({
+                ...prevState,
+                Correción: textValue2,
+                CheckList: {
+                  ...prevState.CheckList,
+                  Check1: switch1,
+                  Check2: switch2,
+                  Check3: switch3
+                },
+              }));
               sendSwitchDataToServer(switches);
             }}
             disabled={!envioCompleteModal1 || !envioCompleteModal2}
@@ -282,6 +309,8 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
   // Estilos específicos para cada modal
   const modalStyles =
     modalNumber === 1 ? styles.modal1 : modalNumber === 2 ? styles.modal2 : {};
+
+    const [switchValue_1, setSwitchValue_1] = useState(false);
 
   return (
     <Modal
@@ -336,7 +365,8 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
             <Switch value={switchValue9} onValueChange={setSwitchValue9} />
           </View>
 
-          <MarginedTextInput_Modal1 margin={20} characterLimit={200} />
+          <MarginedTextInput_Modal1 margin={20} characterLimit={200}  text={textInputValue}
+        setText={setTextInputValue} switchValue1={switchValue_1} setSwitchValue1={setSwitchValue_1}/>
 
           {/* Agregar botón de enviar */}
           <View style={styles.rowContainer}>
@@ -347,8 +377,30 @@ const ModalContent_1 = ({ onClose, modalNumber, isVisible, setEnvioModal1, seten
               // Aquí puedes realizar alguna acción con los valores de los interruptores y el cuadro de texto
               console.log('Interruptor 1:', switchValue1);
               console.log('Interruptor 2:', switchValue2);
-              console.log('Interruptor 3:', switchValue3);
+              console.log('Interruptor otros:', switchValue_1);
               console.log('Texto ingresado:', textInputValue);
+              setSwitchValues(prevState => ({
+                ...prevState,
+                DetalleActo: "Nuevo Detalle",
+                CondicionesSubestandares: {
+                  ...prevState.CondicionesSubestandares,
+                  Marked: isVisible,
+                  CheckA: switchValue1,
+                  CheckB: switchValue2,
+                  CheckC: switchValue3,
+                  CheckD: switchValue4,
+                  CheckF: switchValue5,
+                  CheckG: switchValue6,
+                  CheckH: switchValue7,
+                  CheckI: switchValue8,
+                  CheckJ: switchValue9,
+                  Otros: switchValue_1,
+                  OtrosTexto: textInputValue
+                },
+                DetalleCondicion: "Nuevo Detalle de Condición",
+                Correción: "Nueva Corrección",
+                Observador: "Nuevo Observador"
+              }));
               //Actualizar los switches
               setEnvioModal1(true);
               setenvioCompleteModal1(true);
@@ -388,11 +440,11 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
   const [switchValue5, setSwitchValue5] = useState(false);
   const [switchValue6, setSwitchValue6] = useState(false);
   const [textInputValue, setTextInputValue] = useState('');
-
+  const [text, setText] = useState('');
   // Estilos específicos para cada modal
   const modalStyles =
     modalNumber === 1 ? styles.modal1 : modalNumber === 2 ? styles.modal2 : {};
-
+  const [switchValue_2, setSwitchValue_2] = useState(false);
   return (
     <Modal
       animationType="fade"
@@ -435,8 +487,8 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
             <Switch value={switchValue6} onValueChange={setSwitchValue6} />
           </View>
 
-          <MarginedTextInput_Modal2 margin={20} characterLimit={200} />
-
+          <MarginedTextInput_Modal2 margin={20} characterLimit={200} text={text}
+        setText={setTextInputValue} switchValue2={switchValue_2} setSwitchValue2={setSwitchValue_2}/>
           {/* Agregar botón de enviar */}
           <View style={styles.rowContainer}>
           <View style={styles.buttonContainer}>
@@ -446,8 +498,30 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
               // Aquí puedes realizar alguna acción con los valores de los interruptores y el cuadro de texto
               console.log('Interruptor 1:', switchValue1);
               console.log('Interruptor 2:', switchValue2);
-              console.log('Interruptor 3:', switchValue3);
+              console.log('otros:', switchValue_2);
               console.log('Texto ingresado:', textInputValue);
+              setSwitchValues(prevState => ({
+                ...prevState,
+                DetalleActo: "Nuevo Detalle",
+                CondicionesSubestandares: {
+                  ...prevState.CondicionesSubestandares,
+                  Marked: isVisible,
+                  CheckA: switchValue1,
+                  CheckB: switchValue2,
+                  CheckC: switchValue3,
+                  CheckD: switchValue5,
+                  CheckF: switchValue6,
+                  CheckG: switchValue3,
+                  CheckH: switchValue1,
+                  CheckI: switchValue2,
+                  Otros: switchValue_2,
+                  OtrosTexto: textInputValue
+                },
+                DetalleCondicion: "Nuevo Detalle de Condición",
+                Correción: "Nueva Corrección",
+              
+                Observador: "Nuevo Observador"
+              }));
               setEnvioModal2(true);
               setenvioCompleteModal2(true);
               // Cerrar este modal individual

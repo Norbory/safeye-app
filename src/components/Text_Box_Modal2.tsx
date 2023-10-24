@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, StyleSheet, Switch } from 'react-native';
 
-const MarginedTextInput_Modal2 = ({ margin, characterLimit }) => {
+const MarginedTextInput_Modal2 = ({ margin, characterLimit, text, setText, switchValue2, setSwitchValue2 }) => {
 
-  const [text, setText] = useState('');
   const [linesWithMargins, setLinesWithMargins] = useState([]);
-  const [switchValue1, setSwitchValue1] = useState(false);
 
   useEffect(() => {
     // Dividir el texto en líneas con el margen dado
@@ -23,7 +21,7 @@ const MarginedTextInput_Modal2 = ({ margin, characterLimit }) => {
       <View style={styles.container}>
         <View style={styles.switchContainer}>
           <Text style={styles.textMargin}>Otro:</Text>
-          <Switch value={switchValue1} onValueChange={setSwitchValue1} />
+          <Switch value={switchValue2} onValueChange={setSwitchValue2} />
         </View>
 
         <TextInput

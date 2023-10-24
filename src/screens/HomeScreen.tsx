@@ -45,7 +45,9 @@ export function HomeScreen() {
       _id: ""
     }
   ]);
-
+  const prove = () => {
+    setModalVisible(true);
+  };
   useEffect(() => {
   const updatedCardsData = reportList.map((report: Report, index: number) => ({
     id: index + 1,
@@ -128,7 +130,7 @@ export function HomeScreen() {
         {cardsData.length === 0 && (
           <Card
             backgroundImage={LAST_IMG}
-            onGreenButtonPress={() => {}}
+            onGreenButtonPress={() => {prove()}}
             onRedButtonPress={() => {}}
             onImagePress={() => {}}
             zona={""}
