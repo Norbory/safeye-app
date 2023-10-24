@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, StyleSheet, Switch } from 'react-native';
 
-const MarginedTextInput_Modal2 = ({ margin, characterLimit, text, setText, switchValue2, setSwitchValue2 }) => {
+const MarginedTextInput_Modal2 = ({ margin, characterLimit, text2, setText2, switchValue2, setSwitchValue2 }) => {
 
   const [linesWithMargins, setLinesWithMargins] = useState([]);
 
   useEffect(() => {
     // Dividir el texto en líneas con el margen dado
-    const lines = text.match(new RegExp(`.{1,${margin}}`, 'g')) || [];
+    const lines = text2.match(new RegExp(`.{1,${margin}}`, 'g')) || [];
     setLinesWithMargins(lines);
-  }, [text, margin]);
+  }, [text2, margin]);
 
   const handleTextChange = (newText) => {
     if (newText.length <= characterLimit) {
-      setText(newText);
+      setText2(newText);
     }
   };
 
@@ -30,7 +30,7 @@ const MarginedTextInput_Modal2 = ({ margin, characterLimit, text, setText, switc
           placeholder="Detalle aquí..."
           placeholderTextColor="#95A5A6"
           onChangeText={handleTextChange}
-          value={text}
+          value={text2}
         />
       </View>
   );

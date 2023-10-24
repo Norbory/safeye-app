@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, StyleSheet } from 'react-native';
 import SwitchRow from './SwitchRow';
 
-const MarginedTextInput = ({ margin, characterLimit,text, setText, switch1, switch2, switch3  }) => {
+const MarginedTextInput = ({ margin, characterLimit,text, setText, setSwitch1, setSwitch2, setSwitch3, switch1, switch2, switch3  }) => {
 
   const [linesWithMargins, setLinesWithMargins] = useState([]);
 
@@ -29,7 +29,7 @@ const MarginedTextInput = ({ margin, characterLimit,text, setText, switch1, swit
         onChangeText={handleTextChange}
         value={text}
       />
-      <SwitchRow switch1={switch1}  switch2={switch2}  switch3={switch3}  ></SwitchRow>
+      <SwitchRow setSwitch1={setSwitch1} setSwitch2={setSwitch2} setSwitch3={setSwitch3} switch1={switch1}  switch2={switch2}  switch3={switch3}  ></SwitchRow>
     </View>
 
   

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Switch, StyleSheet } from 'react-native';
 
 const SwitchRow = ({switch1, setSwitch1,switch2, setSwitch2,switch3, setSwitch3}) => {
-  
+
 
   const handleSwitch1Change = (value) => {
     setSwitch1(value);

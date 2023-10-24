@@ -237,7 +237,7 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
             />
           ) : null}
           
-          <MarginedTextInput margin={20} text={textValue2} setText={setTextValue2} characterLimit={200} switch1 ={switch1} switch2={switch2} switch3={switch3} />
+          <MarginedTextInput margin={20} text={textValue2} setText={setTextValue2} characterLimit={200} switch1 ={switch1} switch2={switch2} switch3={switch3}  setSwitch1 ={setSwitch1} setSwitch2={setSwitch2} setSwitch3={setSwitch3} />
           
           <View style={styles.rowContainer}> 
           <View style={styles.buttonContainer}>
@@ -487,8 +487,8 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
             <Switch value={switchValue6} onValueChange={setSwitchValue6} />
           </View>
 
-          <MarginedTextInput_Modal2 margin={20} characterLimit={200} text={text}
-        setText={setTextInputValue} switchValue2={switchValue_2} setSwitchValue2={setSwitchValue_2}/>
+          <MarginedTextInput_Modal2 margin={20} characterLimit={200} text2={text}
+        setText2={setText} switchValue2={switchValue_2} setSwitchValue2={setSwitchValue_2}/>
           {/* Agregar botón de enviar */}
           <View style={styles.rowContainer}>
           <View style={styles.buttonContainer}>
@@ -499,7 +499,7 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
               console.log('Interruptor 1:', switchValue1);
               console.log('Interruptor 2:', switchValue2);
               console.log('otros:', switchValue_2);
-              console.log('Texto ingresado:', textInputValue);
+              console.log('Texto ingresado:', text);
               setSwitchValues(prevState => ({
                 ...prevState,
                 DetalleActo: "Nuevo Detalle",
