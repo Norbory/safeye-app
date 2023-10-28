@@ -11,7 +11,10 @@ export default function useReports() {
   const fetchReports = async () => {
     try {
       const response = await axios.get(
-        `https://apicarranza-b6fd258252ec.herokuapp.com/company/653353956f296017f15e49b9/incidents`
+        `https://apicarranza-b6fd258252ec.herokuapp.com/company/653353956f296017f15e49b9/incidents`,
+        {
+          responseType: 'stream',
+        }
       );
       //console.log(response);
       const transformedReports = response.data.map((report: Report) => ({
@@ -25,7 +28,7 @@ export default function useReports() {
         date: report.date,
         areaName: report.areaName,
       }));
-
+      
       setReports(transformedReports);
     } catch (error) {
       console.error(error);
