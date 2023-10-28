@@ -13,7 +13,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import {LOGO} from "../constantes/images";
-import {IP} from "../constantes/secret";
 
 export function LoginScreen() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);

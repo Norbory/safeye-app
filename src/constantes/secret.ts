@@ -1,1 +1,0 @@
-export const IP = "https://k18gs1mk-8080.brs.devtunnels.ms";
