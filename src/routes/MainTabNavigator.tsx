@@ -149,7 +149,7 @@ const MainTabNavigator = () => {
         </Tab.Navigator>
       }
       <UserInfoComponent
-        username={`${user.name} ${user.lastName}`}
+        username={`${user.name}`}
         isActive={true}
       />
     </View>

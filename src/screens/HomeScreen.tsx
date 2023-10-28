@@ -11,6 +11,10 @@ import CustomModal from "../components/Window";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
+import {getcompanyId} from '../utils/AuthUtils';
+
+ 
 // import * as Device from 'expo-device';
 // import * as Notifications from 'expo-notifications';
 
@@ -34,8 +38,7 @@ export function HomeScreen() {
 
   const reportList = useReports();
   const [nombreE, setNombreE] = useState("");
-  const id = '65199ec6cb4d6bc2da6f49ae';
-
+  const { business } = useAuth();
   // Notifications.scheduleNotificationAsync({
   //   content: {
   //     title: 'Look at that notification',
@@ -47,8 +50,7 @@ export function HomeScreen() {
   useEffect(() => {
     const getName = async () => {
       try {
-        const response = await axios.get(`https://apicarranza-b6fd258252ec.herokuapp.com/company/${id}`);
-        const nombreDeLaEmpresa = response.data.Name;
+        const nombreDeLaEmpresa = business.Name;
         setNombreE(nombreDeLaEmpresa);
       } catch (error) {
         console.error("Error al obtener el nombre:", error);
@@ -86,7 +88,9 @@ export function HomeScreen() {
       _id: ""
     }
   ]);
-
+  const prove = () => {
+    setModalVisible(true);
+  };
   useEffect(() => {
   const updatedCardsData = reportList.map((report: Report, index: number) => ({
     id: index + 1,
@@ -107,10 +111,12 @@ export function HomeScreen() {
   const idRef = useRef(null); 
 
   const handleRedButtonPress = async (id: number) => {
+
+    const companyId = await getcompanyId();
     const selectedCard = cardsData.find((card) => card.id === id);
     if (selectedCard) {
       try {
-        await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/65199ec6cb4d6bc2da6f49ae/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
+        await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/${companyId}/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
         selectedCard.deleted = true;
         setCardsData([...cardsData]);
       } catch (error) {
@@ -168,7 +174,7 @@ export function HomeScreen() {
         {cardsData.length === 0 && (
           <Card
             backgroundImage={LAST_IMG}
-            onGreenButtonPress={() => {}}
+            onGreenButtonPress={() => {prove()}}
             onRedButtonPress={() => {}}
             onImagePress={() => {}}
             zona={""}
