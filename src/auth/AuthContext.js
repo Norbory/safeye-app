@@ -1,6 +1,6 @@
 //react native context for authentication. Create context component and export it
 import { createContext,useState, useEffect } from 'react';
-import {storeToken, getToken, removeToken} from '../utils/AuthUtils';
+import {storeToken, getToken, removeToken, setUserId, storeUserId, removeUserId} from '../utils/AuthUtils';
 
 const AuthContext = createContext(
     {
@@ -48,6 +48,8 @@ function  AuthContextProvider(props) {
         setToken(token);
         // Store token in AsyncStorage
         storeToken(token)
+        setUserId(user._id);
+        storeUserId(user._id);
     }
 
     function logout() {
@@ -57,6 +59,7 @@ function  AuthContextProvider(props) {
         setToken(null);
         // Remove token from AsyncStorage
         removeToken();
+        removeUserId();
     }
 
     function register(user, business, token) {
@@ -66,6 +69,8 @@ function  AuthContextProvider(props) {
         setToken(token);
         // Store token in AsyncStorage
         storeToken(token)
+        setUserId(user._id);
+        storeUserId(user._id);
     }
 
     return (

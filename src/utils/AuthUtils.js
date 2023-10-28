@@ -27,4 +27,31 @@ const removeToken = async () => {
   }
 }
 
-export { storeToken, getToken, removeToken };
+//userId
+const storeUserId = async (userId) => {
+  try {
+    await AsyncStorage.setItem('userId', userId);
+  } catch (error) {
+    console.error('Error al guardar el userId:', error);
+  }
+}
+
+const getUserId = async () => {
+  try {
+    const userId = await AsyncStorage.getItem('userId');
+    return userId;
+  } catch (error) {
+    console.error('Error al obtener el userId:', error);
+  }
+}
+
+const removeUserId = async () => {
+  try {
+    await AsyncStorage.removeItem('userId');
+  } catch (error) {
+    console.error('Error al eliminar el userId:', error);
+  }
+}
+
+
+export { storeToken, getToken, removeToken, storeUserId, getUserId, removeUserId };
