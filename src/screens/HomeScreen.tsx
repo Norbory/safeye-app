@@ -12,6 +12,8 @@ import useReports from "../hooks/useReports";
 import { Report } from "../types";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
+import {getcompanyId} from '../utils/AuthUtils';
+
  
 // import * as Device from 'expo-device';
 // import * as Notifications from 'expo-notifications';
@@ -109,10 +111,12 @@ export function HomeScreen() {
   const idRef = useRef(null); 
 
   const handleRedButtonPress = async (id: number) => {
+
+    const companyId = await getcompanyId();
     const selectedCard = cardsData.find((card) => card.id === id);
     if (selectedCard) {
       try {
-        await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/653353956f296017f15e49b9/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
+        await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/${companyId}/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
         selectedCard.deleted = true;
         setCardsData([...cardsData]);
       } catch (error) {

@@ -27,31 +27,31 @@ const removeToken = async () => {
   }
 }
 
-//userId
-const storeUserId = async (userId) => {
+//companyId
+const storecompanyId = async (companyId) => {
   try {
-    await AsyncStorage.setItem('userId', userId);
+    await AsyncStorage.setItem('companyId', companyId);
   } catch (error) {
-    console.error('Error al guardar el userId:', error);
+    console.error('Error al guardar el companyId:', error);
   }
 }
 
-const getUserId = async () => {
+const getcompanyId = async () => {
   try {
-    const userId = await AsyncStorage.getItem('userId');
-    return userId;
+    const companyId = await AsyncStorage.getItem('companyId');
+    return companyId;
   } catch (error) {
-    console.error('Error al obtener el userId:', error);
+    console.error('Error al obtener el companyId:', error);
   }
 }
 
-const removeUserId = async () => {
+const removecompanyId = async () => {
   try {
-    await AsyncStorage.removeItem('userId');
+    await AsyncStorage.removeItem('companyId');
   } catch (error) {
-    console.error('Error al eliminar el userId:', error);
+    console.error('Error al eliminar el companyId:', error);
   }
 }
 
 
-export { storeToken, getToken, removeToken, storeUserId, getUserId, removeUserId };
+export { storeToken, getToken, removeToken, storecompanyId, getcompanyId, removecompanyId };

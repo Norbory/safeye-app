@@ -3,15 +3,19 @@ import { Report } from "../types";
 import axios from "axios";
 import {IP} from "../constantes/secret";
 import { useAuth } from "./useAuth";
+import { getcompanyId} from '../utils/AuthUtils';
 
 export default function useReports() {
   const { business } = useAuth();
   const [reports, setReports] = useState<Report[]>([]);
 
   const fetchReports = async () => {
+
+    const companyId = await getcompanyId();
+
     try {
       const response = await axios.get(
-        `https://apicarranza-b6fd258252ec.herokuapp.com/company/653353956f296017f15e49b9/incidents`,
+        `https://apicarranza-b6fd258252ec.herokuapp.com/company/${companyId}/incidents`,
         {
           responseType: 'stream',
         }

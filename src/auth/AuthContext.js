@@ -1,6 +1,6 @@
 //react native context for authentication. Create context component and export it
 import { createContext,useState, useEffect } from 'react';
-import {storeToken, getToken, removeToken, setUserId, storeUserId, removeUserId} from '../utils/AuthUtils';
+import {storeToken, getToken, removeToken, getcompanyId, storecompanyId, removecompanyId} from '../utils/AuthUtils';
 
 const AuthContext = createContext(
     {
@@ -13,6 +13,7 @@ const AuthContext = createContext(
             _id: '',
         },
         token: null,
+        companyId: null,
         login: () => {},
         logout: () => {},
         register: () => {}
@@ -25,6 +26,7 @@ function  AuthContextProvider(props) {
     const [user, setUser] = useState({});
     const [business, setBusiness] = useState({});
     const [token, setToken] = useState(null);
+    const [companyId, setcompanyId] = useState(null);
 
 
     // Obtener el token al cargar el componente
@@ -37,7 +39,16 @@ function  AuthContextProvider(props) {
             }
         };
 
+        const retrievecompanyId = async () => {
+            const storedcompanyId = await getcompanyId();
+            if (storedcompanyId) {
+                setcompanyId(storedcompanyId);
+                setIsLoggedIn(true);
+            }
+        }
+
         retrieveToken();
+        retrievecompanyId();
     }, []);
 
 
@@ -48,8 +59,8 @@ function  AuthContextProvider(props) {
         setToken(token);
         // Store token in AsyncStorage
         storeToken(token)
-        setUserId(user._id);
-        storeUserId(user._id);
+        setcompanyId(user._id);
+        storecompanyId(user._id);
     }
 
     function logout() {
@@ -59,7 +70,7 @@ function  AuthContextProvider(props) {
         setToken(null);
         // Remove token from AsyncStorage
         removeToken();
-        removeUserId();
+        removecompanyId();
     }
 
     function register(user, business, token) {
@@ -69,12 +80,12 @@ function  AuthContextProvider(props) {
         setToken(token);
         // Store token in AsyncStorage
         storeToken(token)
-        setUserId(user._id);
-        storeUserId(user._id);
+        setcompanyId(user._id);
+        storecompanyId(user._id);
     }
 
     return (
-        <AuthContext.Provider value={{ isLoggedIn, user, business, token, login, logout, register }}>
+        <AuthContext.Provider value={{ isLoggedIn, user, business, token, companyId,  login, logout, register }}>
             {props.children}
         </AuthContext.Provider>
     );
