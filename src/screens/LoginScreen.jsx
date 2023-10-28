@@ -42,11 +42,11 @@ export function LoginScreen() {
         "user_password": password
       });
 
-      console.log(res.data);
+      // console.log(res.data);
 
       const { user, business, token } = res.data;
 
-      console.log(`Hola ${(res).data.name}`);
+      // console.log(`Hola ${(res).data.name}`);
       login(user, business, token);
 
     } catch (error) {

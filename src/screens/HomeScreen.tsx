@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from 'moment';
-import { StyleSheet, StatusBar, SafeAreaView, ScrollView, View, Text, Platform, Button } from "react-native";
+import { StyleSheet, StatusBar, SafeAreaView, ScrollView, View, Text, } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import {
@@ -112,7 +112,7 @@ export function HomeScreen() {
 
   const handleRedButtonPress = async (id: number) => {
 
-    const companyId = await getcompanyId();
+    const companyId = "653d63d60d58e7aa7ed22a0d";
     const selectedCard = cardsData.find((card) => card.id === id);
     if (selectedCard) {
       try {

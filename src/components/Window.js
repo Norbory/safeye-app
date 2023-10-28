@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Modal, StyleSheet, Text, Pressable, View, Switch, Button, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Switch, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import MarginedTextInput from './Text_Box';
 import MarginedTextInput_Modal1 from './Text_Box_Modal1';
 import MarginedTextInput_Modal2 from './Text_Box_Modal2';
