@@ -47,7 +47,7 @@ export function HomeScreen() {
   useEffect(() => {
     const getName = async () => {
       try {
-        const response = await axios.get(`https://k18gs1mk-8080.brs.devtunnels.ms/company/${id}`);
+        const response = await axios.get(`https://apicarranza-b6fd258252ec.herokuapp.com/company/${id}`);
         const nombreDeLaEmpresa = response.data.Name;
         setNombreE(nombreDeLaEmpresa);
       } catch (error) {
@@ -110,7 +110,7 @@ export function HomeScreen() {
     const selectedCard = cardsData.find((card) => card.id === id);
     if (selectedCard) {
       try {
-        await axios.put(`https://k18gs1mk-8080.brs.devtunnels.ms/company/65199ec6cb4d6bc2da6f49ae/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
+        await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/65199ec6cb4d6bc2da6f49ae/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
         selectedCard.deleted = true;
         setCardsData([...cardsData]);
       } catch (error) {
