@@ -19,7 +19,7 @@ export function LoginScreen() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn } = useAuth();
+  const { login } = useAuth();
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -38,20 +38,18 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const res = axios.post(`https://k18gs1mk-3000.brs.devtunnels.ms/api/signin`, {
-        username,
-        password,
+      const res = await axios.post(`https://apicarranza-b6fd258252ec.herokuapp.com/login`, {
+        "user_username": username,
+        "user_password": password
       });
-      console.log(`Hola ${(await res).data.name}`);
-      signIn(
-        {
-          name: (await res).data.name,
-          lastName: (await res).data.last,
-          email: (await res).data.email,
-        },
-        (await res).headers["auth-token"],
-        (await res).data.company
-      );
+
+      console.log(res.data);
+
+      const { user, business, token } = res.data;
+
+      console.log(`Hola ${(res).data.name}`);
+      login(user, business, token);
+
     } catch (error) {
       console.log(error);
     }
@@ -206,7 +204,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function LogoTitle({ keyboardOpen }: { keyboardOpen: boolean }) {
+function LogoTitle({ keyboardOpen }) {
   return (
     <View
       style={

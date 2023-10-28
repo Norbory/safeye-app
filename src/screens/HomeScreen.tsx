@@ -11,6 +11,8 @@ import CustomModal from "../components/Window";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
+ 
 // import * as Device from 'expo-device';
 // import * as Notifications from 'expo-notifications';
 
@@ -34,8 +36,7 @@ export function HomeScreen() {
 
   const reportList = useReports();
   const [nombreE, setNombreE] = useState("");
-  const id = '65199ec6cb4d6bc2da6f49ae';
-
+  const { business } = useAuth();
   // Notifications.scheduleNotificationAsync({
   //   content: {
   //     title: 'Look at that notification',
@@ -47,8 +48,7 @@ export function HomeScreen() {
   useEffect(() => {
     const getName = async () => {
       try {
-        const response = await axios.get(`https://k18gs1mk-8080.brs.devtunnels.ms/company/${id}`);
-        const nombreDeLaEmpresa = response.data.Name;
+        const nombreDeLaEmpresa = business.Name;
         setNombreE(nombreDeLaEmpresa);
       } catch (error) {
         console.error("Error al obtener el nombre:", error);
@@ -112,7 +112,7 @@ export function HomeScreen() {
     const selectedCard = cardsData.find((card) => card.id === id);
     if (selectedCard) {
       try {
-        await axios.put(`https://k18gs1mk-8080.brs.devtunnels.ms/company/65199ec6cb4d6bc2da6f49ae/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
+        await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/653353956f296017f15e49b9/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
         selectedCard.deleted = true;
         setCardsData([...cardsData]);
       } catch (error) {

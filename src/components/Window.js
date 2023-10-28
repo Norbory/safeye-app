@@ -7,7 +7,7 @@ import MarginedTextInput_Modal2 from './Text_Box_Modal2';
 import { format, parseISO } from 'date-fns';
 
 
-const API_URL = 'https://k18gs1mk-8080.brs.devtunnels.ms/company/llenar-pdf';
+const API_URL = 'https://apicarranza-b6fd258252ec.herokuapp.com/company/llenar-pdf';
 
 const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
       const dia = 0;
@@ -549,6 +549,8 @@ const ModalContent_2 = ({ onClose, modalNumber, isVisible,setEnvioModal2, setenv
     </Modal>
   );
 };
+
+
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
