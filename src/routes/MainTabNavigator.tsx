@@ -11,11 +11,14 @@ import {
 } from "../screens";
 import UserInfoComponent from "../components/UserInfoComponent";
 import { useAuth } from "../hooks/useAuth";
+import { getToken } from "../utils/AuthUtils";
 
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
   const { user } = useAuth();
+  const User = getToken();
+  
   return (
     <View style={{ flex: 1 }}>
       {

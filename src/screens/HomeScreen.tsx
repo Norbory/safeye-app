@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from 'moment';
-import { StyleSheet, StatusBar, SafeAreaView, ScrollView, View, Text, } from "react-native";
+import { StyleSheet, StatusBar, SafeAreaView, ScrollView, View, Text } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import {

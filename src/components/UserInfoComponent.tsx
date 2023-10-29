@@ -5,7 +5,6 @@ import {
         Image, 
         StyleSheet
       } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { useFonts } from 'expo-font';
 import { IUSER } from '../constantes/images'
 import { POPPINS } from "../constantes/fonts";
@@ -29,7 +28,7 @@ const UserInfoComponent: React.FC<Props> = ({
     return(
         <View style={styles.container}>
             <View style={styles.container1}>
-              <Text style={styles.usernameText}>Hola, {username}</Text>
+              <Text style={styles.usernameText}>Bienvenido</Text>
             </View>
             <Image source={IUSER} style={styles.profileImage} />
         </View>
