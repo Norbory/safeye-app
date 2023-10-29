@@ -115,7 +115,6 @@ export function HomeScreen() {
     if (selectedCard) {
       try {
         await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/${companyId}/incidents/${selectedCard._id}`, { Reported: false, Deleted: true });
-        selectedCard.deleted = true;
         setCardsData([...cardsData]);
       } catch (error) {
         console.error(error);
@@ -123,10 +122,20 @@ export function HomeScreen() {
     }
   };
 
-  const handleGreenButtonPress = (id: number) => {
-    selectedCardRef.current = { ...cardsData.find((card) => card.id === id) }; 
-    idRef.current = id; 
-    setModalVisible(true);
+  const handleGreenButtonPress = async (id: number) => {
+    const companyId = "653d63d60d58e7aa7ed22a0d";
+    const selectedCard = cardsData.find((card) => card.id === id);
+
+    if (selectedCard) {
+      try {
+        await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/${companyId}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
+        selectedCardRef.current = { ...cardsData.find((card) => card.id === id) }; 
+        idRef.current = id;
+        setModalVisible(true);
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   // const updateIsButtonSend = (value : any) => 

@@ -1,10 +1,8 @@
 import React, {useState,useEffect} from "react";
 import { 
   StyleSheet, 
-  Button, 
-  View, 
-  ScrollView, 
-  Pressable, 
+  ScrollView,
+  View,
   Text
 } from "react-native";
 import { 
@@ -43,12 +41,12 @@ export function StatisticsScreen() {
   };
 
   const cascoY = ContadorD("Casco", reportList.filter((report) => report.Deleted)) + ContadorA("Casco", reportList.filter((report) => report.Deleted));
-  const mandilY = ContadorD("Mandil", reportList.filter((report) => report.Deleted)) + ContadorA("Mandil", reportList.filter((report) => report.Deleted));
+  const ChalecoY = ContadorD("Chaleco", reportList.filter((report) => report.Deleted)) + ContadorA("Chaleco", reportList.filter((report) => report.Deleted));
   const guantesY = ContadorD("Guantes", reportList.filter((report) => report.Deleted)) + ContadorA("Guantes", reportList.filter((report) => report.Deleted));
   const lentesY = ContadorD("Lentes", reportList.filter((report) => report.Deleted)) + ContadorA("Lentes", reportList.filter((report) => report.Deleted));
   const orejerasY = ContadorD("Orejeras", reportList.filter((report) => report.Deleted)) + ContadorA("Orejeras", reportList.filter((report) => report.Deleted));
   const respiradorY = ContadorD("Respirador", reportList.filter((report) => report.Deleted)) + ContadorA("Respirador", reportList.filter((report) => report.Deleted));
-  const totalitale = cascoY+mandilY+guantesY+lentesY+orejerasY+respiradorY
+  const totalitale = cascoY+ChalecoY+guantesY+lentesY+orejerasY+respiradorY
 
   const porcentaje = (epp:string)=>{
     let porcen;
@@ -57,8 +55,8 @@ export function StatisticsScreen() {
         porcen = Math.round(cascoY * 100/ totalitale);
         break;
       
-      case("Mandil"):
-        porcen = Math.round(mandilY * 100/ totalitale);
+      case("Chaleco"):
+        porcen = Math.round(ChalecoY * 100/ totalitale);
         break;
       
       case("Guantes"):
@@ -83,7 +81,7 @@ export function StatisticsScreen() {
 
   const data = [
     { x: ".", y: cascoY, label: cascoY !== 0 ? `Casco ${porcentaje("Casco")}%` : "" },
-    { x: ".", y: mandilY, label: mandilY !== 0 ? `Mandil ${porcentaje("Mandil")}%` : "" },
+    { x: ".", y: ChalecoY, label: ChalecoY !== 0 ? `Chaleco ${porcentaje("Chaleco")}%` : "" },
     { x: ".", y: guantesY, label: guantesY !== 0 ? `Guantes ${porcentaje("Guantes")}%` : "" },
     { x: ".", y: lentesY, label: lentesY !== 0 ? `Lentes ${porcentaje("Lentes")}%` : "" },
     { x: ".", y: orejerasY, label: orejerasY !== 0 ? `Orejeras ${porcentaje("Orejeras")}%` : "" },
@@ -92,8 +90,9 @@ export function StatisticsScreen() {
   return (
     <ScrollView style={styles.container}>
       {/* Grafica de barras */}
+      <View style={{ marginTop: 20 }}>
       <VictoryChart domainPadding={12}>
-        <VictoryLegend x={105} y={50}
+        <VictoryLegend x={105} y={25}
           orientation="horizontal"
           gutter={30}
           style={{ border: { stroke: "#252525" } }}
@@ -104,7 +103,7 @@ export function StatisticsScreen() {
         <VictoryLabel
           text="Estadísticas de Incidencias de la semana"
           x={198}
-          y={30}
+          y={10}
           textAnchor="middle"
           style={{ fill: "#252525", fontSize:18, fontWeight: "bold" }}
         />
@@ -130,7 +129,7 @@ export function StatisticsScreen() {
           <VictoryBar 
             data={[
               {x:"Casco", y:ContadorA("Casco",reportList.filter((report) => report.Deleted))},
-              {x:"Mandil", y:ContadorA("Mandil",reportList.filter((report) => report.Deleted))},
+              {x:"Chaleco", y:ContadorA("Chaleco",reportList.filter((report) => report.Deleted))},
               {x:"Guantes", y:ContadorA("Guantes",reportList.filter((report) => report.Deleted))},
               {x:"Lentes", y:ContadorA("Lentes",reportList.filter((report) => report.Deleted))},
               {x:"Orejeras", y:ContadorA("Orejeras",reportList.filter((report) => report.Deleted))},
@@ -141,7 +140,7 @@ export function StatisticsScreen() {
           <VictoryBar 
             data={[
               {x:"Casco", y:ContadorD("Casco",reportList.filter((report) => report.Deleted))},
-              {x:"Mandil", y:ContadorD("Mandil",reportList.filter((report) => report.Deleted))},
+              {x:"Chaleco", y:ContadorD("Chaleco",reportList.filter((report) => report.Deleted))},
               {x:"Guantes", y:ContadorD("Guantes",reportList.filter((report) => report.Deleted))},
               {x:"Lentes", y:ContadorD("Lentes",reportList.filter((report) => report.Deleted))},
               {x:"Orejeras", y:ContadorD("Orejeras",reportList.filter((report) => report.Deleted))},
@@ -151,6 +150,8 @@ export function StatisticsScreen() {
           />
         </VictoryStack>
       </VictoryChart>
+      </View>
+      
 
       {/* Grafica de pie */}
       <Text style={{
