@@ -98,8 +98,12 @@ export function DailyScreen() {
             {/* Contenedor para los botones en una fila */}
             <View style={styles.botones}>
               <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => generatePDF()}>
+                style={[styles.button, styles.buttonClose,   {
+                  backgroundColor: selectedReport && selectedReport.Reported === false ? 'grey' : '#2196F3', // Cambia 'blue' al color que desees cuando esté habilitado
+                },]}
+                onPress={() => generatePDF()}
+                disabled={selectedReport && selectedReport.Reported === false}
+                >
                 <Text style={styles.textStyle}>Descargar reporte</Text>
               </Pressable>
               <Pressable

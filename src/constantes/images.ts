@@ -4,6 +4,7 @@ export const LAST_IMG = "https://static.thenounproject.com/png/357658-200.png";
 
 export const LOGO = require("../../assets/imgs/logotipo.png");
 export const IUSER = require('../../assets/imgs/monito.jpg');
+export const COMPA = require('../../assets/imgs/company.png');
 
 export const LIST_CASO = [
     require("../../assets/imgs/casco1.jpg"),

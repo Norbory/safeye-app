@@ -10,15 +10,15 @@ import { format, parseISO } from 'date-fns';
 const API_URL = 'https://apicarranza-b6fd258252ec.herokuapp.com/company/llenar-pdf';
 
 const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
-      const dia = 0;
+    const dia = 0;
     const hora = 0;
 
     useEffect(() => {
       const timeZone = 'America/Lima';
       const now = new Date();
-    const dia = format(now, 'dd/MM/yyyy', {timeZone});
-    const hora = format(now, 'HH:mm:ss', {timeZone});
-    }, []);
+      const dia = format(now, 'dd/MM/yyyy', {timeZone});
+      const hora = format(now, 'HH:mm:ss', {timeZone});
+      }, []);
 
   const [buttonSendPressed, setButtonSendPressed] = useState(false);
 

@@ -10,6 +10,7 @@ import {
   SupportScreen,
 } from "../screens";
 import UserInfoComponent from "../components/UserInfoComponent";
+import Logo from "../components/Logo";
 import { useAuth } from "../hooks/useAuth";
 import { getToken } from "../utils/AuthUtils";
 
@@ -151,6 +152,7 @@ const MainTabNavigator = () => {
           ></Tab.Screen>
         </Tab.Navigator>
       }
+      <Logo/>
       <UserInfoComponent
         username={`${user.name}`}
         isActive={true}
