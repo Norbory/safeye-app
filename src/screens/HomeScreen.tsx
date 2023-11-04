@@ -215,6 +215,7 @@ export function HomeScreen() {
           onClose={() => {
             setModalVisible(false);
           }}
+          incidentId={selectedCardRef.current?._id || ""}
         />
       )}
       {/* <Text>Your expo push token: {expoPushToken}</Text>
