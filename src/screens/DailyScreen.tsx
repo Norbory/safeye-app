@@ -131,7 +131,7 @@ export function DailyScreen() {
                 style={[styles.button, styles.buttonClose,   {
                   backgroundColor: selectedReport && selectedReport.Reported === false ? 'grey' : '#2196F3', // Cambia 'blue' al color que desees cuando esté habilitado
                 },]}
-                onPress={() => generatePDF()}
+                onPress={() => descargarPDF( String(selectedReport?._id) )}
                 disabled={selectedReport && selectedReport.Reported === false}
                 >
                 <Text style={styles.textStyle}>Descargar reporte</Text>
