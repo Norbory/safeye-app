@@ -8,13 +8,15 @@ import {
   TouchableOpacity,
   Pressable,
   Modal,
-  ImageBackground
+  ImageBackground,
+  Linking
 } from "react-native";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
 import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import {HTML} from "../constantes/html";
+import * as FileSystem from 'expo-file-system';
 
 export function DailyScreen() {
   const reportList = useReports();
@@ -31,6 +33,34 @@ export function DailyScreen() {
     setSelectedReport(null); 
     setModalVisible(false);
   };
+
+
+  
+
+  const descargarPDF = async (incidentId:String) => {
+    
+      const url =`https://apicarranza-b6fd258252ec.herokuapp.com/company/report/${incidentId}`
+      try {      
+
+        let LocalPath = FileSystem.cacheDirectory  + 'lorem-ipsum.pdf';
+        const result= await FileSystem.downloadAsync(url, LocalPath)
+        
+        if (result.status === 200) {
+          console.log('Downloaded Successfully');
+          await shareAsync(result.uri);
+          setSelectedReport(null); 
+          setModalVisible(false);
+        } else {
+          console.log('Download Failed');
+        }
+
+    } catch (error) {
+      console.log(error);
+    }
+
+
+  };
+
 
   {/* Agrego el Modal */}
   let showCard = (report:Report) => {
@@ -99,7 +129,7 @@ export function DailyScreen() {
             <View style={styles.botones}>
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => generatePDF()}>
+                onPress={() => descargarPDF(String(selectedReport?._id))}>
                 <Text style={styles.textStyle}>Descargar reporte</Text>
               </Pressable>
               <Pressable
