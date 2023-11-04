@@ -168,7 +168,7 @@ export function StatisticsScreen() {
         colorScale={["#007BFF", "#00D68F", "#FFD700", "#D2B48C", "#FFA500"]}
         data={data}
         labelRadius={({ innerRadius }) => innerRadius + 50 }
-        innerRadius={50}
+        innerRadius={45}
         style={{
           labels: {
             fill: "#252525", 
