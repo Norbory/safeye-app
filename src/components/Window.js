@@ -5,6 +5,9 @@ import MarginedTextInput from './Text_Box';
 import MarginedTextInput_Modal1 from './Text_Box_Modal1';
 import MarginedTextInput_Modal2 from './Text_Box_Modal2';
 import { format, parseISO } from 'date-fns';
+import * as FileSystem from 'expo-file-system';
+import { shareAsync } from "expo-sharing";
+
 
 
 const API_URL = 'https://apicarranza-b6fd258252ec.herokuapp.com/company/llenar-pdf';
@@ -68,9 +71,9 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
       Observador: "Observador aquígaaa"
   })
 
-  const sendSwitchDataToServer = (value) => {
-    axios
-      .post(API_URL, value)
+  const sendSwitchDataToServer = async (value) => {
+    await axios
+      .get(API_URL, value)
       .then((response) => {
         // Handle the API response here
         console.log('API Response:', response.data);
@@ -79,7 +82,19 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
         // Handle errors
         console.error('API Error:', error);
       });
-  };
+  
+      const url =`https://apicarranza-b6fd258252ec.herokuapp.com/company/reporte-generado/last`    
+
+        let LocalPath = FileSystem.cacheDirectory  + 'lorem-ipsum.pdf';
+        const result= await FileSystem.downloadAsync(url, LocalPath)
+        
+        if (result.status === 200) {
+          console.log('Downloaded Successfully');
+          await shareAsync(result.uri);
+        } else {
+          console.log('Download Failed');
+        }
+    };
 
   const handleChangeSend = () => {
     if (buttonSendPressed === true){

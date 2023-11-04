@@ -22,15 +22,16 @@
         "foregroundImage": "./assets/imgs/icon.png",
         "backgroundColor": "#216AD9"
       },
-      "package": "com.norbory.safeyeapp"
+      "package": "com.norbory.safeyeapp",
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/imgs/favicon.png"
     },
     "extra": {
-      "eas": {
-        "projectId": "88cab465-f55d-4dee-9a2c-97b5972f5ff3"
-      }
     }
   }
 }
