@@ -7,9 +7,9 @@
     "icon": "./assets/imgs/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/imgs/splash.png",
+      "image": "./assets/imgs/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#216AD9"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,8 +19,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/imgs/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/imgs/icon.png",
+        "backgroundColor": "#216AD9"
       },
       "package": "com.norbory.safeyeapp"
     },
