@@ -1,6 +1,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from 'moment';
-import { StyleSheet, StatusBar, SafeAreaView, ScrollView, View, Text } from "react-native";
+import { 
+  StyleSheet, 
+  StatusBar, 
+  SafeAreaView, 
+  ScrollView, 
+  View, 
+  Text,
+  Pressable,
+  Modal,
+  Button,
+} from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { SelectList } from 'react-native-dropdown-select-list'
+
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import {
@@ -35,10 +48,10 @@ export function HomeScreen() {
   // const [notification, setNotification] = useState<Notification | null>(null);
   // const notificationListener = useRef<any>();
   // const responseListener = useRef<any>();
-
   const reportList = useReports();
   const [nombreE, setNombreE] = useState("");
   const { business } = useAuth();
+  let selectedId = "";
   // Notifications.scheduleNotificationAsync({
   //   content: {
   //     title: 'Look at that notification',
@@ -46,7 +59,6 @@ export function HomeScreen() {
   //   },
   //   trigger: null,
   // });
-
   useEffect(() => {
     const getName = async () => {
       try {
@@ -102,11 +114,26 @@ export function HomeScreen() {
 
   setCardsData(updatedCardsData);
 }, [reportList]);
-
+  const [modal1, setModal1] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isButtonSend, setisButtonSend] = useState(false);
   const selectedCardRef = useRef(null); 
   const idRef = useRef(null); 
+  const [selected, setSelected] = useState("");
+
+  const data = [
+    {key:'1', value:'Maquinaria'},
+    {key:'2', value:'Soldadura'},
+    {key:'3', value:'Quimicos'},
+  ]
+
+  const addNewCard = async () =>{
+    setModal1(true);
+  }
+  
+  const closeModal = () =>{
+    setModal1(false);
+  }
 
   const handleRedButtonPress = async (id: number) => {
     const companyId = "653d63d60d58e7aa7ed22a0d";
@@ -134,6 +161,7 @@ export function HomeScreen() {
     if (selectedCard) {
       try {
         await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/${companyId}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
+        selectedId = selectedCard._id;
         selectedCardRef.current = { ...cardsData.find((card) => card.id === id) }; 
         idRef.current = id;
         setModalVisible(true);
@@ -168,6 +196,11 @@ export function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      
+      <Pressable style={styles.add} onPress={()=>addNewCard()}>
+        <Ionicons name="add-outline" size={30} color="#F1FAEE"/>
+      </Pressable>
+      
       <ScrollView horizontal={true} style={styles.scrollView}>
         {cardsData
           .filter((cardData) => !cardData.deleted)
@@ -215,8 +248,96 @@ export function HomeScreen() {
           onClose={() => {
             setModalVisible(false);
           }}
+          incidentId={selectedId}
         />
       )}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modal1}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+          <Text style={styles.title}>Añade una desviación</Text>
+          <Text style={styles.subtitle}>EPPS involucrados:</Text>
+          <View style={styles.checkboxForm}>
+            <View>
+              <BouncyCheckbox
+                size={18}
+                fillColor="#252525"
+                unfillColor="#FFFFFF"
+                text="Casco"
+                innerIconStyle={{ borderWidth: 2 }}
+                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
+                onPress={(isChecked: boolean) => {}}
+              />
+                <BouncyCheckbox
+                size={18}
+                fillColor="#252525"
+                unfillColor="#FFFFFF"
+                text="Chaleco"
+                innerIconStyle={{ borderWidth: 2 }}
+                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
+                onPress={(isChecked: boolean) => {}}
+              />
+            </View>
+            <View>
+              <BouncyCheckbox
+                size={18}
+                fillColor="#252525"
+                unfillColor="#FFFFFF"
+                text="Guantes"
+                innerIconStyle={{ borderWidth: 2 }}
+                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
+                onPress={(isChecked: boolean) => {}}
+              />
+                <BouncyCheckbox
+                size={18}
+                fillColor="#252525"
+                unfillColor="#FFFFFF"
+                text="Lentes"
+                innerIconStyle={{ borderWidth: 2 }}
+                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
+                onPress={(isChecked: boolean) => {}}
+              />
+            </View>
+            <View>
+              <BouncyCheckbox
+                size={18}
+                fillColor="#252525"
+                unfillColor="#FFFFFF"
+                text="Orejeras"
+                innerIconStyle={{ borderWidth: 2 }}
+                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
+                onPress={(isChecked: boolean) => {}}
+              />
+                <BouncyCheckbox
+                size={18}
+                fillColor="#252525"
+                unfillColor="#FFFFFF"
+                text="Respirador"
+                innerIconStyle={{ borderWidth: 2 }}
+                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
+                onPress={(isChecked: boolean) => {}}
+              />
+            </View>
+          </View>
+          <Text style={styles.subtitle}>Zona donde ocurrio:</Text>
+          <SelectList 
+            setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
+            data={data} 
+            save="value"
+          />
+          <Text style={styles.subtitle}>Fotografía del incidente:</Text>
+          
+            <Pressable
+            style={[styles.button, styles.buttonClose]}
+            onPress={() => closeModal()}>
+              <Text>Hide it</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       {/* <Text>Your expo push token: {expoPushToken}</Text>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text>Title: {notification && notification.request.content.title} </Text>
@@ -312,5 +433,74 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     top: 8,
     left:10
-  }
+  },
+  add:{
+    position:"absolute",
+    top: 90,
+    right: -10,
+    zIndex:1,
+    borderWidth: 0.5,
+    borderColor: "#252525",
+    backgroundColor:"#2196F3",
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 10,
+    marginHorizontal: 40,
+    bottom:20,
+    shadowColor: "black",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 8,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginHorizontal:3
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  title:{
+    fontSize: 24,
+    fontWeight:"700",
+    textAlign: "center",
+  },
+  subtitle:{
+    fontSize: 14,
+    fontWeight:"500",
+  },
+  checkbox: {
+    alignSelf: 'center',
+  },
+  checkboxForm:{
+    flexDirection:"row"
+  },
 });

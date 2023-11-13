@@ -12,7 +12,7 @@ import { shareAsync } from "expo-sharing";
 
 const API_URL = 'https://apicarranza-b6fd258252ec.herokuapp.com/company/llenar-pdf';
 
-const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
+const CustomModal = ({ setisButtonSend, isModalVisible, onClose, incidentId}) => {
     const dia = 0;
     const hora = 0;
 
@@ -26,8 +26,7 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
   const [buttonSendPressed, setButtonSendPressed] = useState(false);
 
   const [switches, setSwitchValues] = useState({
-  
-      incidentId:"6521bf00e2fa8ecb0b92d733",
+      incidentId: incidentId,
       Nombre: "Angelo Mandros",
       DNI: "6768653",
       Cargo: "Jefe de TI",
@@ -73,14 +72,14 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose}) => {
 
   const sendSwitchDataToServer = async (value) => {
     await axios
-      .get(API_URL, value)
+      .post(API_URL, value)
       .then((response) => {
         // Handle the API response here
         console.log('API Response:', response.data);
       })
       .catch((error) => {
         // Handle errors
-        console.error('API Error:', error);
+        // console.error('API Error:', error);
       });
   
       const url =`https://apicarranza-b6fd258252ec.herokuapp.com/company/reporte-generado/last`    

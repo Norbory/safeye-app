@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { Camera, CameraType } from 'expo-camera';
 import moment from 'moment';
 import { 
   StyleSheet, 
   Text, 
   View, 
   ScrollView,
-  TouchableOpacity,
   Pressable,
   Modal,
-  ImageBackground,
-  Linking
+  ImageBackground
 } from "react-native";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
@@ -34,11 +33,8 @@ export function DailyScreen() {
     setModalVisible(false);
   };
 
-
-  
-
   const descargarPDF = async (incidentId:String) => {
-    
+      
       const url =`https://apicarranza-b6fd258252ec.herokuapp.com/company/report/${incidentId}`
       try {      
 
@@ -57,10 +53,7 @@ export function DailyScreen() {
     } catch (error) {
       console.log(error);
     }
-
-
   };
-
 
   {/* Agrego el Modal */}
   let showCard = (report:Report) => {
