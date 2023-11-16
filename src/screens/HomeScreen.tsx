@@ -63,7 +63,7 @@ export function HomeScreen() {
     const getName = async () => {
       try {
         const nombreDeLaEmpresa = business.Name;
-        setNombreE(nombreDeLaEmpresa);
+        setNombreE(nombreDeLaEmpresa); 
       } catch (error) {
         console.error("Error al obtener el nombre:", error);
       }
@@ -259,69 +259,6 @@ export function HomeScreen() {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
           <Text style={styles.title}>Añade una desviación</Text>
-          <Text style={styles.subtitle}>EPPS involucrados:</Text>
-          <View style={styles.checkboxForm}>
-            <View>
-              <BouncyCheckbox
-                size={18}
-                fillColor="#252525"
-                unfillColor="#FFFFFF"
-                text="Casco"
-                innerIconStyle={{ borderWidth: 2 }}
-                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
-                onPress={(isChecked: boolean) => {}}
-              />
-                <BouncyCheckbox
-                size={18}
-                fillColor="#252525"
-                unfillColor="#FFFFFF"
-                text="Chaleco"
-                innerIconStyle={{ borderWidth: 2 }}
-                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
-                onPress={(isChecked: boolean) => {}}
-              />
-            </View>
-            <View>
-              <BouncyCheckbox
-                size={18}
-                fillColor="#252525"
-                unfillColor="#FFFFFF"
-                text="Guantes"
-                innerIconStyle={{ borderWidth: 2 }}
-                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
-                onPress={(isChecked: boolean) => {}}
-              />
-                <BouncyCheckbox
-                size={18}
-                fillColor="#252525"
-                unfillColor="#FFFFFF"
-                text="Lentes"
-                innerIconStyle={{ borderWidth: 2 }}
-                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
-                onPress={(isChecked: boolean) => {}}
-              />
-            </View>
-            <View>
-              <BouncyCheckbox
-                size={18}
-                fillColor="#252525"
-                unfillColor="#FFFFFF"
-                text="Orejeras"
-                innerIconStyle={{ borderWidth: 2 }}
-                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
-                onPress={(isChecked: boolean) => {}}
-              />
-                <BouncyCheckbox
-                size={18}
-                fillColor="#252525"
-                unfillColor="#FFFFFF"
-                text="Respirador"
-                innerIconStyle={{ borderWidth: 2 }}
-                textStyle={{ textDecorationLine: 'none' , marginLeft: -10, fontSize:14, marginRight:8}}
-                onPress={(isChecked: boolean) => {}}
-              />
-            </View>
-          </View>
           <Text style={styles.subtitle}>Zona donde ocurrio:</Text>
           <SelectList 
             setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
