@@ -9,11 +9,9 @@ import {
   Text,
   Pressable,
   Modal,
-  Button,
+  TouchableOpacity,
 } from "react-native";
-import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { SelectList } from 'react-native-dropdown-select-list'
-
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import {
@@ -25,7 +23,8 @@ import useReports from "../hooks/useReports";
 import { Report } from "../types";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
-import {getcompanyId} from '../utils/AuthUtils';
+import { Camera, CameraType } from 'expo-camera';
+import CameraComponent from "../components/cameraIn";
 
  
 // import * as Device from 'expo-device';
@@ -40,6 +39,16 @@ import {getcompanyId} from '../utils/AuthUtils';
 // });
 
 export function HomeScreen() {
+  //Camara settings
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+
+  const openCamera = () => {
+    setIsCameraOpen(true);
+  };
+
+  const closeCamera = () => {
+    setIsCameraOpen(false);
+  };
 
   //Notificaciones
   // type Token = string;
@@ -154,7 +163,6 @@ export function HomeScreen() {
     }
   };
   
-
   const handleGreenButtonPress = async (id: number) => {
     const companyId = "653d63d60d58e7aa7ed22a0d";
     const selectedCard = cardsData.find((card) => card.id === id);
@@ -266,15 +274,26 @@ export function HomeScreen() {
             save="value"
           />
           <Text style={styles.subtitle}>Fotografía del incidente:</Text>
-          
-            <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => closeModal()}>
-              <Text>Hide it</Text>
-            </Pressable>
+          <TouchableOpacity 
+          onPress={openCamera}
+          style={[styles.button, styles.buttonClose]}>
+            <Text>Abrir cámara</Text>
+          </TouchableOpacity>
+          <Pressable
+          style={[styles.button, styles.buttonClose]}
+          onPress={() => closeModal()}>
+            <Text>Hide it</Text>
+          </Pressable>
           </View>
         </View>
       </Modal>
+
+      <Modal animationType="fade" transparent={true} visible={isCameraOpen}>
+        <View style={styles.cameraModal}>
+          <CameraComponent closeModal={closeCamera} />
+        </View>
+      </Modal>
+
       {/* <Text>Your expo push token: {expoPushToken}</Text>
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text>Title: {notification && notification.request.content.title} </Text>
@@ -400,7 +419,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
-    marginHorizontal:3
+    marginHorizontal:3,
+    marginVertical:1,
   },
   buttonClose: {
     backgroundColor: '#2196F3',
@@ -439,5 +459,11 @@ const styles = StyleSheet.create({
   },
   checkboxForm:{
     flexDirection:"row"
+  },
+  cameraModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
