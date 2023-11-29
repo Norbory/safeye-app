@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { Ionicons } from "@expo/vector-icons";
 import { Camera, CameraType } from 'expo-camera';
 
 type CameraComponentProps = {
@@ -41,12 +42,12 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ closeModal }) => {
       >
         <View style={styles.cameraButtons}>
           <TouchableOpacity onPress={takePicture} style={styles.capture}>
-            <Text style={styles.captureText}>Tomar foto</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={closeModal} style={styles.close}>
-            <Text style={styles.closeText}>Cerrar cámara</Text>
+            <Ionicons name="scan-circle-outline" size={100} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
+        <TouchableOpacity onPress={closeModal} style={styles.close}>
+          <Ionicons name="close-sharp" size={40} color="#FFFFFF" />
+        </TouchableOpacity>
       </Camera>
     </View>
   );
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
     height: Dimensions.get('window').height,
+    width: Dimensions.get('window').width,
   },
   cameraButtons: {
     flexDirection: 'row',
@@ -68,10 +70,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   capture: {
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
     alignSelf: 'center',
     margin: 20,
   },
@@ -80,16 +78,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   close: {
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
+    position: "absolute",
+    top: 0,
+    right: 0,
     alignSelf: 'center',
     margin: 20,
-  },
-  closeText: {
-    color: '#000',
-    fontSize: 18,
   },
 });
 
