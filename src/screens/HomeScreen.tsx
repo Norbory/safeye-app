@@ -290,7 +290,7 @@ export function HomeScreen() {
 
       <Modal animationType="fade" transparent={true} visible={isCameraOpen}>
         <View style={styles.cameraModal}>
-          <CameraComponent closeModal={closeCamera} />
+          <CameraComponent closeModal={closeCamera}/>
         </View>
       </Modal>
 
