@@ -10,7 +10,7 @@ import { shareAsync } from "expo-sharing";
 
 
 
-const API_URL = 'https://apicarranza-b6fd258252ec.herokuapp.com/company/llenar-pdf';
+const API_URL = 'https://rest-ai-production.up.railway.app/company/llenar-pdf';
 
 const CustomModal = ({ setisButtonSend, isModalVisible, onClose, incidentId}) => {
     const dia = 0;
@@ -82,7 +82,7 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose, incidentId}) =>
         // console.error('API Error:', error);
       });
   
-      const url =`https://apicarranza-b6fd258252ec.herokuapp.com/company/reporte-generado/last`    
+      const url =`https://rest-ai-production.up.railway.app/company/reporte-generado/last`    
 
         let LocalPath = FileSystem.cacheDirectory  + 'lorem-ipsum.pdf';
         const result= await FileSystem.downloadAsync(url, LocalPath)

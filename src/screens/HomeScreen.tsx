@@ -136,14 +136,14 @@ export function HomeScreen() {
   }
 
   const handleRedButtonPress = async (id: number) => {
-    const companyId = "653d63d60d58e7aa7ed22a0d";
+    const companyId = "6582223d9113d69bf52bcc51";
     const updatedCardsData = [...cardsData]; // Hacer una copia de las cartas existentes
     const selectedIndex = updatedCardsData.findIndex((card) => card.id === id);
   
     if (selectedIndex !== -1) {
       try {
         await axios.put(
-          `https://apicarranza-b6fd258252ec.herokuapp.com/company/${companyId}/incidents/${updatedCardsData[selectedIndex]._id}`,
+          `https://rest-ai-production.up.railway.app/company/${companyId}/incidents/${updatedCardsData[selectedIndex]._id}`,
           { Reported: false, Deleted: true }
         );
         updatedCardsData.splice(selectedIndex, 1);
@@ -156,11 +156,11 @@ export function HomeScreen() {
   
 
   const handleGreenButtonPress = async (id: number) => {
-    const companyId = "653d63d60d58e7aa7ed22a0d";
+    const companyId = "6582223d9113d69bf52bcc51";
     const selectedCard = cardsData.find((card) => card.id === id);
     if (selectedCard) {
       try {
-        await axios.put(`https://apicarranza-b6fd258252ec.herokuapp.com/company/${companyId}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
+        await axios.put(`https://rest-ai-production.up.railway.app/company/${companyId}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
         selectedId = selectedCard._id;
         selectedCardRef.current = { ...cardsData.find((card) => card.id === id) }; 
         idRef.current = id;

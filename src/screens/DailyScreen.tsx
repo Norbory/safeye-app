@@ -35,7 +35,7 @@ export function DailyScreen() {
 
   const descargarPDF = async (incidentId:String) => {
       
-      const url =`https://apicarranza-b6fd258252ec.herokuapp.com/company/report/${incidentId}`
+      const url =`https://rest-ai-production.up.railway.app/company/report/${incidentId}`
       try {      
 
         let LocalPath = FileSystem.cacheDirectory  + 'lorem-ipsum.pdf';
