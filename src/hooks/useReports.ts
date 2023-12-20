@@ -13,7 +13,7 @@ export default function useReports() {
   
     try {
       const response = await axios.get(
-        `https://rest-ai-production.up.railway.app/company/${companyId}/incidents`,
+        `https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/${companyId}/incidents`,
         {
           responseType: 'json', // Cambiar de 'stream' a 'json'
         }

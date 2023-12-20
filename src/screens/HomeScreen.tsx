@@ -152,7 +152,7 @@ export function HomeScreen() {
     if (selectedIndex !== -1) {
       try {
         await axios.put(
-          `https://rest-ai-production.up.railway.app/company/${companyId}/incidents/${updatedCardsData[selectedIndex]._id}`,
+          `https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/${companyId}/incidents/${updatedCardsData[selectedIndex]._id}`,
           { Reported: false, Deleted: true }
         );
         updatedCardsData.splice(selectedIndex, 1);
@@ -168,7 +168,7 @@ export function HomeScreen() {
     const selectedCard = cardsData.find((card) => card.id === id);
     if (selectedCard) {
       try {
-        await axios.put(`https://rest-ai-production.up.railway.app/company/${companyId}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
+        await axios.put(`https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/${companyId}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
         selectedId = selectedCard._id;
         selectedCardRef.current = { ...cardsData.find((card) => card.id === id) }; 
         idRef.current = id;
