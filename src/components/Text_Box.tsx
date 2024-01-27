@@ -2,17 +2,45 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, Text, StyleSheet } from 'react-native';
 import SwitchRow from './SwitchRow';
 
-const MarginedTextInput = ({ margin, characterLimit,text, setText, setSwitch1, setSwitch2, setSwitch3, switch1, switch2, switch3  }) => {
+const MarginedTextInput = ({
+  margin,
+  characterLimit,
+  text,
+  setText,
+  setSwitch1,
+  setSwitch2,
+  setSwitch3,
+  switch1,
+  switch2,
+  switch3,
+}: {
+  margin: number;
+  characterLimit: number;
+  text: string;
+  setText: (text: string) => void;
+  setSwitch1: (value: boolean) => void;
+  setSwitch2: (value: boolean) => void;
+  setSwitch3: (value: boolean) => void;
+  switch1: boolean;
+  switch2: boolean;
+  switch3: boolean;
+}) => {
 
   const [linesWithMargins, setLinesWithMargins] = useState([]);
 
   useEffect(() => {
     // Dividir el texto en líneas con el margen dado
     const lines = text ? text.match(new RegExp(`.{1,${margin}}`, 'g')) || [] : [];
-    setLinesWithMargins(lines);
+    const [linesWithMargins, setLinesWithMargins] = useState<string[]>([]);
+
+    useEffect(() => {
+      // Dividir el texto en líneas con el margen dado
+      const lines = text ? text.match(new RegExp(`.{1,${margin}}`, 'g')) || [] : [];
+      setLinesWithMargins(lines);
+    }, [text, margin]);
   }, [text, margin]);
 
-  const handleTextChange = (newText) => {
+  const handleTextChange = (newText: string) => {
     if (newText.length <= characterLimit) {
       setText(newText);
     }

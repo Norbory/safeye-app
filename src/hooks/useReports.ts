@@ -6,14 +6,14 @@ import { getcompanyId} from '../utils/AuthUtils';
 
 export default function useReports() {
   const { business } = useAuth();
-  const [reports, setReports] = useState<Report[]>([]);
+  const [reports, setReports] = useState<Report[]>();
 
   const fetchReports = async () => {
-    const companyId = "653d63d60d58e7aa7ed22a0d";
+    const companyId = "6582223d9113d69bf52bcc51";
   
     try {
       const response = await axios.get(
-        `https://apicarranza-b6fd258252ec.herokuapp.com/company/${companyId}/incidents`,
+        `https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/${companyId}/incidents`,
         {
           responseType: 'json', // Cambiar de 'stream' a 'json'
         }

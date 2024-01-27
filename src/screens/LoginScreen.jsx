@@ -37,7 +37,7 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post(`https://apicarranza-b6fd258252ec.herokuapp.com/login`, {
+      const res = await axios.post(`https://rest-ai-dev-cmqn.2.us-1.fl0.io/login`, {
         "user_username": username,
         "user_password": password
       });

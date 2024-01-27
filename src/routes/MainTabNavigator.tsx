@@ -39,7 +39,7 @@ const MainTabNavigator = () => {
             name="Support"
             component={SupportScreen}
             options={{
-              tabBarIcon: ({ color, size, focused }) => (
+              tabBarIcon: ({ color, size, focused }: { color: string, size: number, focused: boolean }) => (
                 <View
                   style={[
                     styles.tabIconContainer,
@@ -62,7 +62,7 @@ const MainTabNavigator = () => {
             name="Daily"
             component={DailyScreen}
             options={{
-              tabBarIcon: ({ color, size, focused }) => (
+              tabBarIcon: ({ color, size, focused }: { color: string, size: number, focused: boolean }) => (
                 <View
                   style={[
                     styles.tabIconContainer,
@@ -85,7 +85,7 @@ const MainTabNavigator = () => {
             name="Home"
             component={HomeScreen}
             options={{
-              tabBarIcon: ({ color, size, focused }) => (
+              tabBarIcon: ({ color, size, focused }: { color: string, size: number, focused: boolean }) => (
                 <View
                   style={[
                     styles.tabIconContainer,
@@ -108,7 +108,7 @@ const MainTabNavigator = () => {
             name="Incidents"
             component={IncidentsScreen}
             options={{
-              tabBarIcon: ({ color, size, focused }) => (
+              tabBarIcon: ({ color, size, focused }: { color: string, size: number, focused: boolean }) => (
                 <View
                   style={[
                     styles.tabIconContainer,
@@ -131,7 +131,7 @@ const MainTabNavigator = () => {
             name="Statistics"
             component={StatisticsScreen}
             options={{
-              tabBarIcon: ({ color, size, focused }) => (
+              tabBarIcon: ({ color, size, focused }: { color: string, size: number, focused: boolean }) => (
                 <View
                   style={[
                     styles.tabIconContainer,
