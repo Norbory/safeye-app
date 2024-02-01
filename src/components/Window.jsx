@@ -22,7 +22,7 @@ import { shareAsync } from "expo-sharing";
 
 
 const API_URL =
-  "https://apicarranza-b6fd258252ec.herokuapp.com/company/llenar-pdf";
+  "https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/llenar-pdf";
 
 const CustomModal = ({
   setisButtonSend,
@@ -33,12 +33,12 @@ const CustomModal = ({
   const dia = 0;
   const hora = 0;
 
-  console.log("IncidentId", incidentId);
-  console.log("IncidentId", incidentId);
-  console.log("IncidentId", incidentId);
-  console.log("IncidentId", incidentId);
-  console.log("IncidentId", incidentId);
-  console.log("IncidentId", incidentId);
+  // console.log("IncidentId", incidentId);
+  // console.log("IncidentId", incidentId);
+  // console.log("IncidentId", incidentId);
+  // console.log("IncidentId", incidentId);
+  // console.log("IncidentId", incidentId);
+  // console.log("IncidentId", incidentId);
 
   useEffect(() => {
     const timeZone = "America/Lima";
@@ -50,7 +50,6 @@ const CustomModal = ({
   const [buttonSendPressed, setButtonSendPressed] = useState(false);
 
   const sendSwitchDataToServer = async (value) => {
-    console.log(value);
 
     await axios
       .post(API_URL, value)
@@ -63,7 +62,7 @@ const CustomModal = ({
         console.error("API Error:", error);
       });
 
-    const url = `https://apicarranza-b6fd258252ec.herokuapp.com/company/reporte-generado/last`;
+    const url = `https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/reporte-generado/last`;
 
     let LocalPath = FileSystem.cacheDirectory + "lorem-ipsum.pdf";
     const result = await FileSystem.downloadAsync(url, LocalPath);

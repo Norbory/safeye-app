@@ -9,7 +9,7 @@ import {
   Keyboard,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
+// import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import {LOGO} from "../constantes/images";
@@ -57,10 +57,6 @@ export function LoginScreen() {
   return (
     <View style={styles.container}>
       <LogoTitle keyboardOpen={keyboardOpen} />
-      {/* <Image
-        source={require("../../assets/isotipo.png")}
-        style={keyboardOpen ? styles.hidden : styles.image}
-      /> */}
       <View
         style={
           keyboardOpen
@@ -99,12 +95,6 @@ export function LoginScreen() {
         </Pressable>
         <Text style={styles.helpText}>Por favor complete todos los campos</Text>
       </View>
-      <LinearGradient
-        colors={["#2474B0", "white"]}
-        style={styles.gradient}
-        start={{ x: 0.5, y: 0.2 }}
-        end={{ x: 0.5, y: 0.8 }}
-      />
     </View>
   );
 }
@@ -128,7 +118,7 @@ const styles = StyleSheet.create({
     height: 260,
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#42B6E6",
+    backgroundColor: "#070236",
     paddingVertical: 20,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -139,7 +129,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 20,
     justifyContent: "center",
-    backgroundColor: "#42B6E6",
+    backgroundColor: "#070236",
     paddingVertical: 20,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -147,10 +137,12 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#fff",
   },
   helpText: {
     fontSize: 12,
     fontWeight: "bold",
+    color: "#fff",
   },
   inputContainer: {
     width: "100%",
@@ -171,12 +163,12 @@ const styles = StyleSheet.create({
     width: 150,
     height: 40,
     borderRadius: 10,
-    backgroundColor: "#2474B0",
+    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
   },
   buttonText: {
-    color: "#fff",
+    color: "#070236",
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -197,10 +189,10 @@ const styles = StyleSheet.create({
     width: 300,
     height: "50%",
   },
-  gradient: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: -1,
-  },
+  // gradient: {
+  //   ...StyleSheet.absoluteFillObject,
+  //   zIndex: -1,
+  // },
 });
 
 function LogoTitle({ keyboardOpen }) {

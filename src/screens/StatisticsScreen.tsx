@@ -10,13 +10,12 @@ import {
   VictoryChart, 
   VictoryAxis,
   VictoryStack, 
-  VictoryLabel,
   VictoryPie, 
   VictoryLegend 
 } from 'victory-native';
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
-
+// import Boton from "../components/button";
 
 export function StatisticsScreen() {
 
@@ -40,12 +39,26 @@ export function StatisticsScreen() {
     return cuenta;
   };
 
-  const cascoY = ContadorD("Casco", reportList.filter((report) => report.Deleted)) + ContadorA("Casco", reportList.filter((report) => report.Deleted));
-  const ChalecoY = ContadorD("Chaleco", reportList.filter((report) => report.Deleted)) + ContadorA("Chaleco", reportList.filter((report) => report.Deleted));
-  const guantesY = ContadorD("Guantes", reportList.filter((report) => report.Deleted)) + ContadorA("Guantes", reportList.filter((report) => report.Deleted));
-  const lentesY = ContadorD("Lentes", reportList.filter((report) => report.Deleted)) + ContadorA("Lentes", reportList.filter((report) => report.Deleted));
-  const orejerasY = ContadorD("Orejeras", reportList.filter((report) => report.Deleted)) + ContadorA("Orejeras", reportList.filter((report) => report.Deleted));
-  const respiradorY = ContadorD("Respirador", reportList.filter((report) => report.Deleted)) + ContadorA("Respirador", reportList.filter((report) => report.Deleted));
+  const cascoD = ContadorD("Casco", reportList.filter((report) => report.Deleted));
+  const ChalecoD = ContadorD("Chaleco", reportList.filter((report) => report.Deleted));
+  const guantesD = ContadorD("Guantes", reportList.filter((report) => report.Deleted));
+  const lentesD = ContadorD("Lentes", reportList.filter((report) => report.Deleted));
+  const orejerasD = ContadorD("Orejeras", reportList.filter((report) => report.Deleted));
+  const respiradorD = ContadorD("Respirador", reportList.filter((report) => report.Deleted));
+
+  const cascoA = ContadorA("Casco", reportList.filter((report) => report.Deleted));
+  const ChalecoA = ContadorA("Chaleco", reportList.filter((report) => report.Deleted));
+  const guantesA = ContadorA("Guantes", reportList.filter((report) => report.Deleted));
+  const lentesA = ContadorA("Lentes", reportList.filter((report) => report.Deleted));
+  const orejerasA = ContadorA("Orejeras", reportList.filter((report) => report.Deleted));
+  const respiradorA = ContadorA("Respirador", reportList.filter((report) => report.Deleted));
+
+  const cascoY = cascoA + cascoD;
+  const ChalecoY = ChalecoA + ChalecoD;
+  const guantesY = guantesA + guantesD;
+  const lentesY = lentesA + lentesD;
+  const orejerasY = orejerasA + orejerasD;
+  const respiradorY = respiradorA + respiradorD;
   const totalitale = cascoY+ChalecoY+guantesY+lentesY+orejerasY+respiradorY
 
   const porcentaje = (epp:string)=>{
@@ -87,9 +100,45 @@ export function StatisticsScreen() {
     { x: ".", y: orejerasY, label: orejerasY !== 0 ? `Orejeras ${porcentaje("Orejeras")}%` : "" },
     { x: ".", y: respiradorY, label: respiradorY !== 0 ? `Respirador ${porcentaje("Respirador")}%` : "" },
   ];
+
+  const barDataD = [
+    { x: "Casco", y: cascoD },
+    { x: "Chaleco", y: ChalecoD },
+    { x: "Guantes", y: guantesD },
+    { x: "Lentes", y: lentesD },
+    { x: "Orejeras", y: orejerasD },
+    { x: "Respirador", y: respiradorD },
+  ];
+  const barDataA = [
+    { x: "Casco", y: cascoA },
+    { x: "Chaleco", y: ChalecoA },
+    { x: "Guantes", y: guantesA },
+    { x: "Lentes", y: lentesA },
+    { x: "Orejeras", y: orejerasA },
+    { x: "Respirador", y: respiradorA },
+  ];
+
+  const [chartData, setChartData] = useState(barDataA);
+
+  const updateChartData = () => {
+    console.log("Updating chart data");
+    const newChartData = chartData.map((bar) => {
+      if (bar.x === "Respirador") {
+        return { ...bar, y: respiradorA};
+      }
+      return bar;
+    });
+  
+    setChartData(newChartData);
+  };
+
   return (
     <ScrollView style={styles.container}>
       {/* Grafica de barras */}
+      <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginTop: 10 }}>
+        Estadísticas de la semana
+      </Text>
+      {/* <Boton title="Ramdom" onPress={updateChartData} /> */}
       <View style={{ marginTop: 20 }}>
       <VictoryChart domainPadding={12}>
         <VictoryLegend x={105} y={25}
@@ -100,13 +149,7 @@ export function StatisticsScreen() {
             { name: "Descartados", symbol:{fill:"tomato"}}, { name: "Amonestados", symbol:{fill:"green"}}
           ]}
         />
-        <VictoryLabel
-          text="Estadísticas de Incidencias de la semana"
-          x={198}
-          y={10}
-          textAnchor="middle"
-          style={{ fill: "#252525", fontSize:18, fontWeight: "bold" }}
-        />
+        
         <VictoryAxis
           label="EPPs"
           style={{
@@ -123,31 +166,19 @@ export function StatisticsScreen() {
             axis: { stroke: "#252525" }
           }}
         />
+        
         <VictoryStack
           colorScale={["green", "tomato"]}
         >
           <VictoryBar 
-            data={[
-              {x:"Casco", y:ContadorA("Casco",reportList.filter((report) => report.Deleted))},
-              {x:"Chaleco", y:ContadorA("Chaleco",reportList.filter((report) => report.Deleted))},
-              {x:"Guantes", y:ContadorA("Guantes",reportList.filter((report) => report.Deleted))},
-              {x:"Lentes", y:ContadorA("Lentes",reportList.filter((report) => report.Deleted))},
-              {x:"Orejeras", y:ContadorA("Orejeras",reportList.filter((report) => report.Deleted))},
-              {x:"Respirador", y:ContadorA("Respirador",reportList.filter((report) => report.Deleted))}
-            ]}
-            style={{}}
-          />
+            data={barDataD}
+            style={{}}/>
+
           <VictoryBar 
-            data={[
-              {x:"Casco", y:ContadorD("Casco",reportList.filter((report) => report.Deleted))},
-              {x:"Chaleco", y:ContadorD("Chaleco",reportList.filter((report) => report.Deleted))},
-              {x:"Guantes", y:ContadorD("Guantes",reportList.filter((report) => report.Deleted))},
-              {x:"Lentes", y:ContadorD("Lentes",reportList.filter((report) => report.Deleted))},
-              {x:"Orejeras", y:ContadorD("Orejeras",reportList.filter((report) => report.Deleted))},
-              {x:"Respirador", y:ContadorD("Respirador",reportList.filter((report) => report.Deleted))}
-            ]}
+            data={barDataA}
             style={{}}
           />
+
         </VictoryStack>
       </VictoryChart>
       </View>
@@ -167,7 +198,7 @@ export function StatisticsScreen() {
       <VictoryPie
         colorScale={["#007BFF", "#00D68F", "#FFD700", "#D2B48C", "#FFA500"]}
         data={data}
-        labelRadius={({ innerRadius }) => innerRadius + 50 }
+        labelRadius={({ innerRadius = 0 }) => (innerRadius as number) + 50 }
         innerRadius={45}
         style={{
           labels: {

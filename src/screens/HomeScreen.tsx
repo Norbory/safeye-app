@@ -179,10 +179,6 @@ export function HomeScreen() {
     }
   };
 
-  // const updateIsButtonSend = (value : any) => 
-  //   setisButtonSend(value);
-  // };
-
   useEffect(() => {
     if (isButtonSend) {
       if (idRef.current !== null) {
