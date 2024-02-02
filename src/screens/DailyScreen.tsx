@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Camera, CameraType } from 'expo-camera';
+import React, { useState } from "react";
 import moment from 'moment';
 import { 
   StyleSheet, 
@@ -36,6 +35,7 @@ export function DailyScreen() {
   const descargarPDF = async (incidentId:String) => {
       
       const url =`https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/report/${incidentId}`
+      console.log(incidentId);
       try {      
 
         let LocalPath = FileSystem.cacheDirectory  + 'lorem-ipsum.pdf';

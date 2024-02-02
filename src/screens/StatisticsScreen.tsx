@@ -139,7 +139,7 @@ export function StatisticsScreen() {
         Estadísticas de la semana
       </Text>
       {/* <Boton title="Ramdom" onPress={updateChartData} /> */}
-      <View style={{ marginTop: 20 }}>
+      <View style={{ marginTop: 20, marginLeft:15 }}>
       <VictoryChart domainPadding={12}>
         <VictoryLegend x={105} y={25}
           orientation="horizontal"
@@ -161,7 +161,7 @@ export function StatisticsScreen() {
         <VictoryAxis dependentAxis
           label="Incidencias"
           style={{
-            axisLabel: { padding: 30, fill: "#252525" },
+            axisLabel: { padding: 40, fill: "#252525" },
             tickLabels: { fill: "#252525" },
             axis: { stroke: "#252525" }
           }}

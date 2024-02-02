@@ -31,8 +31,8 @@ const CustomModal = ({ setisButtonSend, isModalVisible, onClose, incidentId}) =>
       DNI: "6768653",
       Cargo: "Jefe de TI",
       Firma: "FA",
-      Fecha: dia,
-      Hora: hora,
+      Fecha: {dia},
+      Hora: {hora},
       Contrata: "Contrata aquí",
       ActosSubestandares: {
           Marked: false,

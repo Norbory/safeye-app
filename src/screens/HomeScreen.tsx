@@ -18,25 +18,12 @@ import {
   DEFAULT_BACKGROUND_IMAGE,
   LAST_IMG
 } from "../constantes/images";
-import CustomModal from "../components/Window";
+import CustomModal from "../components/Window.jsx";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
-import { Camera, CameraType } from 'expo-camera';
 import CameraComponent from "../components/cameraIn";
-
- 
-// import * as Device from 'expo-device';
-// import * as Notifications from 'expo-notifications';
-
-// Notifications.setNotificationHandler({
-//   handleNotification: async () => ({
-//     shouldShowAlert: true,
-//     shouldPlaySound: true,
-//     shouldSetBadge: false,
-//   }),
-// });
 
 export function HomeScreen() {
   //Camara settings
@@ -50,24 +37,11 @@ export function HomeScreen() {
     setIsCameraOpen(false);
   };
 
-  //Notificaciones
-  // type Token = string;
-  // type Notification = any;
-  // const [expoPushToken, setExpoPushToken] = useState<Token>('');
-  // const [notification, setNotification] = useState<Notification | null>(null);
-  // const notificationListener = useRef<any>();
-  // const responseListener = useRef<any>();
   const reportList = useReports();
   const [nombreE, setNombreE] = useState("");
   const { business } = useAuth();
   let selectedId = "";
-  // Notifications.scheduleNotificationAsync({
-  //   content: {
-  //     title: 'Look at that notification',
-  //     body: "I'm so proud of myself!",
-  //   },
-  //   trigger: null,
-  // });
+
   useEffect(() => {
     const getName = async () => {
       try {
@@ -79,24 +53,6 @@ export function HomeScreen() {
     };
     getName();
   }, []);
-
-  //Section of Notification
-  // useEffect(() => {
-  //   registerForPushNotificationsAsync().then(token => setExpoPushToken(token || ""));
-
-  //   notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-  //     setNotification(notification);
-  //   });
-
-  //   responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-  //     console.log(response);
-  //   });
-
-  //   return () => {
-  //     Notifications.removeNotificationSubscription(notificationListener.current);
-  //     Notifications.removeNotificationSubscription(responseListener.current);
-  //   };
-  // }, []);
 
   const [cardsData, setCardsData] = useState([
     {
@@ -290,66 +246,9 @@ export function HomeScreen() {
         </View>
       </Modal>
 
-      {/* <Text>Your expo push token: {expoPushToken}</Text>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Title: {notification && notification.request.content.title} </Text>
-        <Text>Body: {notification && notification.request.content.body}</Text>
-        <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
-      </View>
-      <Button
-        title="Press to schedule a notification"
-        onPress={async () => {
-          await schedulePushNotification();
-        }}
-      /> */}
     </SafeAreaView>
   );
 }
-
-// Funciones para notificaciones
-// async function schedulePushNotification() {
-//   await Notifications.scheduleNotificationAsync({
-//     content: {
-//       title: "You've got mail! 📬",
-//       body: 'Here is the notification body',
-//       data: { data: 'goes here' },
-//     },
-//     trigger: { seconds: 2 },
-//   });
-// }
-
-// async function registerForPushNotificationsAsync() {
-//   let token: string | undefined;
-
-//   if (Platform.OS === 'android') {
-//     await Notifications.setNotificationChannelAsync('default', {
-//       name: 'default',
-//       importance: Notifications.AndroidImportance.MAX,
-//       vibrationPattern: [0, 250, 250, 250],
-//       lightColor: '#FF231F7C',
-//     });
-//   }
-
-//   if (Device.isDevice) {
-//     const { status: existingStatus } = await Notifications.getPermissionsAsync();
-//     let finalStatus = existingStatus;
-//     if (existingStatus !== 'granted') {
-//       const { status } = await Notifications.requestPermissionsAsync();
-//       finalStatus = status;
-//     }
-//     if (finalStatus !== 'granted') {
-//       alert('Failed to get push token for push notification!');
-//       return;
-//     }
-//     // Learn more about projectId:
-//     // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
-//     token = (await Notifications.getExpoPushTokenAsync({ projectId: 'your-project-id' })).data;
-//     console.log(token);
-//   } else {
-//     alert('Must use physical device for Push Notifications');
-//   }
-//   return token;
-// }
 
 //Estilos
 const styles = StyleSheet.create({
