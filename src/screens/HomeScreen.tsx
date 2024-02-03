@@ -10,6 +10,7 @@ import {
   Pressable,
   Modal,
   TouchableOpacity,
+  ImageBackground
 } from "react-native";
 import { SelectList } from 'react-native-dropdown-select-list'
 import { Ionicons } from "@expo/vector-icons";
@@ -28,13 +29,15 @@ import CameraComponent from "../components/cameraIn";
 export function HomeScreen() {
   //Camara settings
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [capturedPhotoUri, setCapturedPhotoUri] = useState("");
 
   const openCamera = () => {
     setIsCameraOpen(true);
   };
 
-  const closeCamera = () => {
+  const closeCamera = (photoUri: string) => {
     setIsCameraOpen(false);
+    setCapturedPhotoUri(photoUri);
   };
 
   const reportList = useReports();
@@ -79,6 +82,7 @@ export function HomeScreen() {
 
   setCardsData(updatedCardsData);
 }, [reportList]);
+
   const [modal1, setModal1] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isButtonSend, setisButtonSend] = useState(false);
@@ -226,6 +230,7 @@ export function HomeScreen() {
             save="value"
           />
           <Text style={styles.subtitle}>Fotografía del incidente:</Text>
+          <ImageBackground source={{uri:capturedPhotoUri?capturedPhotoUri:LAST_IMG}} style={{width: 180, height: 180, alignSelf: 'center'}} />
           <TouchableOpacity 
           onPress={openCamera}
           style={[styles.button, styles.buttonClose]}>

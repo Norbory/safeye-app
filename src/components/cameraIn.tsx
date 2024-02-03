@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Camera, CameraType } from 'expo-camera';
 
 type CameraComponentProps = {
-  closeModal: () => void;
+  closeModal: (photo:string) => void;
 };
 
 const CameraComponent: React.FC<CameraComponentProps> = ({ closeModal }) => {
@@ -21,7 +21,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ closeModal }) => {
   const takePicture = async () => {
     if (cameraRef.current) {
       let photo = await cameraRef.current.takePictureAsync();
-      console.log(photo);
+      closeModal(photo.uri);
       // Aquí puedes hacer lo que quieras con la foto (guardarla, mostrarla, etc.)
     }
   };
@@ -45,7 +45,8 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ closeModal }) => {
             <Ionicons name="scan-circle-outline" size={100} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={closeModal} style={styles.close}>
+        {/* onPress={closeModal} */}
+        <TouchableOpacity  style={styles.close}>
           <Ionicons name="close-sharp" size={40} color="#FFFFFF" />
         </TouchableOpacity>
       </Camera>
