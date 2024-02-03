@@ -21,6 +21,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ closeModal }) => {
   const takePicture = async () => {
     if (cameraRef.current) {
       let photo = await cameraRef.current.takePictureAsync();
+      console.log(photo.uri);
       closeModal(photo.uri);
       // Aquí puedes hacer lo que quieras con la foto (guardarla, mostrarla, etc.)
     }

@@ -19,9 +19,11 @@ import {
   DEFAULT_BACKGROUND_IMAGE,
   LAST_IMG
 } from "../constantes/images";
+import { URL, COMPANY_ID } from "../constantes/string";
 import CustomModal from "../components/Window.jsx";
 import useReports from "../hooks/useReports";
-import { Report } from "../types";
+import useAreas  from "../hooks/useAreas";
+import { Report, Area } from "../types";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 import CameraComponent from "../components/cameraIn";
@@ -41,6 +43,7 @@ export function HomeScreen() {
   };
 
   const reportList = useReports();
+  const areaList = useAreas();
   const [nombreE, setNombreE] = useState("");
   const { business } = useAuth();
   let selectedId = "";
@@ -90,11 +93,7 @@ export function HomeScreen() {
   const idRef = useRef(null); 
   const [selected, setSelected] = useState("");
 
-  const data = [
-    {key:'1', value:'Maquinaria'},
-    {key:'2', value:'Soldadura'},
-    {key:'3', value:'Quimicos'},
-  ]
+  const data = areaList.map((area: Area) => ({key: area._id, value: area.name}));
 
   const addNewCard = async () =>{
     setModal1(true);
@@ -105,14 +104,13 @@ export function HomeScreen() {
   }
 
   const handleRedButtonPress = async (id: number) => {
-    const companyId = "6582223d9113d69bf52bcc51";
     const updatedCardsData = [...cardsData]; // Hacer una copia de las cartas existentes
     const selectedIndex = updatedCardsData.findIndex((card) => card.id === id);
   
     if (selectedIndex !== -1) {
       try {
         await axios.put(
-          `https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/${companyId}/incidents/${updatedCardsData[selectedIndex]._id}`,
+          `${URL}/company/${COMPANY_ID}/incidents/${updatedCardsData[selectedIndex]._id}`,
           { Reported: false, Deleted: true }
         );
         updatedCardsData.splice(selectedIndex, 1);
@@ -124,13 +122,12 @@ export function HomeScreen() {
   };
   
   const handleGreenButtonPress = async (id: number) => {
-    const companyId = "6582223d9113d69bf52bcc51";
     const selectedCard = cardsData.find((card) => card.id === id);
     if (selectedCard) {
       try {
-        await axios.put(`https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/${companyId}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
+        await axios.put(`${URL}/company/${COMPANY_ID}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
         selectedId = selectedCard._id;
-        selectedCardRef.current = { ...cardsData.find((card) => card.id === id) }; 
+        selectedCardRef.current = { ...cardsData.find((card) => card.id === id) } as any; 
         idRef.current = id;
         setModalVisible(true);
       } catch (error) {
@@ -138,6 +135,20 @@ export function HomeScreen() {
       }
     }
   };
+
+  const handleEnvio = async (area: string,image: string) => {
+    try {
+      const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
+        "ID_area": area,
+        "ID_Cam":"6505633501f1e713f9f60f70",
+        "imageUrls": [image],
+      });
+      console.log("Respuesta del envio:", response);
+      setModal1(false);
+    } catch (error) {
+      console.error("Error al enviar:", error);
+    }
+  }
 
   useEffect(() => {
     if (isButtonSend) {
@@ -225,9 +236,9 @@ export function HomeScreen() {
           <Text style={styles.title}>Añade una desviación</Text>
           <Text style={styles.subtitle}>Zona donde ocurrio:</Text>
           <SelectList 
-            setSelected={(val: React.SetStateAction<string>) => setSelected(val)} 
+            setSelected={(key: React.SetStateAction<string>) => setSelected(key)} 
             data={data} 
-            save="value"
+            save="key"
           />
           <Text style={styles.subtitle}>Fotografía del incidente:</Text>
           <ImageBackground source={{uri:capturedPhotoUri?capturedPhotoUri:LAST_IMG}} style={{width: 180, height: 180, alignSelf: 'center'}} />
@@ -235,6 +246,11 @@ export function HomeScreen() {
           onPress={openCamera}
           style={[styles.button, styles.buttonClose]}>
             <Text>Abrir cámara</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleEnvio(selected,capturedPhotoUri)}
+            style={[styles.button, styles.buttonClose]}>
+            <Text>Subir incidente</Text>
           </TouchableOpacity>
           <Pressable
           style={[styles.button, styles.buttonClose]}

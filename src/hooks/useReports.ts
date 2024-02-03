@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Report } from "../types";
 import axios from "axios";
 import { useAuth } from "./useAuth";
-import { getcompanyId} from '../utils/AuthUtils';
+import { URL, COMPANY_ID } from "../constantes/string";
 
 export default function useReports() {
   const { business } = useAuth();
   const [reports, setReports] = useState<Report[]>([]);
 
   const fetchReports = async () => {
-    const companyId = "6582223d9113d69bf52bcc51";
   
     try {
       const response = await axios.get(
-        `https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/${companyId}/incidents`,
+        `${URL}/company/${COMPANY_ID}/incidents`,
         {
           responseType: 'json', // Cambiar de 'stream' a 'json'
         }

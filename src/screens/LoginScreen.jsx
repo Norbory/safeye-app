@@ -13,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import {LOGO} from "../constantes/images";
+import { URL } from "../constantes/string";
 
 export function LoginScreen() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
@@ -37,7 +38,7 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post(`https://rest-ai-dev-cmqn.2.us-1.fl0.io/login`, {
+      const res = await axios.post(`${URL}/login`, {
         "user_username": username,
         "user_password": password
       });

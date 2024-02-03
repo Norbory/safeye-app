@@ -15,6 +15,7 @@ import { printToFileAsync } from "expo-print";
 import { shareAsync } from "expo-sharing";
 import {HTML} from "../constantes/html";
 import * as FileSystem from 'expo-file-system';
+import { URL } from "../constantes/string";
 
 export function DailyScreen() {
   const reportList = useReports();
@@ -34,7 +35,7 @@ export function DailyScreen() {
 
   const descargarPDF = async (incidentId:String) => {
       
-      const url =`https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/report/${incidentId}`
+      const url =`${URL}/company/report/${incidentId}`
       console.log(incidentId);
       try {      
 
