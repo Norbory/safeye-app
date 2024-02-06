@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.6)",
   },
   selectedButton: {
-    backgroundColor: "#38a3a5",
+    backgroundColor: "#3d3680",
   },
   buttonText: {
     color: "#fff",

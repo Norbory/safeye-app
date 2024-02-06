@@ -173,7 +173,7 @@ export function HomeScreen() {
     <SafeAreaView style={styles.container}>
       
       <Pressable style={styles.add} onPress={()=>addNewCard()}>
-        <Ionicons name="add-outline" size={30} color="#F1FAEE"/>
+        <Text style={styles.empresa}>Añadir incidente +</Text>
       </Pressable>
       
       <ScrollView horizontal={true} style={styles.scrollView}>
@@ -210,7 +210,7 @@ export function HomeScreen() {
               color={activeCardsData.length > 0 ? "#F44343" : "#cbcdd1"}
               style={styles.noti}
             />
-            <Text style={styles.number}>
+            <Text style={activeCardsData.length < 10 ? styles.number1 : styles.number}>
               {activeCardsData.length}
             </Text>
           </View>
@@ -294,17 +294,24 @@ const styles = StyleSheet.create({
   number: {
     position: "absolute",
     color: "#F1FAEE",
-    fontSize: 32,
-    right: 13,
-    top: 2
+    fontSize: 28,
+    right: 10,
+    top: 3
+  },
+  number1: {
+    position: "absolute",
+    color: "#F1FAEE",
+    fontSize: 28,
+    right: 18,
+    top: 4
   },
   empresa:{
     position: "absolute",
     color: "#F1FAEE",
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
-    top: 8,
-    left:10
+    top: 7,
+    left:18
   },
   add:{
     position:"absolute",
@@ -313,9 +320,9 @@ const styles = StyleSheet.create({
     zIndex:1,
     borderWidth: 0.5,
     borderColor: "#252525",
-    backgroundColor:"#2196F3",
-    width: 54,
-    height: 54,
+    backgroundColor:"#3d3680",
+    width: 180,
+    height: 40,
     borderRadius: 27,
     alignItems: "center",
     justifyContent: "center",
