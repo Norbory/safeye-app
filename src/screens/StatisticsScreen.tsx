@@ -93,12 +93,12 @@ export function StatisticsScreen() {
   }
 
   const data = [
-    { x: ".", y: cascoY, label: cascoY !== 0 ? `Casco ${porcentaje("Casco")}%` : "" },
-    { x: ".", y: ChalecoY, label: ChalecoY !== 0 ? `Chaleco ${porcentaje("Chaleco")}%` : "" },
-    { x: ".", y: guantesY, label: guantesY !== 0 ? `Guantes ${porcentaje("Guantes")}%` : "" },
-    { x: ".", y: lentesY, label: lentesY !== 0 ? `Lentes ${porcentaje("Lentes")}%` : "" },
-    { x: ".", y: orejerasY, label: orejerasY !== 0 ? `Orejeras ${porcentaje("Orejeras")}%` : "" },
-    { x: ".", y: respiradorY, label: respiradorY !== 0 ? `Respirador ${porcentaje("Respirador")}%` : "" },
+    { x: cascoY !== 0 ? `Casco ${porcentaje("Casco")}%` : ".", y: cascoY  },
+    { x: ChalecoY !== 0 ? `Chaleco ${porcentaje("Chaleco")}%` : "." , y: ChalecoY},
+    { x: guantesY !== 0 ? `Guantes ${porcentaje("Guantes")}%` : ".", y: guantesY},
+    { x: lentesY !== 0 ? `Lentes ${porcentaje("Lentes")}%` : "." , y: lentesY},
+    { x: orejerasY !== 0 ? `Orejeras ${porcentaje("Orejeras")}%` : "." , y: orejerasY},
+    { x: respiradorY !== 0 ? `Respirador ${porcentaje("Respirador")}%` : ".", y: respiradorY },
   ];
 
   const barDataD = [
@@ -196,16 +196,17 @@ export function StatisticsScreen() {
         Grafica de incidentes
         </Text>
       <VictoryPie
-        colorScale={["#007BFF", "#00D68F", "#FFD700", "#D2B48C", "#FFA500"]}
+        colorScale={["#f4f1de", "#e07a5f", "#90e0ef", "#81b29a", "#f2cc8f", "#fcbf49"]}
         data={data}
-        labelRadius={({ innerRadius = 0 }) => (innerRadius as number) + 50 }
-        innerRadius={35}
+        labelRadius={({ innerRadius = 0 }) => (innerRadius as number) + 40 }
+        innerRadius={40}
         style={{
           labels: {
             fill: "#252525", 
-            fontSize: 14, 
-            fontWeight: "semibold" 
-          } 
+            fontSize: 13, 
+            fontWeight: "bold",
+            textAnchor: "middle"
+          }
         }}
       />
     </ScrollView>
