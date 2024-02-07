@@ -30,21 +30,15 @@ const CustomModal = ({
   onClose,
   incidentId,
 }) => {
-  const dia = 0;
-  const hora = 0;
-
-  // console.log("IncidentId", incidentId);
-  // console.log("IncidentId", incidentId);
-  // console.log("IncidentId", incidentId);
-  // console.log("IncidentId", incidentId);
-  // console.log("IncidentId", incidentId);
-  // console.log("IncidentId", incidentId);
+  const [dia,setDia] = useState<String>("");
+  const [hora,setHora] = useState<String>("");
+  console.log("IncidentId", incidentId);
 
   useEffect(() => {
     const timeZone = "America/Lima";
     const now = new Date();
-    const dia = format(now, "dd/MM/yyyy", { timeZone });
-    const hora = format(now, "HH:mm:ss", { timeZone });
+    setDia(format(now, "dd/MM/yyyy", { timeZone }));
+    setHora(format(now, "HH:mm:ss", { timeZone }));
   }, []);
 
   const [buttonSendPressed, setButtonSendPressed] = useState(false);
