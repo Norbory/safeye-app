@@ -57,17 +57,22 @@ const CustomModal = ({
         console.error("API Error:", error);
       });
 
-    const url = `${URL}/company/reporte-generado/last`;
+      const url = `${URL}/company/report/${incidentId}`;
 
-    let LocalPath = FileSystem.cacheDirectory + "lorem-ipsum.pdf";
-    const result = await FileSystem.downloadAsync(url, LocalPath);
-
-    if (result.status === 200) {
-      console.log("Downloaded Successfully");
-      await shareAsync(result.uri);
-    } else {
-      console.log("Download Failed");
-    }
+      // Define el directorio local y el nombre del archivo PDF
+      let LocalPath = FileSystem.cacheDirectory + `formulario_${incidentId}.pdf`;
+  
+      // Descarga el PDF desde la URL
+      const result = await FileSystem.downloadAsync(url, LocalPath);
+  
+      // Verifica si la descarga fue exitosa
+      if (result.status === 200) {
+        console.log("Downloaded Successfully");
+        // Comparte el PDF descargado
+        await shareAsync(result.uri);
+      } else {
+        console.log("Download Failed");
+      }
   };
 
   const handleChangeSend = () => {

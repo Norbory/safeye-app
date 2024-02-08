@@ -39,7 +39,7 @@ export function DailyScreen() {
       console.log(incidentId);
       try {      
 
-        let LocalPath = FileSystem.cacheDirectory  + 'lorem-ipsum.pdf';
+        let LocalPath = FileSystem.cacheDirectory  + `finalreporte${incidentId}.pdf`;
         const result= await FileSystem.downloadAsync(url, LocalPath)
         
         if (result.status === 200) {
