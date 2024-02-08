@@ -46,7 +46,7 @@ export function HomeScreen() {
   const areaList = useAreas();
   const [nombreE, setNombreE] = useState("");
   const { business } = useAuth();
-  let selectedId = "";
+  const [selectedId, setSelectedId] = useState<string>("");
 
   useEffect(() => {
     const getName = async () => {
@@ -122,19 +122,26 @@ export function HomeScreen() {
   };
   
   const handleGreenButtonPress = async (id: number) => {
-    const selectedCard = cardsData.find((card) => card.id === id);
-    if (selectedCard) {
-      try {
-        await axios.put(`${URL}/company/${COMPANY_ID}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
-        selectedId = selectedCard._id;
-        selectedCardRef.current = { ...cardsData.find((card) => card.id === id) } as any; 
-        idRef.current = id;
-        setModalVisible(true);
-      } catch (error) {
-        console.error(error);
-      }
+    const updatedCardsData = [...cardsData];
+    const selectedIndex = updatedCardsData.findIndex((card) => card.id === id);
+    if (selectedIndex !== -1) {// Verificar que selectedCard no sea undefined y que tenga _id definido
+    //   try {
+    //     // Realizar la solicitud PUT solo si selectedCard._id es válido
+    //     await axios.put(`${URL}/company/${COMPANY_ID}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
+      // Asignar el _id del incidente seleccionado a selectedId
+      setSelectedId(updatedCardsData[selectedIndex]._id);
+      // updatedCardsData.splice(selectedIndex, 1);
+      // setCardsData(updatedCardsData);
+      // Mostrar el modal
+      setModalVisible(true);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // } else {
+    //   console.error("No se pudo encontrar la tarjeta seleccionada o el ID de la tarjeta no está definido.");
     }
   };
+  
 
   const handleEnvio = async (area: string,image: string) => {
     try {

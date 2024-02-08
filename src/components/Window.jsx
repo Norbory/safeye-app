@@ -18,11 +18,12 @@ import MarginedTextInput_Modal2 from "./Text_Box_Modal2";
 import { format, parseISO } from "date-fns";
 import * as FileSystem from "expo-file-system";
 import { shareAsync } from "expo-sharing";
+import { URL } from "../constantes/string";
 
 
 
 const API_URL =
-  "https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/llenar-pdf";
+  `${URL}/company/llenar-pdf`;
 
 const CustomModal = ({
   setisButtonSend,
@@ -30,15 +31,15 @@ const CustomModal = ({
   onClose,
   incidentId,
 }) => {
-  const [dia,setDia] = useState<String>("");
-  const [hora,setHora] = useState<String>("");
-  console.log("IncidentId", incidentId);
+  let dia = 0;
+  let hora = 0;
 
   useEffect(() => {
+    console.log("IncidentId", incidentId);
     const timeZone = "America/Lima";
     const now = new Date();
-    setDia(format(now, "dd/MM/yyyy", { timeZone }));
-    setHora(format(now, "HH:mm:ss", { timeZone }));
+    dia = format(now, "dd/MM/yyyy", { timeZone });
+    hora = format(now, "HH:mm:ss", { timeZone });
   }, []);
 
   const [buttonSendPressed, setButtonSendPressed] = useState(false);
@@ -56,7 +57,7 @@ const CustomModal = ({
         console.error("API Error:", error);
       });
 
-    const url = `https://rest-ai-dev-cmqn.2.us-1.fl0.io/company/reporte-generado/last`;
+    const url = `${URL}/company/reporte-generado/last`;
 
     let LocalPath = FileSystem.cacheDirectory + "lorem-ipsum.pdf";
     const result = await FileSystem.downloadAsync(url, LocalPath);
