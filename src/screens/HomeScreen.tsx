@@ -145,16 +145,29 @@ export function HomeScreen() {
 
   const handleEnvio = async (area: string,image: string) => {
     try {
+      const base64Image = await convertToBase64(image);
       const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
         "ID_area": area,
         "ID_Cam":"6505633501f1e713f9f60f70",
-        "imageUrls": [image],
+        "imageUrls": [base64Image],
       });
       console.log("Respuesta del envio:", response);
       setModal1(false);
     } catch (error) {
       console.error("Error al enviar:", error);
     }
+  }
+
+  const convertToBase64 = async (imageUrl: string): Promise<string> => {
+    // Realiza una petición HTTP GET para obtener la imagen como un array buffer
+    const response = await axios.get(imageUrl, {
+        responseType: 'arraybuffer',
+    });
+    
+    // Convierte el array buffer a base64
+    const base64Image = Buffer.from(response.data, 'binary').toString('base64');
+    
+    return `data:${response.headers['content-type']};base64,${base64Image}`;
   }
 
   useEffect(() => {
