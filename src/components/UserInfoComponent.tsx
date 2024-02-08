@@ -1,6 +1,14 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { 
+        View,
+        Text, 
+        Image, 
+        StyleSheet
+      } from "react-native";
+import { useFonts } from 'expo-font';
+import { IUSER } from '../constantes/images'
+import { POPPINS } from "../constantes/fonts";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type Props = {
     username: string;
@@ -11,18 +19,18 @@ const UserInfoComponent: React.FC<Props> = ({
     username,
     isActive,
     }) => {
+      const [fontsLoaded] = useFonts({
+        'Poppins-Bold': POPPINS,
+      });
+      if (!fontsLoaded) {
+        return null;
+      }
     return(
         <View style={styles.container}>
-            <Image source={require('../../assets/monito.jpg')} style={styles.profileImage} />
             <View style={styles.container1}>
-                <Text style={styles.usernameText}>{username}</Text>
-                {isActive && (
-                    <View style={styles.activeContainer}>
-                    <Ionicons name="checkmark-circle" color="#1FFFA9" size={20} />
-                    <Text style={styles.activeText}>Active</Text>
-                    </View>
-                )}
+              <Text style={styles.usernameText}>Bienvenido</Text>
             </View>
+            <Image source={IUSER} style={styles.profileImage} />
         </View>
     );
     };
@@ -30,41 +38,31 @@ const UserInfoComponent: React.FC<Props> = ({
     const styles = StyleSheet.create({
         container: {
           position: "absolute",
-          top: 30,
-          left: 5,
+          top: 40,
+          right: 15,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
-          // backgroundColor: "#252525",
           padding: 10,
         },
         container1: {
             flexDirection: "column",
-            // alignItems: "center",
-            // justifyContent: "center",
-            // backgroundColor: "#252525",
-            // padding: 10,
+            marginRight:10,
           },
         usernameText: {
-          color: "#fff",
-          fontSize: 14,
+          fontFamily:"Poppins-Bold",
+          color: "#252525",
+          fontSize: 16,
           fontWeight: "bold",
-          marginLeft: 10,
-        },
-        activeContainer: {
-          flexDirection: "row",
-          alignItems: "center",
-          marginLeft: 10,
-        },
-        activeText: {
-          fontSize: 12,
-          color: "#1FFFA9",
-          marginLeft: 5,
+          marginRight: -8,
+          textShadowColor: "rgba(0,0,0,0.3)",
+          textShadowOffset: { width: -1, height: 1 },
+          textShadowRadius: 1,
         },
         profileImage: {
-          width: 30,
-          height: 30,
-          borderRadius: 15,
+          width: 40,
+          height: 40,
+          borderRadius: 20,
         },
       });
 

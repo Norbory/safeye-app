@@ -1,9 +1,11 @@
 export interface Report {
   _id: string;
-  company_id: string;
-  epp: string;
-  place: string;
-  time: Date;
-  admonished: boolean;
-  supervisor: string;
+  ID_area: string;
+  ID_Cam: string;
+  imageUrls: string[];
+  EPPs: string[];
+  Reported: boolean;
+  Deleted: boolean;
+  date: string;
+  areaName: string;
 }

@@ -9,15 +9,17 @@ import {
   Keyboard,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
+// import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
+import {LOGO} from "../constantes/images";
+import { URL } from "../constantes/string";
 
 export function LoginScreen() {
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn } = useAuth();
+  const { login } = useAuth();
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -36,20 +38,18 @@ export function LoginScreen() {
 
   const handleLogin = async () => {
     try {
-      const res = axios.post("http://192.168.1.5:3000/api/signin", {
-        username,
-        password,
+      const res = await axios.post(`${URL}/login`, {
+        "user_username": username,
+        "user_password": password
       });
-      console.log(`Hola ${(await res).data.name}`);
-      signIn(
-        {
-          name: (await res).data.name,
-          lastName: (await res).data.last,
-          email: (await res).data.email,
-        },
-        (await res).headers["auth-token"],
-        (await res).data.company
-      );
+
+      // console.log(res.data);
+
+      const { user, business, token } = res.data;
+
+      // console.log(`Hola ${(res).data.name}`);
+      login(user, business, token);
+
     } catch (error) {
       console.log(error);
     }
@@ -58,10 +58,6 @@ export function LoginScreen() {
   return (
     <View style={styles.container}>
       <LogoTitle keyboardOpen={keyboardOpen} />
-      {/* <Image
-        source={require("../../assets/isotipo.png")}
-        style={keyboardOpen ? styles.hidden : styles.image}
-      /> */}
       <View
         style={
           keyboardOpen
@@ -100,12 +96,6 @@ export function LoginScreen() {
         </Pressable>
         <Text style={styles.helpText}>Por favor complete todos los campos</Text>
       </View>
-      <LinearGradient
-        colors={["#2474B0", "white"]}
-        style={styles.gradient}
-        start={{ x: 0.5, y: 0.2 }}
-        end={{ x: 0.5, y: 0.8 }}
-      />
     </View>
   );
 }
@@ -129,7 +119,7 @@ const styles = StyleSheet.create({
     height: 260,
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#42B6E6",
+    backgroundColor: "#070236",
     paddingVertical: 20,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -140,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 20,
     justifyContent: "center",
-    backgroundColor: "#42B6E6",
+    backgroundColor: "#070236",
     paddingVertical: 20,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
@@ -148,10 +138,12 @@ const styles = StyleSheet.create({
   welcomeText: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#fff",
   },
   helpText: {
     fontSize: 12,
     fontWeight: "bold",
+    color: "#fff",
   },
   inputContainer: {
     width: "100%",
@@ -172,12 +164,12 @@ const styles = StyleSheet.create({
     width: 150,
     height: 40,
     borderRadius: 10,
-    backgroundColor: "#2474B0",
+    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
   },
   buttonText: {
-    color: "#fff",
+    color: "#070236",
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -198,13 +190,13 @@ const styles = StyleSheet.create({
     width: 300,
     height: "50%",
   },
-  gradient: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: -1,
-  },
+  // gradient: {
+  //   ...StyleSheet.absoluteFillObject,
+  //   zIndex: -1,
+  // },
 });
 
-function LogoTitle({ keyboardOpen }: { keyboardOpen: boolean }) {
+function LogoTitle({ keyboardOpen }) {
   return (
     <View
       style={
@@ -214,7 +206,7 @@ function LogoTitle({ keyboardOpen }: { keyboardOpen: boolean }) {
       }
     >
       <Image
-        source={require("../../assets/logotipo.png")}
+        source={LOGO}
         style={[styles.logo]}
         resizeMode="contain"
       />

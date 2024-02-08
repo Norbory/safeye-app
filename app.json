@@ -4,27 +4,45 @@
     "slug": "safeye-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/imgs/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/imgs/icon.png",
+      "resizeMode": "stretch",
+      "backgroundColor": "white"
     },
     "assetBundlePatterns": [
       "**/*"
+    ],
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ]
     ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "foregroundImage": "./assets/imgs/icon.png",
+        "backgroundColor": "#216AD9"
+      },
+      "package": "com.norbory.safeyeapp",
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/imgs/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "88cab465-f55d-4dee-9a2c-97b5972f5ff3"
+      }
     }
   }
 }

@@ -1,24 +1,23 @@
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import AppNavigator from "./src/routes/AppNavigator";
-import { AuthProvider } from "./src/auth/AuthProvider";
-import { useAuth } from "./src/hooks/useAuth";
+import { AuthContextProvider } from "./src/auth/AuthContext";
 
 const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background: "#0A3559",
+    background: "#faf6f4",
   },
 };
 
 export default function App() {
   return (
-    <AuthProvider>
+    <AuthContextProvider>
       <NavigationContainer theme={MyTheme}>
         <StatusBar style="auto" />
         <AppNavigator />
       </NavigationContainer>
-    </AuthProvider>
+    </AuthContextProvider>
   );
 }

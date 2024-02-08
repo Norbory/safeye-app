@@ -10,12 +10,16 @@ import {
   SupportScreen,
 } from "../screens";
 import UserInfoComponent from "../components/UserInfoComponent";
+import Logo from "../components/Logo";
 import { useAuth } from "../hooks/useAuth";
+import { getToken } from "../utils/AuthUtils";
 
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
   const { user } = useAuth();
+  const User = getToken();
+  
   return (
     <View style={{ flex: 1 }}>
       {
@@ -24,12 +28,10 @@ const MainTabNavigator = () => {
             tabBarShowLabel: false,
             headerShown: false,
             tabBarStyle: {
-              backgroundColor: "#49B4CB",
-              borderTopRightRadius: 30,
-              borderTopLeftRadius: 30,
+              backgroundColor: "#070236"
             },
             tabBarActiveTintColor: "#DADCDE",
-            tabBarInactiveTintColor: "#252525",
+            tabBarInactiveTintColor: "#ededed",
           }}
           initialRouteName="Home"
         >
@@ -42,7 +44,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#070236" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -65,7 +67,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#070236" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -88,7 +90,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#070236" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -111,7 +113,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#070236" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -134,7 +136,7 @@ const MainTabNavigator = () => {
                   style={[
                     styles.tabIconContainer,
                     {
-                      backgroundColor: focused ? "#49B4CB" : "transparent",
+                      backgroundColor: focused ? "#070236" : "transparent",
                       marginTop: focused ? -45 : 0,
                     },
                   ]}
@@ -150,8 +152,9 @@ const MainTabNavigator = () => {
           ></Tab.Screen>
         </Tab.Navigator>
       }
+      <Logo/>
       <UserInfoComponent
-        username={`${user.name} ${user.lastName}`}
+        username={`${user.name}`}
         isActive={true}
       />
     </View>

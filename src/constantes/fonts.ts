@@ -1,0 +1,1 @@
+export const POPPINS = require('../../assets/fonts/Poppins-Bold.ttf');
