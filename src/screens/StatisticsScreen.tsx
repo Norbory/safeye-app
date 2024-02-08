@@ -168,15 +168,14 @@ export function StatisticsScreen() {
         />
         
         <VictoryStack
-          colorScale={["green", "tomato"]}
+          colorScale={["tomato", "green"]}
         >
           <VictoryBar 
             data={barDataD}
-            style={{}}/>
+          />
 
           <VictoryBar 
             data={barDataA}
-            style={{}}
           />
 
         </VictoryStack>

@@ -15,12 +15,10 @@ import {
 import MarginedTextInput from "./Text_Box";
 import MarginedTextInput_Modal1 from "./Text_Box_Modal1";
 import MarginedTextInput_Modal2 from "./Text_Box_Modal2";
-import { format, parseISO } from "date-fns";
 import * as FileSystem from "expo-file-system";
 import { shareAsync } from "expo-sharing";
-import { URL } from "../constantes/string";
-
-
+import { URL, COMPANY_ID } from "../constantes/string";
+import { format } from "date-fns-tz";
 
 const API_URL =
   `${URL}/company/llenar-pdf`;
@@ -31,48 +29,39 @@ const CustomModal = ({
   onClose,
   incidentId,
 }) => {
-  let dia = 0;
-  let hora = 0;
-
-  useEffect(() => {
-    console.log("IncidentId", incidentId);
-    const timeZone = "America/Lima";
-    const now = new Date();
-    dia = format(now, "dd/MM/yyyy", { timeZone });
-    hora = format(now, "HH:mm:ss", { timeZone });
-  }, []);
+  const timeZone = "America/Lima";
+  const now = new Date();
+  const dia = format(now, "dd/MM/yyyy", { timeZone });
+  const hora = format(now, "HH:mm:ss", { timeZone });
 
   const [buttonSendPressed, setButtonSendPressed] = useState(false);
 
   const sendSwitchDataToServer = async (value) => {
-
-    await axios
-      .post(API_URL, value)
-      .then((response) => {
-        // Handle the API response here
-        console.log("API Response:", response.data);
-      })
-      .catch((error) => {
-        // Handle errors
-        console.error("API Error:", error);
-      });
+    try {
+      const response = await axios.post(API_URL, value);
+      console.log("API Response:", response.data);
 
       const url = `${URL}/company/report/${incidentId}`;
 
       // Define el directorio local y el nombre del archivo PDF
       let LocalPath = FileSystem.cacheDirectory + `formulario_${incidentId}.pdf`;
-  
+
       // Descarga el PDF desde la URL
       const result = await FileSystem.downloadAsync(url, LocalPath);
-  
+
       // Verifica si la descarga fue exitosa
       if (result.status === 200) {
         console.log("Downloaded Successfully");
+        // Realiza la solicitud PUT para marcar el incidente como reportado y eliminado
+        await axios.put(`${URL}/company/${COMPANY_ID}/incidents/${incidentId}`, { Reported: true, Deleted: true });
         // Comparte el PDF descargado
         await shareAsync(result.uri);
       } else {
         console.log("Download Failed");
       }
+    } catch (error) {
+      console.error("API Error:", error);
+    }
   };
 
   const handleChangeSend = () => {
@@ -178,12 +167,12 @@ const CustomModal = ({
   const [switches, setSwitchValues] = useState({
     incidentId: incidentId,
     Nombre: "hola",
-    DNI: "6768653",
-    Cargo: "Jefe de TI",
+    DNI: "",
+    Cargo: "",
     Firma: "FA",
     Fecha: dia,
     Hora: hora,
-    Contrata: "Contrata aquí",
+    Contrata: "",
     ActosSubestandares: {
       Marked: false,
       CheckA: false,
@@ -196,9 +185,9 @@ const CustomModal = ({
       CheckH: false,
       CheckI: false,
       Otros: false,
-      OtrosTexto: "Texto aquí",
+      OtrosTexto: "",
     },
-    DetalleActo: "Detalle aquí",
+    DetalleActo: "",
     CondicionesSubestandares: {
       Marked: false,
       Check1: false,
@@ -210,14 +199,14 @@ const CustomModal = ({
       Otros: false,
       OtrosTexto: "AAA aquí",
     },
-    DetalleCondicion: "Detalle aquí",
+    DetalleCondicion: "",
     Correción: "Correción aquí",
     CheckList: {
       Check1: switch1,
       Check2: switch2,
       Check3: switch3,
     },
-    Observador: "Observador aquígaaa",
+    Observador: "",
   });
 
   const switchesRef = useRef(switches);
@@ -325,11 +314,8 @@ useEffect(() => {
                         styles.disabledButton,
                     ]}
                     onPress={() => {
-                      console.log("Nombre", textValue);
-                      console.log("Correcion", textValue2);
                       onClosefinalChange(true);
                       onClose();
-                      console.log("Switch sí:", switch1);
                       setSwitchValues((prevState) => {
                         const newState = {
                           ...prevState,
@@ -342,12 +328,8 @@ useEffect(() => {
                             Check3: switch3,
                           },
                         };
-                    
-                        console.log("Nuevo estado de switches:", newState);
-                        console.log("Switch sí:", switch1);
                         sendSwitchDataToServer(newState);
                         switchesRef.current = newState; // Actualiza el ref con la última versión
-                    
                         return newState;
                       });
                       
@@ -500,14 +482,10 @@ const ModalContent_1 = ({
                     style={styles.buttonSend}
                     onPress={() => {
                       // Aquí puedes realizar alguna acción con los valores de los interruptores y el cuadro de texto
-                      console.log("Interruptor 1:", switchValue1);
-                      console.log("Interruptor 2:", switchValue2);
-                      console.log("Interruptor otros:", switchValue_1);
-                      console.log("Texto ingresado:", textInputValue);
                       setSwitchValues((prevState) => {
                         const newState = {
                           ...prevState,
-                        DetalleActo: "Nuevo Detalle",
+                        DetalleActo: "",
                         ActosSubestandares: {
                           ...prevState.ActosSubestandares,
                           Marked: isVisible,
@@ -523,9 +501,6 @@ const ModalContent_1 = ({
                           Otros: switchValue_1,
                           OtrosTexto: textInputValue,
                         },
-                        DetalleCondicion: "Nuevo Detalle de Condición",
-                        Correción: "Nueva Corrección",
-                        Observador: "Nuevo Observador",
                         };
               
                         switchesRef.current = newState;
@@ -646,14 +621,9 @@ const ModalContent_2 = ({
                     style={styles.buttonSend}
                     onPress={() => {
                       // Aquí puedes realizar alguna acción con los valores de los interruptores y el cuadro de texto
-                      console.log("Interruptor 1:", switchValue1);
-                      console.log("Interruptor 2:", switchValue2);
-                      console.log("otros:", switchValue_2);
-                      console.log("Texto ingresado:", text);
                       setSwitchValues((prevState) => {
                         const newState = {
                           ...prevState,
-                        DetalleActo: "Nuevo Detalle",
                         CondicionesSubestandares: {
                           ...prevState.CondicionesSubestandares,
                           Marked: isVisible,
@@ -666,17 +636,11 @@ const ModalContent_2 = ({
                           Otros: switchValue_2,
                           OtrosTexto: textInputValue,
                         },
-                        DetalleCondicion: "Nuevo Detalle de Condición",
-                        Correción: "Nueva Corrección",
-
-                        Observador: "Nuevo Observador",
+                        DetalleCondicion: "",
                         };
-                    
-                        console.log("Nuevo estado de switches:", newState);
                         switchesRef.current = newState; // Actualiza el ref con la última versión
                         return newState;
-                      });
-                    
+                      }); 
                       setEnvioModal2(true);
                       setenvioCompleteModal2(true);
                       // Cerrar este modal individual
@@ -714,7 +678,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#1A5276",
+    backgroundColor: "#faf6f4",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -728,11 +692,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modal1: {
-    backgroundColor: "#17202A", // Color de fondo personalizado para Modal 1
+    backgroundColor: "#faf6f4", // Color de fondo personalizado para Modal 1
     shadowColor: "#17202A",
   },
   modal2: {
-    backgroundColor: "#17202A", // Color de fondo personalizado para Modal 1
+    backgroundColor: "#faf6f4", // Color de fondo personalizado para Modal 1
     shadowColor: "#17202A",
   },
   buttonClose: {
@@ -741,7 +705,8 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
-    color: "white",
+    color: "black",
+    fontWeight: "bold",
   },
   button: {
     flex: 1,
@@ -753,7 +718,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   textStyle: {
-    color: "white",
+    color: "black",
     fontSize: 20,
     fontFamily: "Poppins-Bold",
     fontWeight: "bold",
@@ -767,7 +732,7 @@ const styles = StyleSheet.create({
   switchLabel: {
     flex: 1,
     marginRight: 10,
-    color: "white",
+    color: "black",
   },
   additionalScreenText: {
     fontSize: 16,
@@ -775,10 +740,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   textInput: {
-    color: "white",
+    color: "black",
     width: "100%",
     borderWidth: 1,
-    borderColor: "white",
+    borderColor: "black",
     borderRadius: 5,
     padding: 5,
     marginBottom: 10, // Espacio entre el cuadro de texto y los interruptores

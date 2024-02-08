@@ -73,7 +73,8 @@ export function DailyScreen() {
       <ScrollView style={{ width: "100%", height: "100%" }}>
 
       {/* Lista de incidentes Tarjetas */}
-      {reportList.filter((report) => report.Deleted).map((report: Report, index: number) => (
+      {reportList.filter((report) => report.Deleted) ? 
+      reportList.filter((report) => report.Deleted).map((report: Report, index: number) => (
         <View key={report._id}>
         <Pressable 
           key={report._id} 
@@ -96,7 +97,7 @@ export function DailyScreen() {
           </View>
         </Pressable>
         </View>
-      ))}
+      )): <Text>No hay reportes</Text>}
   </ScrollView>
       {reportList.length < 1 && <Text>No hay reportes</Text>}
 

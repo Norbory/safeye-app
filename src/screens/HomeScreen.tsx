@@ -7,12 +7,8 @@ import {
   ScrollView, 
   View, 
   Text,
-  Pressable,
-  Modal,
-  TouchableOpacity,
-  ImageBackground
 } from "react-native";
-import { SelectList } from 'react-native-dropdown-select-list'
+// import { SelectList } from 'react-native-dropdown-select-list'
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import {
@@ -22,28 +18,28 @@ import {
 import { URL, COMPANY_ID } from "../constantes/string";
 import CustomModal from "../components/Window.jsx";
 import useReports from "../hooks/useReports";
-import useAreas  from "../hooks/useAreas";
+// import useAreas  from "../hooks/useAreas";
 import { Report, Area } from "../types";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
-import CameraComponent from "../components/cameraIn";
+// import CameraComponent from "../components/cameraIn";
 
 export function HomeScreen() {
   //Camara settings
-  const [isCameraOpen, setIsCameraOpen] = useState(false);
-  const [capturedPhotoUri, setCapturedPhotoUri] = useState("");
+  // const [isCameraOpen, setIsCameraOpen] = useState(false);
+  // const [capturedPhotoUri, setCapturedPhotoUri] = useState("");
 
-  const openCamera = () => {
-    setIsCameraOpen(true);
-  };
+  // const openCamera = () => {
+  //   setIsCameraOpen(true);
+  // };
 
-  const closeCamera = (photoUri: string) => {
-    setIsCameraOpen(false);
-    setCapturedPhotoUri(photoUri);
-  };
+  // const closeCamera = (photoUri: string) => {
+  //   setIsCameraOpen(false);
+  //   setCapturedPhotoUri(photoUri);
+  // };
 
   const reportList = useReports();
-  const areaList = useAreas();
+  // const areaList = useAreas();
   const [nombreE, setNombreE] = useState("");
   const { business } = useAuth();
   const [selectedId, setSelectedId] = useState<string>("");
@@ -59,6 +55,12 @@ export function HomeScreen() {
     };
     getName();
   }, []);
+
+  // const [modal1, setModal1] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isButtonSend, setisButtonSend] = useState(false);
+  const selectedCardRef = useRef(null); 
+  const idRef = useRef(null); 
 
   const [cardsData, setCardsData] = useState([
     {
@@ -85,23 +87,17 @@ export function HomeScreen() {
 
   setCardsData(updatedCardsData);
 }, [reportList]);
+  // const [selected, setSelected] = useState("");
 
-  const [modal1, setModal1] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [isButtonSend, setisButtonSend] = useState(false);
-  const selectedCardRef = useRef(null); 
-  const idRef = useRef(null); 
-  const [selected, setSelected] = useState("");
+  // const data = areaList.map((area: Area) => ({key: area._id, value: area.name}));
 
-  const data = areaList.map((area: Area) => ({key: area._id, value: area.name}));
-
-  const addNewCard = async () =>{
-    setModal1(true);
-  }
+  // const addNewCard = async () =>{
+  //   setModal1(true);
+  // }
   
-  const closeModal = () =>{
-    setModal1(false);
-  }
+  // const closeModal = () =>{
+  //   setModal1(false);
+  // }
 
   const handleRedButtonPress = async (id: number) => {
     const updatedCardsData = [...cardsData]; // Hacer una copia de las cartas existentes
@@ -124,51 +120,41 @@ export function HomeScreen() {
   const handleGreenButtonPress = async (id: number) => {
     const updatedCardsData = [...cardsData];
     const selectedIndex = updatedCardsData.findIndex((card) => card.id === id);
-    if (selectedIndex !== -1) {// Verificar que selectedCard no sea undefined y que tenga _id definido
-    //   try {
-    //     // Realizar la solicitud PUT solo si selectedCard._id es válido
-    //     await axios.put(`${URL}/company/${COMPANY_ID}/incidents/${selectedCard._id}`, { Reported: true, Deleted: true });
-      // Asignar el _id del incidente seleccionado a selectedId
+    if (selectedIndex !== -1) {    
       setSelectedId(updatedCardsData[selectedIndex]._id);
-      // updatedCardsData.splice(selectedIndex, 1);
-      // setCardsData(updatedCardsData);
       // Mostrar el modal
       setModalVisible(true);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // } else {
-    //   console.error("No se pudo encontrar la tarjeta seleccionada o el ID de la tarjeta no está definido.");
-    }
-  };
+      updatedCardsData.splice(selectedIndex, 1);
+      setCardsData(updatedCardsData);
+  }};
   
 
-  const handleEnvio = async (area: string,image: string) => {
-    try {
-      const base64Image = await convertToBase64(image);
-      const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
-        "ID_area": area,
-        "ID_Cam":"6505633501f1e713f9f60f70",
-        "imageUrls": [base64Image],
-      });
-      console.log("Respuesta del envio:", response);
-      setModal1(false);
-    } catch (error) {
-      console.error("Error al enviar:", error);
-    }
-  }
+  // const handleEnvio = async (area: string,image: string) => {
+  //   try {
+  //     const base64Image = await convertToBase64(image);
+  //     const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
+  //       "ID_area": area,
+  //       "ID_Cam":"6505633501f1e713f9f60f70",
+  //       "imageUrls": [base64Image],
+  //     });
+  //     console.log("Respuesta del envio:", response);
+  //     setModal1(false);
+  //   } catch (error) {
+  //     console.error("Error al enviar:", error);
+  //   }
+  // }
 
-  const convertToBase64 = async (imageUrl: string): Promise<string> => {
-    // Realiza una petición HTTP GET para obtener la imagen como un array buffer
-    const response = await axios.get(imageUrl, {
-        responseType: 'arraybuffer',
-    });
+  // const convertToBase64 = async (imageUrl: string): Promise<string> => {
+  //   // Realiza una petición HTTP GET para obtener la imagen como un array buffer
+  //   const response = await axios.get(imageUrl, {
+  //       responseType: 'arraybuffer',
+  //   });
     
-    // Convierte el array buffer a base64
-    const base64Image = Buffer.from(response.data, 'binary').toString('base64');
+  //   // Convierte el array buffer a base64
+  //   const base64Image = Buffer.from(response.data, 'binary').toString('base64');
     
-    return `data:${response.headers['content-type']};base64,${base64Image}`;
-  }
+  //   return `data:${response.headers['content-type']};base64,${base64Image}`;
+  // }
 
   useEffect(() => {
     if (isButtonSend) {
@@ -192,9 +178,9 @@ export function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       
-      <Pressable style={styles.add} onPress={()=>addNewCard()}>
+      {/* <Pressable style={styles.add} onPress={()=>addNewCard()}>
         <Text style={styles.empresa}>Añadir incidente +</Text>
-      </Pressable>
+      </Pressable> */}
       
       <ScrollView horizontal={true} style={styles.scrollView}>
         {cardsData
@@ -211,7 +197,7 @@ export function HomeScreen() {
             tiempo={cardsData.tiempo}
           />
         ))}
-        {cardsData.length === 0 && (
+        {cardsData.length <= 0 && (
           <Card
             backgroundImage={LAST_IMG}
             onGreenButtonPress={() => {}}
@@ -246,7 +232,8 @@ export function HomeScreen() {
           incidentId={selectedId}
         />
       )}
-      <Modal
+      
+      {/* <Modal
         animationType="fade"
         transparent={true}
         visible={modal1}
@@ -285,7 +272,7 @@ export function HomeScreen() {
         <View style={styles.cameraModal}>
           <CameraComponent closeModal={closeCamera}/>
         </View>
-      </Modal>
+      </Modal> */}
 
     </SafeAreaView>
   );
