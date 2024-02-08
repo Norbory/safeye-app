@@ -23,7 +23,6 @@
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "expo": "^49.0.7",
-    "expo-camera": "~13.4.4",
     "expo-constants": "~14.4.2",
     "expo-dev-client": "~2.4.11",
     "expo-device": "~5.4.0",
