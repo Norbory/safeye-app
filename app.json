@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "safeye-app",
+    "name": "HarkAI",
     "slug": "safeye-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,12 +15,7 @@
       "**/*"
     ],
     "plugins": [
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
-        }
-      ]
+      
     ],
     "ios": {
       "supportsTablet": true

@@ -1,7 +1,6 @@
 // import React, { useState, useEffect, useRef } from 'react';
 // import { Text, View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 // import { Ionicons } from "@expo/vector-icons";
-// import { Camera, CameraType } from 'expo-camera';
 
 // type CameraComponentProps = {
 //   closeModal: (photo:string) => void;

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   textMargin: {
     marginRight: 8, // Espacio entre el texto y el margen derecho
     marginBottom: 8, // Espacio entre las líneas de texto
-    color: 'white',
+    color: 'black',
   },
   textInput: {
     width: '100%',
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 20,
-    color: 'white',
+    color: 'black',
   },
 });
 

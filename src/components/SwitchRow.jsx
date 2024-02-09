@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginRight: 1, // Espacio entre el texto y el interruptor (ajustado a 5) aumento se separa, si disminuyo 
     marginLeft: 1, // Espacio entre el interruptor y la letra
-    color: 'white',
+    color: 'black',
   },
 });
 
