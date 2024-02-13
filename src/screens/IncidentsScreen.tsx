@@ -34,19 +34,21 @@ export function IncidentsScreen() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Lista de incidentes</Text>
       <View style={styles.buttonContainer}>
         <Pressable
           style={[styles.button, seeAdmonished && styles.selectedButton]}
           onPress={() => setSeeAdmonished(true)}
         >
-          <Text style={styles.buttonText}>Amonestados</Text>
+          <Text style={[styles.buttonText, seeAdmonished && styles.underlinedText]}>Amonestados</Text>
         </Pressable>
         <Pressable
           style={[styles.button, !seeAdmonished && styles.selectedButton]}
           onPress={() => setSeeAdmonished(false)}
         >
-          <Text style={styles.buttonText}>Descartados</Text>
+          <Text style={[styles.buttonText, !seeAdmonished && styles.underlinedText]}>Descartados</Text>
         </Pressable>
+      
       </View>
       <FlatList
         data={filteredReports}
@@ -86,7 +88,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginRight: 8,
   },
-  
+
+  title: {
+    color: "#252525", // Texto oscuro
+    fontSize: 24, // Tamaño de fuente ligeramente mayor
+    fontWeight: "bold",
+  },
+
   listItemInfo: {
     flex: 1,
     flexDirection: "row",
@@ -121,7 +129,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "center",
-    paddingVertical: 20,
+    paddingVertical: 10,
   },
   button: {
     flex: 1,
@@ -135,7 +143,10 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
-    fontWeight: "bold",
+  },
+  underlinedText: {
+    textDecorationLine: "underline",
+    fontWeight: "900",
   },
   listItemText: {
     fontSize: 16,

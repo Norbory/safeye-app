@@ -12,14 +12,12 @@ import {
 import UserInfoComponent from "../components/UserInfoComponent";
 import Logo from "../components/Logo";
 import { useAuth } from "../hooks/useAuth";
-import { getToken } from "../utils/AuthUtils";
 
 const Tab = createBottomTabNavigator();
 
 const MainTabNavigator = () => {
   const { user } = useAuth();
-  const User = getToken();
-  
+
   return (
     <View style={{ flex: 1 }}>
       {
@@ -154,7 +152,7 @@ const MainTabNavigator = () => {
       }
       <Logo/>
       <UserInfoComponent
-        username={`${user.name}`}
+        username={`${user?.name}`}
         isActive={true}
       />
     </View>

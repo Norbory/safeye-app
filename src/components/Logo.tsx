@@ -18,7 +18,7 @@ export const Logo = () =>{
         container: {
           position: "absolute",
           top: 40,
-          left: 15,
+          right: 20,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "center",
@@ -27,7 +27,6 @@ export const Logo = () =>{
         profileImage: {
           width: 40,
           height: 40,
-          
         },
       });
 

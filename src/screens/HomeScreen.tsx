@@ -19,9 +19,8 @@ import { URL, COMPANY_ID } from "../constantes/string";
 import CustomModal from "../components/Window.jsx";
 import useReports from "../hooks/useReports";
 // import useAreas  from "../hooks/useAreas";
-import { Report, Area } from "../types";
+import { Report } from "../types";
 import axios from "axios";
-import { useAuth } from "../hooks/useAuth";
 // import CameraComponent from "../components/cameraIn";
 
 export function HomeScreen() {
@@ -41,20 +40,7 @@ export function HomeScreen() {
   const reportList = useReports();
   // const areaList = useAreas();
   const [nombreE, setNombreE] = useState("");
-  const { business } = useAuth();
   const [selectedId, setSelectedId] = useState<string>("");
-
-  useEffect(() => {
-    const getName = async () => {
-      try {
-        const nombreDeLaEmpresa = business.Name;
-        setNombreE(nombreDeLaEmpresa); 
-      } catch (error) {
-        console.error("Error al obtener el nombre:", error);
-      }
-    };
-    getName();
-  }, []);
 
   // const [modal1, setModal1] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);

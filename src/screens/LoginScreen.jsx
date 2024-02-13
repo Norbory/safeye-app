@@ -7,12 +7,13 @@ import {
   Pressable,
   Image,
   Keyboard,
+  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 // import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
-import {LOGO} from "../constantes/images";
+import { LOGO } from "../constantes/images";
 import { URL } from "../constantes/string";
 
 export function LoginScreen() {
@@ -47,11 +48,16 @@ export function LoginScreen() {
 
       const { user, business, token } = res.data;
 
-      // console.log(`Hola ${(res).data.name}`);
       login(user, business, token);
 
     } catch (error) {
       console.log(error);
+      // Si hay un error en el inicio de sesión, muestra una alerta
+      Alert.alert(
+        'Error de inicio de sesión',
+        'Usuario o contraseña incorrectos. Por favor, inténtelo de nuevo.',
+        [{ text: 'OK' }]
+      );
     }
   };
 

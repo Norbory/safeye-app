@@ -1,5 +1,3 @@
-// AuthUtils.js
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const storeToken = async (token) => {
@@ -27,7 +25,6 @@ const removeToken = async () => {
   }
 }
 
-//companyId
 const storecompanyId = async (companyId) => {
   try {
     await AsyncStorage.setItem('companyId', companyId);
@@ -53,5 +50,32 @@ const removecompanyId = async () => {
   }
 }
 
+// Funciones para almacenar, obtener y eliminar datos de usuario
+const storeUser = async (user) => {
+  try {
+    const jsonUser = JSON.stringify(user);
+    await AsyncStorage.setItem('user', jsonUser);
+  } catch (error) {
+    console.error('Error al guardar el usuario:', error);
+  }
+}
 
-export { storeToken, getToken, removeToken, storecompanyId, getcompanyId, removecompanyId };
+const getUser = async () => {
+  try {
+    const jsonUser = await AsyncStorage.getItem('user');
+    return jsonUser != null ? JSON.parse(jsonUser) : null;
+  } catch (error) {
+    console.error('Error al obtener el usuario:', error);
+    return null;
+  }
+}
+
+const removeUser = async () => {
+  try {
+    await AsyncStorage.removeItem('user');
+  } catch (error) {
+    console.error('Error al eliminar el usuario:', error);
+  }
+}
+
+export { storeToken, getToken, removeToken, storecompanyId, getcompanyId, removecompanyId, storeUser, getUser, removeUser };
