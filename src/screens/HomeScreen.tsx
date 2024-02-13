@@ -7,6 +7,7 @@ import {
   ScrollView, 
   View, 
   Text,
+  Alert,
 } from "react-native";
 // import { SelectList } from 'react-native-dropdown-select-list'
 import { Ionicons } from "@expo/vector-icons";
@@ -36,6 +37,8 @@ export function HomeScreen() {
   //   setIsCameraOpen(false);
   //   setCapturedPhotoUri(photoUri);
   // };
+  const [showMessage, setShowMessage] = useState(false);
+  const [message, setMessage] = useState('');
 
   const reportList = useReports();
   // const areaList = useAreas();
@@ -60,19 +63,6 @@ export function HomeScreen() {
     }
   ]);
   
-  useEffect(() => {
-  const updatedCardsData = reportList.map((report: Report, index: number) => ({
-    id: index + 1,
-    backgroundImage: report.imageUrls[0],
-    zona: report.areaName,
-    epp: report.EPPs.join("   "),
-    tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY H:mm'),
-    deleted: report.Deleted,
-    _id: report._id
-  }));
-
-  setCardsData(updatedCardsData);
-}, [reportList]);
   // const [selected, setSelected] = useState("");
 
   // const data = areaList.map((area: Area) => ({key: area._id, value: area.name}));
@@ -90,16 +80,36 @@ export function HomeScreen() {
     const selectedIndex = updatedCardsData.findIndex((card) => card.id === id);
   
     if (selectedIndex !== -1) {
-      try {
-        await axios.put(
-          `${URL}/company/${COMPANY_ID}/incidents/${updatedCardsData[selectedIndex]._id}`,
-          { Reported: false, Deleted: true }
-        );
-        updatedCardsData.splice(selectedIndex, 1);
-        setCardsData(updatedCardsData);
-      } catch (error) {
-        console.error(error);
-      }
+      Alert.alert(
+        "¿Estás seguro de descartar este incidente?",
+        "Una vez descartado, no podrás recuperar la información.",
+        [
+          {
+            text: "Cancelar",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          {
+            text: "Sí, descartar",
+            onPress: async () => {
+              try {
+                await axios.put(
+                  `${URL}/company/${COMPANY_ID}/incidents/${updatedCardsData[selectedIndex]._id}`,
+                  { Reported: false, Deleted: true }
+                );
+                updatedCardsData.splice(selectedIndex, 1);
+                setCardsData(updatedCardsData);
+                setMessage('La carta fue eliminada exitosamente.');
+                setShowMessage(true);
+                setTimeout(() => setShowMessage(false), 3000);
+              } catch (error) {
+                console.error(error);
+              }
+            }
+          }
+        ],
+        { cancelable: false }
+      );
     }
   };
   
@@ -114,6 +124,19 @@ export function HomeScreen() {
       setCardsData(updatedCardsData);
   }};
   
+  useEffect(() => {
+    const updatedCardsData = reportList.map((report: Report, index: number) => ({
+      id: index + 1,
+      backgroundImage: report.imageUrls[0],
+      zona: report.areaName,
+      epp: report.EPPs.join("   "),
+      tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY H:mm'),
+      deleted: report.Deleted,
+      _id: report._id
+    }));
+  
+    setCardsData(updatedCardsData);
+  }, [reportList, showMessage]);
 
   // const handleEnvio = async (area: string,image: string) => {
   //   try {
@@ -218,7 +241,26 @@ export function HomeScreen() {
           incidentId={selectedId}
         />
       )}
-      
+
+      {showMessage && (
+        <Text style={{
+          position: 'absolute',
+          zIndex: 1,
+          backgroundColor: 'rgba(128, 128, 128, 0.5)', // Fondo gris claro con transparencia
+          padding: 10, // Añade relleno alrededor del texto
+          borderRadius: 10, // Agrega bordes redondeados alrededor del mensaje
+          textAlign: 'center', // Centra el texto horizontalmente
+          width: '80%', // Define el ancho del mensaje
+          top: '50%', // Posiciona el mensaje en la mitad de la pantalla verticalmente
+          left: '10%', // Centra el mensaje horizontalmente
+          transform: [{ translateY: -50 }], // Ajusta el mensaje verticalmente hacia arriba
+          color: 'white',
+          fontSize: 16,
+          fontWeight:"700",
+        }}>
+          {message}
+        </Text>
+      )}     
       {/* <Modal
         animationType="fade"
         transparent={true}
