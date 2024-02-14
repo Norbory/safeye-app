@@ -2,18 +2,14 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, Pressable,FlatList  } from "react-native";
 import useReports from "../hooks/useReports";
 import { Report } from "../types";
-
+import moment from 'moment';
 
 export function IncidentsScreen() {
   const [seeAdmonished, setSeeAdmonished] = useState(true);
   const reportList = useReports();
 
   const renderAdmonishedItem = ({ item, index }: { item: Report; index: number }) => {
-    const date = new Date(item.date);
-    const time = `${date.getHours()}:${String(date.getMinutes()).padStart(
-      2,
-      "0"
-    )}`;
+    
     return (
       <View style={styles.listItem}>
         <View style={styles.listItemContent}>
@@ -21,7 +17,9 @@ export function IncidentsScreen() {
           <View style={styles.listItemInfo}>
             <Text style={styles.listItemEPPs}>{item.EPPs.join(", ")}</Text>
             <Text style={styles.listItemArea}>{item.areaName}</Text>
-            <Text style={styles.listItemTime}>{time}</Text>
+            <Text style={styles.listItemTime}>
+              {moment(item.date).utcOffset(-5).format('H:mm')}
+              </Text>
           </View>
         </View>
       </View>

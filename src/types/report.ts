@@ -8,4 +8,5 @@ export interface Report {
   Deleted: boolean;
   date: string;
   areaName: string;
+  supervisor: string;
 }

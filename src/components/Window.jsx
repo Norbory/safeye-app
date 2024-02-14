@@ -41,6 +41,7 @@ const CustomModal = ({
 
   const sendSwitchDataToServer = async (value) => {
     try {
+
       const response = await axios.post(API_URL, value);
       console.log("API Response:", response.data);
 
@@ -56,7 +57,7 @@ const CustomModal = ({
       if (result.status === 200) {
         console.log("Downloaded Successfully");
         // Realiza la solicitud PUT para marcar el incidente como reportado y eliminado
-        await axios.put(`${URL}/company/${COMPANY_ID}/incidents/${incidentId}`, { Reported: true, Deleted: true });
+        await axios.put(`${URL}/company/${COMPANY_ID}/incidents/${incidentId}`, { Reported: true, Deleted: true, supervisor: user?.name});
         // Comparte el PDF descargado
         await shareAsync(result.uri);
       } else {
@@ -211,8 +212,6 @@ const CustomModal = ({
     },
     Observador: user?.name,
   });
-
-  console.log("Switches:", switches.Observador);
 
   const switchesRef = useRef(switches);
 
@@ -481,18 +480,6 @@ const ModalContent_1 = ({
                 setSwitchValue1={setSwitchValue_1}
               />
 
-              <View style={styles.textAdicional}>
-                <Text style={styles.textoLabel}>Detalla el acto:</Text>
-                <TextInput
-                  style={styles.textoInput}
-                  placeholder="Detallar acto subestandar"
-                  placeholderTextColor="#95A5A6"
-                  placeholderStyle={{ fontSize: 12 }}
-                  onChangeText={setText}
-                  value={text}
-                />
-              </View>
-
               {/* Agregar botón de enviar */}
               <View style={styles.rowContainer}>
                 <View style={styles.buttonContainer}>
@@ -503,7 +490,7 @@ const ModalContent_1 = ({
                       setSwitchValues((prevState) => {
                         const newState = {
                           ...prevState,
-                        DetalleActo: text,
+                        DetalleActo: "",
                         ActosSubestandares: {
                           ...prevState.ActosSubestandares,
                           Marked: isVisible,
@@ -534,7 +521,7 @@ const ModalContent_1 = ({
                       onClose();
                     }}
                   >
-                    <Text style={styles.buttonText}>Enviar Condición</Text>
+                    <Text style={styles.buttonText}>Registrar Condición</Text>
                   </Pressable>
                   <View style={styles.buttonSeparator} />
                   <Pressable
@@ -635,17 +622,6 @@ const ModalContent_2 = ({
                 setSwitchValue2={setSwitchValue_2}
               />
 
-              <View style={styles.textAdicional}>
-                <Text style={styles.textoLabel}>Detalla la condición:</Text>
-                <TextInput
-                  style={styles.textoInput}
-                  placeholder="Detallar condición subestandar"
-                  placeholderTextColor="#95A5A6"
-                  placeholderStyle={{ fontSize: 12 }}
-                  onChangeText={setTextA}
-                  value={textA}
-                />
-              </View>
               {/* Agregar botón de enviar */}
               <View style={styles.rowContainer}>
                 <View style={styles.buttonContainer}>
@@ -668,7 +644,7 @@ const ModalContent_2 = ({
                           Otros: switchValue_2,
                           OtrosTexto: textInputValue,
                         },
-                        DetalleCondicion: textA,
+                        DetalleCondicion: "",
                         };
                         switchesRef.current = newState; // Actualiza el ref con la última versión
                         return newState;
@@ -679,7 +655,7 @@ const ModalContent_2 = ({
                       onClose();
                     }}
                   >
-                    <Text style={styles.buttonText}>Enviar Condición</Text>
+                    <Text style={styles.buttonText}>Registrar Condición</Text>
                   </Pressable>
                   <View style={styles.buttonSeparator} />
                   <Pressable
@@ -860,6 +836,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     padding: 8,
     fontWeight: "bold",
+    textAlign: "center",
   },
   buttonDelete: {
     flex: 1,

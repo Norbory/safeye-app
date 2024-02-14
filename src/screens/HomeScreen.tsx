@@ -9,7 +9,7 @@ import {
   Text,
   Alert,
 } from "react-native";
-// import { SelectList } from 'react-native-dropdown-select-list'
+import { SelectList } from 'react-native-dropdown-select-list'
 import { Ionicons } from "@expo/vector-icons";
 import Card from "../components/Card";
 import {
@@ -19,7 +19,7 @@ import {
 import { URL, COMPANY_ID } from "../constantes/string";
 import CustomModal from "../components/Window.jsx";
 import useReports from "../hooks/useReports";
-// import useAreas  from "../hooks/useAreas";
+import useAreas  from "../hooks/useAreas";
 import { Report } from "../types";
 import axios from "axios";
 // import CameraComponent from "../components/cameraIn";
@@ -80,7 +80,7 @@ export function HomeScreen() {
       backgroundImage: report.imageUrls[0],
       zona: report.areaName,
       epp: report.EPPs.join("   "),
-      tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY H:mm'),
+      tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY     H:mm'),
       deleted: report.Deleted,
       _id: report._id
     }));

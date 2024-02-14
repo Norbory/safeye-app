@@ -30,6 +30,7 @@ export default function useReports() {
           _id: report._id,
           date: report.date,
           areaName: report.areaName,
+          supervisor: report.supervisor,
         }));
         setReports(transformedReports);
       } else {

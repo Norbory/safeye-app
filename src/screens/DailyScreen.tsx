@@ -21,6 +21,7 @@ export function DailyScreen() {
   const reportList = useReports();
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+  const [isPressed, setIsPressed] = useState<Boolean>(false);
 
   const listDelected = reportList.filter((report) => report.Deleted);
   const listAmonestado = listDelected.filter((report) => report.Reported);
@@ -70,6 +71,19 @@ export function DailyScreen() {
     setModalVisible(false);
   };
 
+  const getTurno = (hora: number) => {
+    let hour = hora - 5;
+    if (hour >= 6 && hour < 11) {
+      return "Turno mañana";
+    } else if (hour >= 11 && hour < 16) {
+      return "Turno tarde";
+    } else if (hour >= 16 && hour < 23) {
+      return "Turno noche";
+    } else {
+      return "Fuera de turno";
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Resumen de incidentes</Text>
@@ -84,17 +98,17 @@ export function DailyScreen() {
           onPress={() => showCard(report)}
         >
           <Text style={styles.reportTitle}>Incidente {index + 1}</Text>
-          <Text style={styles.reportText}>Area: {report.areaName}</Text>
+          <Text style={styles.reportText}>Zona: {report.areaName}</Text>
           <Text style={styles.reportText}>
             EPPs: {report.EPPs.join(", ")}
           </Text>
-          <Text style={report.Reported ? styles.reportedStyle : styles.notReportedStyle}>
-            Reportado: {report.Reported ? "Sí" : "No"}
+          <Text style={styles.reportText}>
+            {getTurno(moment(report.date).hour())}: {moment(report.date).utcOffset(-5).format('H:mm')}
           </Text>
 
           <View style={styles.dateContainer}>
           <Text style={styles.dateText}>
-            {moment(report.date).utcOffset(-5).format('D/M/YYYY H:mm')}
+            {moment(report.date).utcOffset(-5).format('D/M/YYYY')}
           </Text> 
           </View>
         </Pressable>
@@ -110,15 +124,16 @@ export function DailyScreen() {
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.titleText}>Incidente</Text>
+            <Text style={styles.titleText}>Incidente {(selectedReport?._id ?? '').slice(-6)}</Text>
 
             {/* Contenedor para la imagen, área y EPPs */}
             <View style={styles.imageAreaEPPContainer}>
               <ImageBackground source={{ uri: selectedReport?.imageUrls[0] }} style={styles.reportImage}></ImageBackground>
 
               <View style={styles.reportDetails}>
-                <Text style={styles.modalText}>Área: {selectedReport?.areaName}</Text>
+                <Text style={styles.modalText}>Zona: {selectedReport?.areaName}</Text>
                 <Text style={styles.modalText}>EPPs: {selectedReport?.EPPs.join(", ")}</Text>
+                <Text style={styles.modalText}>Supervisor: {selectedReport?.supervisor?? ''}</Text>
               </View>
             </View>
 
@@ -254,7 +269,7 @@ const styles = StyleSheet.create({
   },
   modalText: {
     marginBottom: 15,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   titleText:{
     textAlign: 'center',
