@@ -19,6 +19,7 @@ import * as FileSystem from "expo-file-system";
 import { shareAsync } from "expo-sharing";
 import { URL, COMPANY_ID } from "../constantes/string";
 import { format } from "date-fns-tz";
+import { useAuth } from "../hooks/useAuth";
 
 const API_URL =
   `${URL}/company/llenar-pdf`;
@@ -29,6 +30,8 @@ const CustomModal = ({
   onClose,
   incidentId,
 }) => {
+  const { user } = useAuth();
+
   const timeZone = "America/Lima";
   const now = new Date();
   const dia = format(now, "dd/MM/yyyy", { timeZone });
@@ -169,7 +172,7 @@ const CustomModal = ({
     Nombre: "hola",
     DNI: "",
     Cargo: "",
-    Firma: "FA",
+    Firma: "",
     Fecha: dia,
     Hora: hora,
     Contrata: "",
@@ -206,8 +209,10 @@ const CustomModal = ({
       Check2: switch2,
       Check3: switch3,
     },
-    Observador: "",
+    Observador: user?.name,
   });
+
+  console.log("Switches:", switches.Observador);
 
   const switchesRef = useRef(switches);
 
@@ -231,15 +236,16 @@ useEffect(() => {
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Observaciones</Text>
 
-              <View style={styles.rowContainer}>
+              <View style={styles.switchContainer}>
                 <View style={styles.leftColumn}>
                   <Text style={styles.modalText}>Nombre:</Text>
                 </View>
                 <View style={styles.rightColumn}>
                   <TextInput
                     style={styles.textInput}
-                    placeholder="Ingrese su nombre..."
+                    placeholder="Nombre del involucrado"
                     placeholderTextColor="#95A5A6"
+                    placeholderStyle={{ fontSize: 12 }}
                     onChangeText={setTextValue}
                     value={textValue}
                   />
@@ -304,7 +310,6 @@ useEffect(() => {
                 setSwitch2={setSwitch2}
                 setSwitch3={setSwitch3}
               />
-
               <View style={styles.rowContainer}>
                 <View style={styles.buttonContainer}>
                   <Pressable
@@ -390,6 +395,7 @@ const ModalContent_1 = ({
   const [switchValue9, setSwitchValue9] = useState(false);
 
   const [textInputValue, setTextInputValue] = useState("");
+  const [text, setText] = useState("");
 
   // Estilos específicos para cada modal
   const modalStyles =
@@ -475,6 +481,18 @@ const ModalContent_1 = ({
                 setSwitchValue1={setSwitchValue_1}
               />
 
+              <View style={styles.textAdicional}>
+                <Text style={styles.textoLabel}>Detalla el acto:</Text>
+                <TextInput
+                  style={styles.textoInput}
+                  placeholder="Detallar acto subestandar"
+                  placeholderTextColor="#95A5A6"
+                  placeholderStyle={{ fontSize: 12 }}
+                  onChangeText={setText}
+                  value={text}
+                />
+              </View>
+
               {/* Agregar botón de enviar */}
               <View style={styles.rowContainer}>
                 <View style={styles.buttonContainer}>
@@ -485,7 +503,7 @@ const ModalContent_1 = ({
                       setSwitchValues((prevState) => {
                         const newState = {
                           ...prevState,
-                        DetalleActo: "",
+                        DetalleActo: text,
                         ActosSubestandares: {
                           ...prevState.ActosSubestandares,
                           Marked: isVisible,
@@ -554,6 +572,8 @@ const ModalContent_2 = ({
   const [switchValue6, setSwitchValue6] = useState(false);
   const [textInputValue, setTextInputValue] = useState("");
   const [text, setText] = useState("");
+  const [textA, setTextA] = useState("");
+
   // Estilos específicos para cada modal
   const modalStyles =
     modalNumber === 1 ? styles.modal1 : modalNumber === 2 ? styles.modal2 : {};
@@ -614,6 +634,18 @@ const ModalContent_2 = ({
                 switchValue2={switchValue_2}
                 setSwitchValue2={setSwitchValue_2}
               />
+
+              <View style={styles.textAdicional}>
+                <Text style={styles.textoLabel}>Detalla la condición:</Text>
+                <TextInput
+                  style={styles.textoInput}
+                  placeholder="Detallar condición subestandar"
+                  placeholderTextColor="#95A5A6"
+                  placeholderStyle={{ fontSize: 12 }}
+                  onChangeText={setTextA}
+                  value={textA}
+                />
+              </View>
               {/* Agregar botón de enviar */}
               <View style={styles.rowContainer}>
                 <View style={styles.buttonContainer}>
@@ -636,7 +668,7 @@ const ModalContent_2 = ({
                           Otros: switchValue_2,
                           OtrosTexto: textInputValue,
                         },
-                        DetalleCondicion: "",
+                        DetalleCondicion: textA,
                         };
                         switchesRef.current = newState; // Actualiza el ref con la última versión
                         return newState;
@@ -703,7 +735,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2196F3",
   },
   modalText: {
-    marginBottom: 15,
+    marginBottom: 10,
     textAlign: "center",
     color: "black",
     fontWeight: "bold",
@@ -754,11 +786,29 @@ const styles = StyleSheet.create({
     marginBottom: 5, // Espacio entre la fila y otros elementos
   },
   leftColumn: {
-    flex: 2, // Toma el 50% del ancho disponible
+    flex: 1, // Toma el 50% del espacio disponible
+    paddingRight: 10,
   },
   rightColumn: {
-    flex: 2, // Toma el 50% del ancho disponible
-    marginLeft: 5, // Espacio entre el texto y el cuadro de texto
+    flex: 3, // Toma el 50% del espacio disponible
+  },
+  textAdicional: {
+    flexDirection: "row",
+    alignItems: 'start',
+  },
+  textoLabel: {
+    marginRight: 10, // Espacio entre el texto y el TextInput
+    textAlign: 'left',
+    marginTop: 10,
+  },
+  textoInput: {
+    width: 180, 
+    textAlign: 'left',
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   centeredView_BoxText: {
     flex: 1,
@@ -807,7 +857,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 15,
+    padding: 8,
     fontWeight: "bold",
   },
   buttonDelete: {

@@ -26,7 +26,7 @@ const MarginedTextInput_Modal1 = ({ margin, characterLimit, text, setText, switc
         <TextInput
           style={styles.textInput}
           multiline={true}
-          placeholder="Detalla aquí..."
+          placeholder="Otro acto"
           placeholderTextColor="#95A5A6"
           onChangeText={handleTextChange}
           value={text}

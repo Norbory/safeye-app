@@ -42,7 +42,6 @@ export function HomeScreen() {
 
   const reportList = useReports();
   // const areaList = useAreas();
-  const [nombreE, setNombreE] = useState("");
   const [selectedId, setSelectedId] = useState<string>("");
 
   // const [modal1, setModal1] = useState(false);
@@ -75,6 +74,20 @@ export function HomeScreen() {
   //   setModal1(false);
   // }
 
+  useEffect(() => {
+    const updatedCardsData = reportList.map((report: Report, index: number) => ({
+      id: index + 1,
+      backgroundImage: report.imageUrls[0],
+      zona: report.areaName,
+      epp: report.EPPs.join("   "),
+      tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY H:mm'),
+      deleted: report.Deleted,
+      _id: report._id
+    }));
+  
+    setCardsData(updatedCardsData);
+  }, [reportList, showMessage]);
+
   const handleRedButtonPress = async (id: number) => {
     const updatedCardsData = [...cardsData]; // Hacer una copia de las cartas existentes
     const selectedIndex = updatedCardsData.findIndex((card) => card.id === id);
@@ -101,7 +114,7 @@ export function HomeScreen() {
                 setCardsData(updatedCardsData);
                 setMessage('La carta fue eliminada exitosamente.');
                 setShowMessage(true);
-                setTimeout(() => setShowMessage(false), 3000);
+                setTimeout(() => setShowMessage(false), 5000);
               } catch (error) {
                 console.error(error);
               }
@@ -120,23 +133,7 @@ export function HomeScreen() {
       setSelectedId(updatedCardsData[selectedIndex]._id);
       // Mostrar el modal
       setModalVisible(true);
-      updatedCardsData.splice(selectedIndex, 1);
-      setCardsData(updatedCardsData);
   }};
-  
-  useEffect(() => {
-    const updatedCardsData = reportList.map((report: Report, index: number) => ({
-      id: index + 1,
-      backgroundImage: report.imageUrls[0],
-      zona: report.areaName,
-      epp: report.EPPs.join("   "),
-      tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY H:mm'),
-      deleted: report.Deleted,
-      _id: report._id
-    }));
-  
-    setCardsData(updatedCardsData);
-  }, [reportList, showMessage]);
 
   // const handleEnvio = async (area: string,image: string) => {
   //   try {

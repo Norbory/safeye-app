@@ -20,7 +20,7 @@ const MarginedTextInput = ({ margin, characterLimit,text, setText, setSwitch1, s
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textMargin}>Correción</Text>
+      <Text style={styles.textMargin}>Correción:</Text>
       <TextInput
         style={styles.textInput}
         multiline={true}
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   },
   textMargin: {
     marginRight: 8, // Espacio entre el texto y el margen derecho
+    marginTop: 8, // Espacio entre el texto y el margen inferior
     marginBottom: 8, // Espacio entre las líneas de texto
     color: 'black',
   },

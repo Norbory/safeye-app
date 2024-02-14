@@ -22,6 +22,9 @@ export function DailyScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
 
+  const listDelected = reportList.filter((report) => report.Deleted);
+  const listAmonestado = listDelected.filter((report) => report.Reported);
+
   let generatePDF = async () => {
     const file = await printToFileAsync({ 
       html: HTML,
@@ -73,8 +76,7 @@ export function DailyScreen() {
       <ScrollView style={{ width: "100%", height: "100%" }}>
 
       {/* Lista de incidentes Tarjetas */}
-      {reportList.filter((report) => report.Deleted) ? 
-      reportList.filter((report) => report.Deleted).map((report: Report, index: number) => (
+      {listAmonestado?listAmonestado.map((report: Report, index: number) => (
         <View key={report._id}>
         <Pressable 
           key={report._id} 
@@ -99,7 +101,7 @@ export function DailyScreen() {
         </View>
       )): <Text>No hay reportes</Text>}
   </ScrollView>
-      {reportList.length < 1 && <Text>No hay reportes</Text>}
+      {listAmonestado.length < 1 && <Text>No hay reportes</Text>}
 
       <Modal
         animationType="fade"
