@@ -8,6 +8,9 @@ import {
   View, 
   Text,
   Alert,
+  Pressable,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 import { SelectList } from 'react-native-dropdown-select-list'
 import { Ionicons } from "@expo/vector-icons";
@@ -20,8 +23,9 @@ import { URL, COMPANY_ID } from "../constantes/string";
 import CustomModal from "../components/Window.jsx";
 import useReports from "../hooks/useReports";
 import useAreas  from "../hooks/useAreas";
-import { Report } from "../types";
+import { Report, Area } from "../types";
 import axios from "axios";
+import { useAuth } from "../hooks/useAuth";
 // import CameraComponent from "../components/cameraIn";
 
 export function HomeScreen() {
@@ -37,14 +41,16 @@ export function HomeScreen() {
   //   setIsCameraOpen(false);
   //   setCapturedPhotoUri(photoUri);
   // };
+  const { user } = useAuth();
+
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
 
   const reportList = useReports();
-  // const areaList = useAreas();
+  const areaList = useAreas();
   const [selectedId, setSelectedId] = useState<string>("");
 
-  // const [modal1, setModal1] = useState(false);
+  const [modal1, setModal1] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isButtonSend, setisButtonSend] = useState(false);
   const selectedCardRef = useRef(null); 
@@ -62,17 +68,18 @@ export function HomeScreen() {
     }
   ]);
   
-  // const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState("");
 
-  // const data = areaList.map((area: Area) => ({key: area._id, value: area.name}));
+  const data = areaList.map((area: Area) => ({key: area._id, value: area.name}));
 
-  // const addNewCard = async () =>{
-  //   setModal1(true);
-  // }
+  const addNewCard = async () =>{
+    setModal1(true);
+    console.log('Name:', user?.name);
+  }
   
-  // const closeModal = () =>{
-  //   setModal1(false);
-  // }
+  const closeModal = () =>{
+    setModal1(false);
+  }
 
   useEffect(() => {
     const updatedCardsData = reportList.map((report: Report, index: number) => ({
@@ -135,20 +142,40 @@ export function HomeScreen() {
       setModalVisible(true);
   }};
 
-  // const handleEnvio = async (area: string,image: string) => {
-  //   try {
-  //     const base64Image = await convertToBase64(image);
-  //     const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
-  //       "ID_area": area,
-  //       "ID_Cam":"6505633501f1e713f9f60f70",
-  //       "imageUrls": [base64Image],
-  //     });
-  //     console.log("Respuesta del envio:", response);
-  //     setModal1(false);
-  //   } catch (error) {
-  //     console.error("Error al enviar:", error);
-  //   }
-  // }
+  const handleEnvio = async (area: string) => {
+    Alert.alert(
+      "¿Estás seguro de enviar este incidente?",
+      "Una vez enviado, no podrás modificar la información.",
+      [
+        {
+          text: "Cancelar",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "Sí, enviar",
+          onPress: async () => {
+            try {
+              const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
+                ID_area: area,
+                ID_Cam: "6505633501f1e713f9f60f70",
+                supervisor: user?.name,
+              });
+              setModal1(false);
+              setMessage('El incidente fue enviado exitosamente.');
+              setShowMessage(true);
+              setTimeout(() => setShowMessage(false), 5000);
+              setSelectedId(response.data._id);
+              setModalVisible(true);
+            } catch (error) {
+              console.error("Error al enviar:", error);
+            }
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  }
 
   // const convertToBase64 = async (imageUrl: string): Promise<string> => {
   //   // Realiza una petición HTTP GET para obtener la imagen como un array buffer
@@ -184,9 +211,9 @@ export function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       
-      {/* <Pressable style={styles.add} onPress={()=>addNewCard()}>
+      <Pressable style={styles.add} onPress={()=>addNewCard()}>
         <Text style={styles.empresa}>Añadir incidente +</Text>
-      </Pressable> */}
+      </Pressable>
       
       <ScrollView horizontal={true} style={styles.scrollView}>
         {cardsData
@@ -194,7 +221,7 @@ export function HomeScreen() {
           .map((cardsData, index) => (
           <Card
             key={index}
-            backgroundImage={cardsData.backgroundImage}
+            backgroundImage={cardsData.backgroundImage??DEFAULT_BACKGROUND_IMAGE}
             onGreenButtonPress={() => handleGreenButtonPress(cardsData.id)}
             onRedButtonPress={() => handleRedButtonPress(cardsData.id)}
             onImagePress={() => {}}
@@ -258,7 +285,7 @@ export function HomeScreen() {
           {message}
         </Text>
       )}     
-      {/* <Modal
+      <Modal
         animationType="fade"
         transparent={true}
         visible={modal1}
@@ -272,33 +299,21 @@ export function HomeScreen() {
             data={data} 
             save="key"
           />
-          <Text style={styles.subtitle}>Fotografía del incidente:</Text>
-          <ImageBackground source={{uri:capturedPhotoUri?capturedPhotoUri:LAST_IMG}} style={{width: 180, height: 180, alignSelf: 'center'}} />
-          <TouchableOpacity 
-          onPress={openCamera}
-          style={[styles.button, styles.buttonClose]}>
-            <Text>Abrir cámara</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleEnvio(selected,capturedPhotoUri)}
-            style={[styles.button, styles.buttonClose]}>
-            <Text>Subir incidente</Text>
-          </TouchableOpacity>
-          <Pressable
-          style={[styles.button, styles.buttonClose]}
-          onPress={() => closeModal()}>
-            <Text>Hide it</Text>
-          </Pressable>
+          <View style={styles.rowContainer}>
+            <TouchableOpacity
+              onPress={() => handleEnvio(selected)}
+              style={styles.buttonSend}>
+              <Text style={styles.modales}>REGISTRAR</Text>
+            </TouchableOpacity>
+            <Pressable
+              style={styles.buttonDelete}
+              onPress={() => closeModal()}>
+              <Text style={styles.modales}>CANCELAR</Text>
+            </Pressable>
+          </View>
           </View>
         </View>
       </Modal>
-
-      <Modal animationType="fade" transparent={true} visible={isCameraOpen}>
-        <View style={styles.cameraModal}>
-          <CameraComponent closeModal={closeCamera}/>
-        </View>
-      </Modal> */}
-
     </SafeAreaView>
   );
 }
@@ -408,6 +423,7 @@ const styles = StyleSheet.create({
   subtitle:{
     fontSize: 14,
     fontWeight:"500",
+    marginTop: 10,
   },
   checkbox: {
     alignSelf: 'center',
@@ -420,5 +436,38 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  rowContainer: {
+    flexDirection: "row",
+    alignItems: "center", // Alinea verticalmente en el centro
+    marginBottom: 5, // Espacio entre la fila y otros elementos
+  },
+  buttonSend: {
+    flex: 1,
+    maxHeight: "100%",
+    maxWidth: "100%",
+    borderRadius: 10,
+    backgroundColor: "#31CF5A",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    marginTop: 10,
+    marginHorizontal: 5,
+  },
+  buttonDelete: {
+    flex: 1,
+    maxHeight: "100%",
+    maxWidth: "100%",
+    borderRadius: 10,
+    backgroundColor: "#DF344B",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 10,
+    marginTop: 10,
+    marginHorizontal: 5,
+  },
+  modales: {
+    color: "#F1FAEE",
+    fontWeight: "500",
   },
 });

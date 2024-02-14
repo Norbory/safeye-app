@@ -100,7 +100,10 @@ export function DailyScreen() {
           <Text style={styles.reportTitle}>Incidente {index + 1}</Text>
           <Text style={styles.reportText}>Zona: {report.areaName}</Text>
           <Text style={styles.reportText}>
-            EPPs: {report.EPPs.join(", ")}
+            {report?.EPPs.length <= 0
+              ? "Formulario manual"
+              : `EPPs: ${report?.EPPs.join(", ")}`
+            }
           </Text>
           <Text style={styles.reportText}>
             {getTurno(moment(report.date).hour())}: {moment(report.date).utcOffset(-5).format('H:mm')}
@@ -132,8 +135,13 @@ export function DailyScreen() {
 
               <View style={styles.reportDetails}>
                 <Text style={styles.modalText}>Zona: {selectedReport?.areaName}</Text>
-                <Text style={styles.modalText}>EPPs: {selectedReport?.EPPs.join(", ")}</Text>
-                <Text style={styles.modalText}>Supervisor: {selectedReport?.supervisor?? ''}</Text>
+                <Text style={styles.modalText}>
+                  {selectedReport?.EPPs.length <= 0
+                    ? "Formulario manual"
+                    : `EPPs: ${selectedReport?.EPPs.join(", ")}`
+                  }
+                </Text>
+                <Text style={styles.modalText}>Supervisor: {selectedReport?.supervisor ?? ""}</Text>
               </View>
             </View>
 

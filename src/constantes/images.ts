@@ -1,4 +1,4 @@
-export const DEFAULT_BACKGROUND_IMAGE = "https://www.eloficial.ec/wp-content/uploads/2014/02/casco_s.png";
+export const DEFAULT_BACKGROUND_IMAGE = "https://cdn.goconqr.com/uploads/media/image/15871495/desktop_dd0b5505-cbfe-4ee6-8f77-679d1582593c.png";
 export const ALTERNATE_BACKGROUND_IMAGE = "https://prosinfer.com/wp-content/uploads/slider2/articulos-de-seguridad-industrial-lima-peru-minas-construccion-compressor.png";
 export const LAST_IMG = "https://static.thenounproject.com/png/357658-200.png";
 
