@@ -15,7 +15,9 @@ export function IncidentsScreen() {
         <View style={styles.listItemContent}>
           <Text style={styles.listItemNumber}>{index + 1}.</Text>
           <View style={styles.listItemInfo}>
-            <Text style={styles.listItemEPPs}>{item.EPPs.join(", ")}</Text>
+            <Text style={styles.listItemEPPs}>
+              {item.EPPs.length > 0 ? item.EPPs.join(", "): "Formulario manual"}
+            </Text>
             <Text style={styles.listItemArea}>{item.areaName}</Text>
             <Text style={styles.listItemTime}>
               {moment(item.date).utcOffset(-5).format('H:mm')}

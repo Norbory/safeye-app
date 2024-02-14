@@ -7,10 +7,7 @@ import { useAuth } from "../hooks/useAuth";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-  const { user, business, token } = useAuth();
-  console.log("user", user);
-  console.log("business", business);
-  console.log("token", token);
+  const { token } = useAuth();
   
   return (
     <Stack.Navigator initialRouteName="Login">

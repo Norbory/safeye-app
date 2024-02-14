@@ -3,7 +3,8 @@ import {
   StyleSheet, 
   ScrollView,
   View,
-  Text
+  Text,
+  TouchableOpacity
 } from "react-native";
 import { 
   VictoryBar,
@@ -20,6 +21,40 @@ import { Report } from "../types";
 export function StatisticsScreen() {
 
   const reportList = useReports();
+  const [selectedDateRange, setSelectedDateRange] = useState("semana");
+  const [filteredReportList, setFilteredReportList] = useState<Report[]>(reportList);
+
+  useEffect(() => {
+    filterReportsByDateRange();
+  }, [selectedDateRange]);
+
+  const filterReportsByDateRange = () => {
+    const currentDate = new Date();
+    const endDate = new Date();
+    
+    switch (selectedDateRange) {
+      case "semana":
+        endDate.setDate(endDate.getDate() - 7);
+        break;
+      case "mes":
+        endDate.setMonth(endDate.getMonth() - 1);
+        console.log(endDate);
+        break;
+      case "anual":
+        endDate.setFullYear(endDate.getFullYear() - 1);
+        console.log(endDate);
+        break;
+      default:
+        break;
+    }
+
+    const filteredReports = reportList.filter((report) => {
+      const reportDate = new Date(report.date);
+      return reportDate >= endDate && reportDate <= currentDate;
+    });
+
+    setFilteredReportList(filteredReports);
+  };
 
   const ContadorA = (epp: string, reports: Report[]) => {
     let cuenta = 0;
@@ -39,19 +74,19 @@ export function StatisticsScreen() {
     return cuenta;
   };
 
-  const cascoD = ContadorD("Casco", reportList.filter((report) => report.Deleted));
-  const ChalecoD = ContadorD("Chaleco", reportList.filter((report) => report.Deleted));
-  const guantesD = ContadorD("Guantes", reportList.filter((report) => report.Deleted));
-  const lentesD = ContadorD("Lentes", reportList.filter((report) => report.Deleted));
-  const orejerasD = ContadorD("Orejeras", reportList.filter((report) => report.Deleted));
-  const respiradorD = ContadorD("Respirador", reportList.filter((report) => report.Deleted));
+  const cascoD = ContadorD("Casco", filteredReportList.filter((report) => report.Deleted));
+  const ChalecoD = ContadorD("Chaleco", filteredReportList.filter((report) => report.Deleted));
+  const guantesD = ContadorD("Guantes", filteredReportList.filter((report) => report.Deleted));
+  const lentesD = ContadorD("Lentes", filteredReportList.filter((report) => report.Deleted));
+  const orejerasD = ContadorD("Orejeras", filteredReportList.filter((report) => report.Deleted));
+  const respiradorD = ContadorD("Respirador", filteredReportList.filter((report) => report.Deleted));
 
-  const cascoA = ContadorA("Casco", reportList.filter((report) => report.Deleted));
-  const ChalecoA = ContadorA("Chaleco", reportList.filter((report) => report.Deleted));
-  const guantesA = ContadorA("Guantes", reportList.filter((report) => report.Deleted));
-  const lentesA = ContadorA("Lentes", reportList.filter((report) => report.Deleted));
-  const orejerasA = ContadorA("Orejeras", reportList.filter((report) => report.Deleted));
-  const respiradorA = ContadorA("Respirador", reportList.filter((report) => report.Deleted));
+  const cascoA = ContadorA("Casco", filteredReportList.filter((report) => report.Deleted));
+  const ChalecoA = ContadorA("Chaleco", filteredReportList.filter((report) => report.Deleted));
+  const guantesA = ContadorA("Guantes", filteredReportList.filter((report) => report.Deleted));
+  const lentesA = ContadorA("Lentes", filteredReportList.filter((report) => report.Deleted));
+  const orejerasA = ContadorA("Orejeras", filteredReportList.filter((report) => report.Deleted));
+  const respiradorA = ContadorA("Respirador", filteredReportList.filter((report) => report.Deleted));
 
   const cascoY = cascoA + cascoD;
   const ChalecoY = ChalecoA + ChalecoD;
@@ -118,28 +153,42 @@ export function StatisticsScreen() {
     { x: "Respirador", y: respiradorA },
   ];
 
-  const [chartData, setChartData] = useState(barDataA);
-
-  const updateChartData = () => {
-    console.log("Updating chart data");
-    const newChartData = chartData.map((bar) => {
-      if (bar.x === "Respirador") {
-        return { ...bar, y: respiradorA};
-      }
-      return bar;
-    });
-  
-    setChartData(newChartData);
-  };
-
   return (
     <ScrollView style={styles.container}>
       {/* Grafica de barras */}
-      <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginTop: 10 }}>
+      <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginTop: 20 }}>
         Estadísticas de la semana
       </Text>
+      {/* Los botones selectores */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={[styles.dateButton, selectedDateRange === "semana" && styles.selectedButton]}
+          onPress={() => setSelectedDateRange("semana")}
+        >
+          <Text style={styles.buttonText}>Última semana</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.dateButton, selectedDateRange === "mes" && styles.selectedButton]}
+          onPress={() => setSelectedDateRange("mes")}
+        >
+          <Text style={styles.buttonText}>Último mes</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.dateButton, selectedDateRange === "anual" && styles.selectedButton]}
+          onPress={() => setSelectedDateRange("anual")}
+        >
+          <Text style={styles.buttonText}>Último año</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Si no hay reportes para mostrar */}
+      {filteredReportList.length === 0 && (
+        <Text style={{ textAlign: 'center', marginTop: 20 }}>No hay reportes para estadísticas</Text>
+      )}
+
       {/* <Boton title="Ramdom" onPress={updateChartData} /> */}
-      <View style={{ marginTop: 20, marginLeft:15 }}>
+      {filteredReportList.length > 0 && (
+        <View style={{ marginTop: 0, marginLeft:15 }}>
       <VictoryChart domainPadding={12}>
         <VictoryLegend x={105} y={25}
           orientation="horizontal"
@@ -181,33 +230,37 @@ export function StatisticsScreen() {
         </VictoryStack>
       </VictoryChart>
       </View>
+      )}
       
-
       {/* Grafica de pie */}
-      <Text style={{
-          textAlign: "center",
-          color: "#252525", 
-          fontSize: 18, 
-          fontWeight: "bold",
-          marginTop:10,
-          marginBottom: -40,
-        }}>
-        Grafica de incidentes
-        </Text>
-      <VictoryPie
-        colorScale={["#f4f1de", "#e07a5f", "#90e0ef", "#81b29a", "#f2cc8f", "#fcbf49"]}
-        data={data}
-        labelRadius={({ innerRadius = 0 }) => (innerRadius as number) + 40 }
-        innerRadius={40}
-        style={{
-          labels: {
-            fill: "#252525", 
-            fontSize: 13, 
+        <>
+        {filteredReportList.length > 0 && (
+          <Text style={{
+            textAlign: "center",
+            color: "#252525", 
+            fontSize: 18, 
             fontWeight: "bold",
-            textAnchor: "middle"
-          }
-        }}
-      />
+            marginTop:10,
+            marginBottom: -40,
+          }}>
+            Grafica de incidentes
+          </Text>
+        )}
+        <VictoryPie
+          colorScale={["#f4f1de", "#e07a5f", "#90e0ef", "#81b29a", "#f2cc8f", "#fcbf49"]}
+          data={data}
+          labelRadius={({ innerRadius = 0 }) => (innerRadius as number) + 40 }
+          innerRadius={40}
+          style={{
+            labels: {
+              fill: "#252525", 
+              fontSize: 13, 
+              fontWeight: "bold",
+              textAnchor: "middle"
+            }
+          }}
+        />
+        </>
     </ScrollView>
   );
 }
@@ -216,5 +269,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop:"20%",
-  }
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 10,
+  },
+  dateButton: {
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: "#000",
+    backgroundColor: "#fff",
+  },
+  selectedButton: {
+    backgroundColor: "#ccc",
+  },
+  buttonText: {
+    fontWeight: "bold",
+  },
 });
