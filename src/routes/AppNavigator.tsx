@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainTabNavigator from "./MainTabNavigator";
 import { LoginScreen } from "../screens";
@@ -7,8 +7,9 @@ import { useAuth } from "../hooks/useAuth";
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
+
   const { token } = useAuth();
-  
+
   return (
     <Stack.Navigator initialRouteName="Login">
       {token !== null ? (

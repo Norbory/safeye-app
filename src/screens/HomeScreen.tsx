@@ -26,6 +26,7 @@ import useAreas  from "../hooks/useAreas";
 import { Report, Area } from "../types";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
+import { io, Socket } from 'socket.io-client';
 // import CameraComponent from "../components/cameraIn";
 
 export function HomeScreen() {
@@ -45,6 +46,8 @@ export function HomeScreen() {
 
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
+
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const reportList = useReports();
   const areaList = useAreas();
@@ -80,6 +83,10 @@ export function HomeScreen() {
   const closeModal = () =>{
     setModal1(false);
   }
+
+  useEffect(() => {
+    setSocket(io('https://rest-ai-dev-cmqn.2.us-1.fl0.io')); // Conectar al servidor
+  }, []);
 
   useEffect(() => {
     const updatedCardsData = reportList.map((report: Report, index: number) => ({
