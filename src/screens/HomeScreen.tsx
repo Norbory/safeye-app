@@ -81,19 +81,7 @@ export function HomeScreen() {
     setModal1(false);
   }
 
-  useEffect(() => {
-    const updatedCardsData = reportList.map((report: Report, index: number) => ({
-      id: index + 1,
-      backgroundImage: report.imageUrls[0],
-      zona: report.areaName,
-      epp: report.EPPs.join("   "),
-      tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY     H:mm'),
-      deleted: report.Deleted,
-      _id: report._id
-    }));
   
-    setCardsData(updatedCardsData);
-  }, [reportList, showMessage]);
 
   const handleRedButtonPress = async (id: number) => {
     const updatedCardsData = [...cardsData]; // Hacer una copia de las cartas existentes
@@ -112,16 +100,18 @@ export function HomeScreen() {
           {
             text: "Sí, descartar",
             onPress: async () => {
+              
               try {
                 await axios.put(
                   `${URL}/company/${COMPANY_ID}/incidents/${updatedCardsData[selectedIndex]._id}`,
                   { Reported: false, Deleted: true }
                 );
+                // Actualizar la lista de cartas llamando a fetchReports
                 updatedCardsData.splice(selectedIndex, 1);
                 setCardsData(updatedCardsData);
-                setMessage('La carta fue eliminada exitosamente.');
+                setMessage('El incidente fue eliminada exitosamente.');
                 setShowMessage(true);
-                setTimeout(() => setShowMessage(false), 5000);
+                setTimeout(() => setShowMessage(false), 3000);
               } catch (error) {
                 console.error(error);
               }
@@ -144,8 +134,8 @@ export function HomeScreen() {
 
   const handleEnvio = async (area: string) => {
     Alert.alert(
-      "¿Estás seguro de enviar este incidente?",
-      "Una vez enviado, no podrás modificar la información.",
+      "¿Estás seguro de registrar este incidente?",
+      "Una vez registrado, no podrás modificar la información.",
       [
         {
           text: "Cancelar",
@@ -153,7 +143,7 @@ export function HomeScreen() {
           style: "cancel"
         },
         {
-          text: "Sí, enviar",
+          text: "Sí, registrar",
           onPress: async () => {
             try {
               const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
@@ -162,9 +152,9 @@ export function HomeScreen() {
                 supervisor: user?.name,
               });
               setModal1(false);
-              setMessage('El incidente fue enviado exitosamente.');
+              setMessage('El incidente fue registrado exitosamente.');
               setShowMessage(true);
-              setTimeout(() => setShowMessage(false), 5000);
+              setTimeout(() => setShowMessage(false), 3000);
               setSelectedId(response.data._id);
               setModalVisible(true);
             } catch (error) {
@@ -177,6 +167,19 @@ export function HomeScreen() {
     );
   }
 
+  useEffect(() => {
+    const updatedCardsData = reportList.map((report: Report, index: number) => ({
+      id: index + 1,
+      backgroundImage: report.imageUrls[0],
+      zona: report.areaName,
+      epp: report.EPPs.join("   "),
+      tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY     H:mm'),
+      deleted: report.Deleted,
+      _id: report._id
+    }));
+  
+    setCardsData(updatedCardsData);
+  }, [reportList, showMessage, message]);
   // const convertToBase64 = async (imageUrl: string): Promise<string> => {
   //   // Realiza una petición HTTP GET para obtener la imagen como un array buffer
   //   const response = await axios.get(imageUrl, {
@@ -206,7 +209,7 @@ export function HomeScreen() {
     }
   }, [isButtonSend, cardsData]);
 
-  const activeCardsData = cardsData.filter((cardData) => !cardData.deleted);
+  const activeCardsData = cardsData.filter((cardData) => !cardData.deleted).filter(cardData => cardData.epp.length > 0);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -217,7 +220,7 @@ export function HomeScreen() {
       
       <ScrollView horizontal={true} style={styles.scrollView}>
         {cardsData
-          .filter((cardData) => !cardData.deleted)
+          .filter((cardData) => !cardData.deleted).filter(cardData => cardData.epp.length > 0)
           .map((cardsData, index) => (
           <Card
             key={index}
@@ -230,7 +233,7 @@ export function HomeScreen() {
             tiempo={cardsData.tiempo}
           />
         ))}
-        {cardsData.length <= 0 && (
+        {cardsData.length === 0 && (
           <Card
             backgroundImage={LAST_IMG}
             onGreenButtonPress={() => {}}
