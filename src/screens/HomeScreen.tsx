@@ -71,6 +71,21 @@ export function HomeScreen() {
     }
   ]);
   
+  // Función de callback que se ejecutará cuando se reciba el evento 'server:updateCards'
+  const handleUpdateCards = () => {
+    // Actualiza el estado de las cartas con la nueva lista de userReports
+    const updatedCardsData = reportList.filter((report) => !report.Deleted).map((report: Report, index: number) => ({
+      id: index + 1,
+      backgroundImage: report.imageUrls[0],
+      zona: report.areaName,
+      epp: report.EPPs.join("   "),
+      tiempo: moment(report.date).format('D/M/YYYY     H:mm'),
+      deleted: report.Deleted,
+      _id: report._id
+    }));
+    setCardsData(updatedCardsData);
+  };
+  
   const [selected, setSelected] = useState("");
 
   const data = areaList.map((area: Area) => ({key: area._id, value: area.name}));
@@ -84,15 +99,21 @@ export function HomeScreen() {
     setModal1(false);
   }
 
-  useEffect(() => {
-    setSocket(io('https://rest-ai-dev-cmqn.2.us-1.fl0.io')); // Conectar al servidor
-  }, []);
-
-  useEffect(() => {
-    setSocket(io('https://rest-ai-dev-cmqn.2.us-1.fl0.io')); // Conectar al servidor
-  }, []);
-
-  
+    useEffect(() => {
+      // Configura el socket y suscripción al evento 'server:updateCards'
+      const socket = io('https://rest-ai-dev-cmqn.2.us-1.fl0.io');
+      
+      // Escucha el evento 'server:updateCards'
+      socket.on('server:updateCards', () => {
+        console.log('Se recibió el evento "server:updateCards" en el cliente');
+        // Aquí puedes agregar la lógica para manejar el evento recibido
+      });
+    
+      // Limpia el efecto al desmontar el componente
+      return () => {
+        socket.disconnect(); // Desconecta el socket cuando el componente se desmonta
+      };
+    }, []);
 
   const handleRedButtonPress = async (id: number) => {
     const updatedCardsData = [...cardsData]; // Hacer una copia de las cartas existentes
@@ -117,14 +138,14 @@ export function HomeScreen() {
                   `${URL}/company/${COMPANY_ID}/incidents/${updatedCardsData[selectedIndex]._id}`,
                   { Reported: false, Deleted: true }
                 );
-                // Actualizar la lista de cartas llamando a fetchReports
-                updatedCardsData.splice(selectedIndex, 1);
-                setCardsData(updatedCardsData);
-                setMessage('El incidente fue eliminada exitosamente.');
+                setMessage('El incidente fue eliminado exitosamente.');
                 setShowMessage(true);
                 setTimeout(() => setShowMessage(false), 3000);
               } catch (error) {
-                console.error(error);
+                console.error("Hubo un error el cual es el siguiente: ",error);
+                setMessage('Hubo un error al intentar descartar el incidente.');
+                setShowMessage(true);
+                setTimeout(() => setShowMessage(false), 3000);
               }
             }
           }
@@ -179,18 +200,21 @@ export function HomeScreen() {
   }
 
   useEffect(() => {
-    const updatedCardsData = reportList.map((report: Report, index: number) => ({
-      id: index + 1,
-      backgroundImage: report.imageUrls[0],
-      zona: report.areaName,
-      epp: report.EPPs.join("   "),
-      tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY     H:mm'),
-      deleted: report.Deleted,
-      _id: report._id
-    }));
+    if (socket && reportList) {
+        socket.on("server:updateCards", handleUpdateCards);
+        console.log("Escuchando evento 'server:updateCards'");
+    }
+    return () => {
+        socket?.off("server:updateCards", handleUpdateCards);
+    };
+  }, [socket, reportList]);
+
   
-    setCardsData(updatedCardsData);
-  }, [reportList, showMessage, message]);
+  useEffect(() => {
+    handleUpdateCards();
+    console.log("lista: ", cardsData.length);
+  }, [reportList]);
+
   // const convertToBase64 = async (imageUrl: string): Promise<string> => {
   //   // Realiza una petición HTTP GET para obtener la imagen como un array buffer
   //   const response = await axios.get(imageUrl, {
@@ -220,7 +244,7 @@ export function HomeScreen() {
     }
   }, [isButtonSend, cardsData]);
 
-  const activeCardsData = cardsData.filter((cardData) => !cardData.deleted).filter(cardData => cardData.epp.length > 0);
+  const activeCardsData = cardsData;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -231,7 +255,6 @@ export function HomeScreen() {
       
       <ScrollView horizontal={true} style={styles.scrollView}>
         {cardsData
-          .filter((cardData) => !cardData.deleted).filter(cardData => cardData.epp.length > 0)
           .map((cardsData, index) => (
           <Card
             key={index}
