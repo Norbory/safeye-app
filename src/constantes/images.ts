@@ -2,7 +2,7 @@ export const DEFAULT_BACKGROUND_IMAGE = "https://cdn.goconqr.com/uploads/media/i
 export const ALTERNATE_BACKGROUND_IMAGE = "https://prosinfer.com/wp-content/uploads/slider2/articulos-de-seguridad-industrial-lima-peru-minas-construccion-compressor.png";
 export const LAST_IMG = "https://static.thenounproject.com/png/357658-200.png";
 
-export const LOGO = require("../../assets/imgs/logotipo.png");
+export const LOGO = require("../../assets/imgs/icon.png");
 export const IUSER = require('../../assets/imgs/monito.jpg');
 export const COMPA = require('../../assets/imgs/company.png');
 
