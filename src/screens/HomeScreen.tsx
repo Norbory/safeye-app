@@ -47,8 +47,6 @@ export function HomeScreen() {
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
 
-  const [socket, setSocket] = useState<Socket | null>(null);
-
   const reportList = useReports();
   const areaList = useAreas();
   const [selectedId, setSelectedId] = useState<string>("");
