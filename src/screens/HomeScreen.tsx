@@ -67,11 +67,11 @@ export function HomeScreen() {
       epp: "",
       tiempo: "",
       deleted: true,
-      _id: ""
+      _id: "",
+      supervisor: ""
     }
   ]);
   
-  // Función de callback que se ejecutará cuando se reciba el evento 'server:updateCards'
   const handleUpdateCards = () => {
     // Actualiza el estado de las cartas con la nueva lista de userReports
     const updatedCardsData = reportList.filter((report) => !report.Deleted).map((report: Report, index: number) => ({
@@ -81,7 +81,8 @@ export function HomeScreen() {
       epp: report.EPPs.join("   "),
       tiempo: moment(report.date).format('D/M/YYYY     H:mm'),
       deleted: report.Deleted,
-      _id: report._id
+      _id: report._id,
+      supervisor: report.supervisor || "Supervisor no registrado"
     }));
     setCardsData(updatedCardsData);
   };
@@ -102,12 +103,6 @@ export function HomeScreen() {
     useEffect(() => {
       // Configura el socket y suscripción al evento 'server:updateCards'
       const socket = io('https://rest-ai-dev-cmqn.2.us-1.fl0.io');
-      
-      // Escucha el evento 'server:updateCards'
-      socket.on('server:updateCards', () => {
-        console.log('Se recibió el evento "server:updateCards" en el cliente');
-        // Aquí puedes agregar la lógica para manejar el evento recibido
-      });
     
       // Limpia el efecto al desmontar el componente
       return () => {
@@ -197,22 +192,10 @@ export function HomeScreen() {
       ],
       { cancelable: false }
     );
-  }
-
-  useEffect(() => {
-    if (socket && reportList) {
-        socket.on("server:updateCards", handleUpdateCards);
-        console.log("Escuchando evento 'server:updateCards'");
-    }
-    return () => {
-        socket?.off("server:updateCards", handleUpdateCards);
-    };
-  }, [socket, reportList]);
-
+  };
   
   useEffect(() => {
     handleUpdateCards();
-    console.log("lista: ", cardsData.length);
   }, [reportList]);
 
   // const convertToBase64 = async (imageUrl: string): Promise<string> => {
@@ -244,8 +227,6 @@ export function HomeScreen() {
     }
   }, [isButtonSend, cardsData]);
 
-  const activeCardsData = cardsData;
-
   return (
     <SafeAreaView style={styles.container}>
       
@@ -263,7 +244,7 @@ export function HomeScreen() {
             onRedButtonPress={() => handleRedButtonPress(cardsData.id)}
             onImagePress={() => {}}
             zona={cardsData.zona}
-            epp={cardsData.epp}
+            epp={cardsData.epp.length > 0 ? cardsData.epp : `S: ${cardsData.supervisor}`}
             tiempo={cardsData.tiempo}
           />
         ))}
@@ -278,16 +259,16 @@ export function HomeScreen() {
             tiempo={""}
           />
         )}
-        {activeCardsData.length > 0 && (
+        {cardsData.length > 0 && (
           <View style={styles.notificacion}>
             <Ionicons
               name={"ellipse-sharp"}
               size={50}
-              color={activeCardsData.length > 0 ? "#F44343" : "#cbcdd1"}
+              color={cardsData.length > 0 ? "#F44343" : "#cbcdd1"}
               style={styles.noti}
             />
-            <Text style={activeCardsData.length < 10 ? styles.number1 : styles.number}>
-              {activeCardsData.length}
+            <Text style={cardsData.length < 10 ? styles.number1 : styles.number}>
+              {cardsData.length}
             </Text>
           </View>
         )}
