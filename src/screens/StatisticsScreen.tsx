@@ -38,11 +38,9 @@ export function StatisticsScreen() {
         break;
       case "mes":
         endDate.setMonth(endDate.getMonth() - 1);
-        console.log(endDate);
         break;
       case "anual":
         endDate.setFullYear(endDate.getFullYear() - 1);
-        console.log(endDate);
         break;
       default:
         break;

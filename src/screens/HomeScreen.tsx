@@ -1,4 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import 
+  React, 
+  { useState, 
+    useEffect, 
+    useRef   
+} from "react";
 import moment from 'moment';
 import { 
   StyleSheet, 
@@ -11,6 +16,7 @@ import {
   Pressable,
   Modal,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import { SelectList } from 'react-native-dropdown-select-list'
 import { Ionicons } from "@expo/vector-icons";
@@ -27,21 +33,23 @@ import { Report, Area } from "../types";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 import { io, Socket } from 'socket.io-client';
-// import CameraComponent from "../components/cameraIn";
+import CameraComponent from "../components/cameraIn";
+import ImagePicker from 'react-native-image-picker';
 
 export function HomeScreen() {
   //Camara settings
-  // const [isCameraOpen, setIsCameraOpen] = useState(false);
-  // const [capturedPhotoUri, setCapturedPhotoUri] = useState("");
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [capturedPhotoUri, setCapturedPhotoUri] = useState("");
 
-  // const openCamera = () => {
-  //   setIsCameraOpen(true);
-  // };
+  const openCamera = () => {
+    setIsCameraOpen(true);
+  };
 
-  // const closeCamera = (photoUri: string) => {
-  //   setIsCameraOpen(false);
-  //   setCapturedPhotoUri(photoUri);
-  // };
+  const closeCamera = (photoUri: string) => {
+    setIsCameraOpen(false);
+    setCapturedPhotoUri(photoUri);
+  };
+
   const { user } = useAuth();
 
   const [showMessage, setShowMessage] = useState(false);
@@ -77,7 +85,6 @@ export function HomeScreen() {
 
   const addNewCard = async () =>{
     setModal1(true);
-    console.log('Name:', user?.name);
   }
   
   const closeModal = () =>{
@@ -184,17 +191,25 @@ export function HomeScreen() {
     );
   }
 
-  // const convertToBase64 = async (imageUrl: string): Promise<string> => {
-  //   // Realiza una petición HTTP GET para obtener la imagen como un array buffer
-  //   const response = await axios.get(imageUrl, {
-  //       responseType: 'arraybuffer',
-  //   });
-    
-  //   // Convierte el array buffer a base64
-  //   const base64Image = Buffer.from(response.data, 'binary').toString('base64');
-    
-  //   return `data:${response.headers['content-type']};base64,${base64Image}`;
-  // }
+  const openImagePicker = async () => {
+    try {
+      const response = await fetch(capturedPhotoUri);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
+      }
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = (reader.result as string).replace('data:', '').replace(/^.+,/, '');
+        if (base64String) {
+          console.log("Se envió la imagen");
+        }
+      };
+      reader.readAsDataURL(blob);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
   useEffect(() => {
     if (isButtonSend) {
@@ -306,9 +321,29 @@ export function HomeScreen() {
             data={data} 
             save="key"
           />
+          <Text style={styles.subtitle}>Fotografía del incidente:</Text>
+
+          <View style={styles.fotoRow}>
+            <ImageBackground 
+              source={{uri:capturedPhotoUri?capturedPhotoUri:LAST_IMG}} 
+              style={styles.imagen} 
+            />
+            <TouchableOpacity 
+              onPress={openCamera}
+              style={[styles.buttonFoto]}
+            >
+              <Ionicons
+                name={"camera-outline"}
+                size={40}
+                color={"#FFFFFF"}
+                style={styles.noti}
+              />
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.rowContainer}>
             <TouchableOpacity
-              onPress={() => handleEnvio(selected)}
+              onPress={() => openImagePicker()}
               style={styles.buttonSend}>
               <Text style={styles.modales}>REGISTRAR</Text>
             </TouchableOpacity>
@@ -319,6 +354,11 @@ export function HomeScreen() {
             </Pressable>
           </View>
           </View>
+        </View>
+      </Modal>
+      <Modal animationType="fade" transparent={true} visible={isCameraOpen}>
+        <View style={styles.cameraModal}>
+          <CameraComponent closeModal={closeCamera}/>
         </View>
       </Modal>
     </SafeAreaView>
@@ -393,14 +433,13 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   button: {
-    borderRadius: 20,
+    borderRadius: 5,
     padding: 10,
     elevation: 2,
-    marginHorizontal:3,
-    marginVertical:1,
+    marginHorizontal: 20,
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#4a4e69',
   },
   modalView: {
     margin: 20,
@@ -476,5 +515,22 @@ const styles = StyleSheet.create({
   modales: {
     color: "#F1FAEE",
     fontWeight: "500",
+  },
+  imagen: {
+    width: 180, 
+    height: 180, 
+    alignSelf: 'center', 
+    marginVertical: 8,
+  },
+  fotoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  buttonFoto: {
+    borderRadius: 50,
+    padding: 10,
+    elevation: 2,
+    marginHorizontal: 20,
+    backgroundColor: '#4a4e69',
   },
 });
