@@ -20,7 +20,7 @@ export function IncidentsScreen() {
             </Text>
             <Text style={styles.listItemArea}>{item.areaName}</Text>
             <Text style={styles.listItemTime}>
-              {moment(item.date).utcOffset(-5).format('H:mm')}
+              {moment(item.date).format('H:mm')}
               </Text>
           </View>
         </View>

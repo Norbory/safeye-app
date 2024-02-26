@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Report } from "../types";
 import axios from "axios";
-import { useAuth } from "./useAuth";
 import { URL, COMPANY_ID } from "../constantes/string";
 
-export default function useReports() {
-  const { business } = useAuth();
+export default function useReports( ) {
   const [reports, setReports] = useState<Report[]>([]);
 
   const fetchReports = async () => {
@@ -44,7 +42,7 @@ export default function useReports() {
 
   useEffect(() => {
     fetchReports();
-  }, []);
+  }, [reports]);
 
   return  reports;
 }

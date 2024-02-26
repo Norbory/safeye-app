@@ -18,11 +18,11 @@ export function SupportScreen() {
         <Text style={styles.text}>
           Para obtener soporte técnico, puedes comunicarte con Consultoría Carranza de las siguientes maneras:
           {"\n\n"}
-          📧 Teléfono: 511-4601863{"\n"}
-          📧 Correo electrónico: ayuda@consultoriacarranza.com.pe{"\n"}
-          📧 Sitio web: <Text onPress={() => Linking.openURL("https://consultoriacarranza.com.pe")}>https://consultoriacarranza.com.pe</Text>{"\n"}
-          📧 Facebook: <Text onPress={() => Linking.openURL("https://www.facebook.com/consultoriacarranza.eirl")}>https://www.facebook.com/consultoriacarranza.eirl</Text>{"\n"}
-          📧 LinkedIn: <Text onPress={() => Linking.openURL("https://www.linkedin.com/company/consultoria-carranza-eirl/")}>https://www.linkedin.com/company/consultoria-carranza-eirl/</Text>{"\n"}
+          📧 Teléfono: {"\n"}+51 950 436 941{"\n"}
+          📧 Correo electrónico: {"\n"}area.innovacion@consultoriacarranza.com.pe{"\n"}
+          📧 Sitio web:{"\n"} <Text onPress={() => Linking.openURL("https://consultoriacarranza.com.pe")}>https://consultoriacarranza.com.pe</Text>{"\n"}
+          📧 Facebook: {"\n"}<Text onPress={() => Linking.openURL("https://www.facebook.com/consultoriacarranza.eirl")}>https://www.facebook.com/consultoriacarranza.eirl</Text>{"\n"}
+          📧 LinkedIn: {"\n"}<Text onPress={() => Linking.openURL("https://www.linkedin.com/company/consultoria-carranza-eirl/")}>https://www.linkedin.com/company/consultoria-carranza-eirl/</Text>{"\n"}
         </Text>
       </ScrollView>
     </View>

@@ -106,12 +106,12 @@ export function DailyScreen() {
             }
           </Text>
           <Text style={styles.reportText}>
-            {getTurno(moment(report.date).hour())}: {moment(report.date).utcOffset(-5).format('H:mm')}
+            {getTurno(moment(report.date).hour())}: {moment(report.date).format('H:mm')}
           </Text>
 
           <View style={styles.dateContainer}>
           <Text style={styles.dateText}>
-            {moment(report.date).utcOffset(-5).format('D/M/YYYY')}
+            {moment(report.date).format('D/M/YYYY')}
           </Text> 
           </View>
         </Pressable>
@@ -136,9 +136,9 @@ export function DailyScreen() {
               <View style={styles.reportDetails}>
                 <Text style={styles.modalText}>Zona: {selectedReport?.areaName}</Text>
                 <Text style={styles.modalText}>
-                  {selectedReport?.EPPs.length <= 0
+                  {selectedReport?.EPPs?.length ?? 0 <= 0
                     ? "Formulario manual"
-                    : `EPPs: ${selectedReport?.EPPs.join(", ")}`
+                    : `EPPs: ${selectedReport?.EPPs?.join(", ")}`
                   }
                 </Text>
                 <Text style={styles.modalText}>Supervisor: {selectedReport?.supervisor ?? ""}</Text>

@@ -55,8 +55,6 @@ export function HomeScreen() {
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
 
-  const [socket, setSocket] = useState<Socket | null>(null);
-
   const reportList = useReports();
   const areaList = useAreas();
   const [selectedId, setSelectedId] = useState<string>("");
@@ -75,9 +73,25 @@ export function HomeScreen() {
       epp: "",
       tiempo: "",
       deleted: true,
-      _id: ""
+      _id: "",
+      supervisor: ""
     }
   ]);
+  
+  const handleUpdateCards = () => {
+    // Actualiza el estado de las cartas con la nueva lista de userReports
+    const updatedCardsData = reportList.filter((report) => !report.Deleted).map((report: Report, index: number) => ({
+      id: index + 1,
+      backgroundImage: report.imageUrls[0],
+      zona: report.areaName,
+      epp: report.EPPs.join("   "),
+      tiempo: moment(report.date).format('D/M/YYYY     H:mm'),
+      deleted: report.Deleted,
+      _id: report._id,
+      supervisor: report.supervisor || "Supervisor no registrado"
+    }));
+    setCardsData(updatedCardsData);
+  };
   
   const [selected, setSelected] = useState("");
 
@@ -91,23 +105,15 @@ export function HomeScreen() {
     setModal1(false);
   }
 
-  useEffect(() => {
-    setSocket(io('https://rest-ai-dev-cmqn.2.us-1.fl0.io')); // Conectar al servidor
-  }, []);
-
-  useEffect(() => {
-    const updatedCardsData = reportList.map((report: Report, index: number) => ({
-      id: index + 1,
-      backgroundImage: report.imageUrls[0],
-      zona: report.areaName,
-      epp: report.EPPs.join("   "),
-      tiempo: moment(report.date).utcOffset(-5).format('D/M/YYYY     H:mm'),
-      deleted: report.Deleted,
-      _id: report._id
-    }));
-  
-    setCardsData(updatedCardsData);
-  }, [reportList, showMessage]);
+    useEffect(() => {
+      // Configura el socket y suscripción al evento 'server:updateCards'
+      const socket = io('https://rest-ai-dev-cmqn.2.us-1.fl0.io');
+    
+      // Limpia el efecto al desmontar el componente
+      return () => {
+        socket.disconnect(); // Desconecta el socket cuando el componente se desmonta
+      };
+    }, []);
 
   const handleRedButtonPress = async (id: number) => {
     const updatedCardsData = [...cardsData]; // Hacer una copia de las cartas existentes
@@ -126,18 +132,20 @@ export function HomeScreen() {
           {
             text: "Sí, descartar",
             onPress: async () => {
+              
               try {
                 await axios.put(
                   `${URL}/company/${COMPANY_ID}/incidents/${updatedCardsData[selectedIndex]._id}`,
                   { Reported: false, Deleted: true }
                 );
-                updatedCardsData.splice(selectedIndex, 1);
-                setCardsData(updatedCardsData);
-                setMessage('La carta fue eliminada exitosamente.');
+                setMessage('El incidente fue eliminado exitosamente.');
                 setShowMessage(true);
-                setTimeout(() => setShowMessage(false), 5000);
+                setTimeout(() => setShowMessage(false), 3000);
               } catch (error) {
-                console.error(error);
+                console.error("Hubo un error el cual es el siguiente: ",error);
+                setMessage('Hubo un error al intentar descartar el incidente.');
+                setShowMessage(true);
+                setTimeout(() => setShowMessage(false), 3000);
               }
             }
           }
@@ -158,8 +166,8 @@ export function HomeScreen() {
 
   const handleEnvio = async (area: string) => {
     Alert.alert(
-      "¿Estás seguro de enviar este incidente?",
-      "Una vez enviado, no podrás modificar la información.",
+      "¿Estás seguro de registrar este incidente?",
+      "Una vez registrado, no podrás modificar la información.",
       [
         {
           text: "Cancelar",
@@ -167,7 +175,7 @@ export function HomeScreen() {
           style: "cancel"
         },
         {
-          text: "Sí, enviar",
+          text: "Sí, registrar",
           onPress: async () => {
             try {
               const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
@@ -176,9 +184,9 @@ export function HomeScreen() {
                 supervisor: user?.name,
               });
               setModal1(false);
-              setMessage('El incidente fue enviado exitosamente.');
+              setMessage('El incidente fue registrado exitosamente.');
               setShowMessage(true);
-              setTimeout(() => setShowMessage(false), 5000);
+              setTimeout(() => setShowMessage(false), 3000);
               setSelectedId(response.data._id);
               setModalVisible(true);
             } catch (error) {
@@ -189,7 +197,11 @@ export function HomeScreen() {
       ],
       { cancelable: false }
     );
-  }
+  };
+  
+  useEffect(() => {
+    handleUpdateCards();
+  }, [reportList]);
 
   const openImagePicker = async () => {
     try {
@@ -228,8 +240,6 @@ export function HomeScreen() {
     }
   }, [isButtonSend, cardsData]);
 
-  const activeCardsData = cardsData.filter((cardData) => !cardData.deleted);
-
   return (
     <SafeAreaView style={styles.container}>
       
@@ -239,7 +249,6 @@ export function HomeScreen() {
       
       <ScrollView horizontal={true} style={styles.scrollView}>
         {cardsData
-          .filter((cardData) => !cardData.deleted)
           .map((cardsData, index) => (
           <Card
             key={index}
@@ -248,11 +257,11 @@ export function HomeScreen() {
             onRedButtonPress={() => handleRedButtonPress(cardsData.id)}
             onImagePress={() => {}}
             zona={cardsData.zona}
-            epp={cardsData.epp}
+            epp={cardsData.epp.length > 0 ? cardsData.epp : `S: ${cardsData.supervisor}`}
             tiempo={cardsData.tiempo}
           />
         ))}
-        {cardsData.length <= 0 && (
+        {cardsData.length === 0 && (
           <Card
             backgroundImage={LAST_IMG}
             onGreenButtonPress={() => {}}
@@ -263,16 +272,16 @@ export function HomeScreen() {
             tiempo={""}
           />
         )}
-        {activeCardsData.length > 0 && (
+        {cardsData.length > 0 && (
           <View style={styles.notificacion}>
             <Ionicons
               name={"ellipse-sharp"}
               size={50}
-              color={activeCardsData.length > 0 ? "#F44343" : "#cbcdd1"}
+              color={cardsData.length > 0 ? "#F44343" : "#cbcdd1"}
               style={styles.noti}
             />
-            <Text style={activeCardsData.length < 10 ? styles.number1 : styles.number}>
-              {activeCardsData.length}
+            <Text style={cardsData.length < 10 ? styles.number1 : styles.number}>
+              {cardsData.length}
             </Text>
           </View>
         )}
