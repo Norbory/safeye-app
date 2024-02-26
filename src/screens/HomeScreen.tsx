@@ -352,7 +352,7 @@ export function HomeScreen() {
 
           <View style={styles.rowContainer}>
             <TouchableOpacity
-              onPress={() => openImagePicker()}
+              onPress={() => handleEnvio(selected)}
               style={styles.buttonSend}>
               <Text style={styles.modales}>REGISTRAR</Text>
             </TouchableOpacity>
