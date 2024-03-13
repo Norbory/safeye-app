@@ -98,7 +98,7 @@ export function LoginScreen() {
           />
         </View>
         <Pressable style={styles.button} onPress={() => handleLogin()}>
-          <Text style={styles.buttonText}>ENTRAR</Text>
+          <Text style={styles.buttonText}>INGRESAR</Text>
         </Pressable>
         <Text style={styles.helpText}>Por favor complete todos los campos</Text>
       </View>

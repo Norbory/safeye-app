@@ -23,6 +23,7 @@ export function StatisticsScreen() {
   const reportList = useReports();
   const [selectedDateRange, setSelectedDateRange] = useState("semana");
   const [filteredReportList, setFilteredReportList] = useState<Report[]>(reportList);
+  const [title, setTitle] = useState("Estadísticas");
 
   useEffect(() => {
     filterReportsByDateRange();
@@ -34,12 +35,15 @@ export function StatisticsScreen() {
     
     switch (selectedDateRange) {
       case "semana":
+        setTitle("Estadísticas de la última semana")
         endDate.setDate(endDate.getDate() - 7);
         break;
       case "mes":
+        setTitle("Estadísticas del último mes")
         endDate.setMonth(endDate.getMonth() - 1);
         break;
       case "anual":
+        setTitle("Estadísticas del último año")
         endDate.setFullYear(endDate.getFullYear() - 1);
         break;
       default:
@@ -155,7 +159,7 @@ export function StatisticsScreen() {
     <ScrollView style={styles.container}>
       {/* Grafica de barras */}
       <Text style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 18, marginTop: 20 }}>
-        Estadísticas de la semana
+        {title}
       </Text>
       {/* Los botones selectores */}
       <View style={styles.buttonContainer}>

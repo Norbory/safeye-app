@@ -45,21 +45,11 @@ const CustomModal = ({
       const response = await axios.post(API_URL, value);
       console.log("API Response:", response.data);
 
-      const url = `${URL}/company/report/${incidentId}`;
-
-      // Define el directorio local y el nombre del archivo PDF
-      let LocalPath = FileSystem.cacheDirectory + `formulario_${incidentId}.pdf`;
-
-      // Descarga el PDF desde la URL
-      const result = await FileSystem.downloadAsync(url, LocalPath);
-
       // Verifica si la descarga fue exitosa
-      if (result.status === 200) {
+      if (response.status === 200) {
         console.log("Downloaded Successfully");
         // Realiza la solicitud PUT para marcar el incidente como reportado y eliminado
         await axios.put(`${URL}/company/${COMPANY_ID}/incidents/${incidentId}`, { Reported: true, Deleted: true, supervisor: user?.name});
-        // Comparte el PDF descargado
-        await shareAsync(result.uri);
       } else {
         console.log("Download Failed");
       }
@@ -237,7 +227,7 @@ useEffect(() => {
 
               <View style={styles.switchContainer}>
                 <View style={styles.leftColumn}>
-                  <Text style={styles.modalText}>Nombre:</Text>
+                  <Text style={styles.modalText}>Nombre</Text>
                 </View>
                 <View style={styles.rightColumn}>
                   <TextInput
@@ -347,7 +337,7 @@ useEffect(() => {
                           styles.disabledButtonText,
                       ]}
                     >
-                      Enviar Reporte
+                      Registrar Reporte
                     </Text>
                   </Pressable>
 

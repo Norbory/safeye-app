@@ -17,6 +17,7 @@ import {
   Modal,
   TouchableOpacity,
   ImageBackground,
+  Button
 } from "react-native";
 import { SelectList } from 'react-native-dropdown-select-list'
 import { Ionicons } from "@expo/vector-icons";
@@ -34,12 +35,18 @@ import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 import { io, Socket } from 'socket.io-client';
 import CameraComponent from "../components/cameraIn";
-import ImagePicker from 'react-native-image-picker';
+import Voice from '@react-native-voice/voice'
+import { Audio } from 'expo-av';
 
 export function HomeScreen() {
   //Camara settings
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [capturedPhotoUri, setCapturedPhotoUri] = useState("");
+
+  //Audio settings
+  const [recording, setRecording] = useState();
+  const [permissionResponse, requestPermission] = Audio.usePermissions();
+  const [recordedText, setRecordedText] = useState('');  
 
   const openCamera = () => {
     setIsCameraOpen(true);
@@ -95,6 +102,54 @@ export function HomeScreen() {
   
   const [selected, setSelected] = useState("");
 
+  //Audio functions
+  async function startRecording() {
+    try {
+      if (permissionResponse?.status !== 'granted') {
+        console.log('Requesting permission..');
+        await requestPermission();
+      }
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      });
+
+      console.log('Starting recording..');
+      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HighQuality);
+      setRecording(recording);
+      console.log('Recording started');
+    } catch (err) {
+      console.error('Failed to start recording', err);
+    }
+  }
+
+  async function stopRecording() {
+    console.log('Stopping recording..');
+    setRecording(undefined);
+    await recording.stopAndUnloadAsync();
+    await Audio.setAudioModeAsync(
+      {
+        allowsRecordingIOS: false,
+      }
+    );
+    const uri = recording.getURI();
+    console.log('Recording stopped and stored at', uri);
+    await transcribeRecording(uri);
+  }
+
+  async function transcribeRecording(uri: any) {
+    try {
+      const text = await SpeechToText.transcribeFromFile(uri, {
+        apiKey: 'TU_API_KEY', //Reemplaza TU_API_KEY con tu clave de API de Google Cloud
+        languageCode: 'es-PE',
+      });
+      console.log('Transcription:', text);
+      setRecordedText(text);
+    } catch (err) {
+      console.error('Failed to transcribe recording', err);
+    }
+  }
+
   const data = areaList.map((area: Area) => ({key: area._id, value: area.name}));
 
   const addNewCard = async () =>{
@@ -105,16 +160,17 @@ export function HomeScreen() {
     setModal1(false);
   }
 
-    useEffect(() => {
-      // Configura el socket y suscripción al evento 'server:updateCards'
-      const socket = io('https://rest-ai-dev-cmqn.2.us-1.fl0.io');
-    
-      // Limpia el efecto al desmontar el componente
-      return () => {
-        socket.disconnect(); // Desconecta el socket cuando el componente se desmonta
-      };
-    }, []);
+  useEffect(() => {
+    // Configura el socket y suscripción al evento 'server:updateCards'
+    const socket = io('https://rest-ai-dev-cmqn.2.us-1.fl0.io');
+  
+    // Limpia el efecto al desmontar el componente
+    return () => {
+      socket.disconnect(); // Desconecta el socket cuando el componente se desmonta
+    };
+  }, []);
 
+  
   const handleRedButtonPress = async (id: number) => {
     const updatedCardsData = [...cardsData]; // Hacer una copia de las cartas existentes
     const selectedIndex = updatedCardsData.findIndex((card) => card.id === id);
@@ -178,12 +234,15 @@ export function HomeScreen() {
           text: "Sí, registrar",
           onPress: async () => {
             try {
+              // Enviar la solicitud POST
               const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
-                ID_area: area,
+                ID_area: area, // Adjuntar el ID del área
                 ID_Cam: "6505633501f1e713f9f60f70",
-                supervisor: user?.name,
+                supervisor: user?.name, // Adjuntar el nombre del supervisor
+                imageUrls: [`"${capturedPhotoUri}"`], // Adjuntar la imagen en base64
               });
               setModal1(false);
+              setCapturedPhotoUri("");
               setMessage('El incidente fue registrado exitosamente.');
               setShowMessage(true);
               setTimeout(() => setShowMessage(false), 3000);
@@ -202,26 +261,6 @@ export function HomeScreen() {
   useEffect(() => {
     handleUpdateCards();
   }, [reportList]);
-
-  const openImagePicker = async () => {
-    try {
-      const response = await fetch(capturedPhotoUri);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.status} ${response.statusText}`);
-      }
-      const blob = await response.blob();
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64String = (reader.result as string).replace('data:', '').replace(/^.+,/, '');
-        if (base64String) {
-          console.log("Se envió la imagen");
-        }
-      };
-      reader.readAsDataURL(blob);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
 
   useEffect(() => {
     if (isButtonSend) {
@@ -242,7 +281,6 @@ export function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      
       <Pressable style={styles.add} onPress={()=>addNewCard()}>
         <Text style={styles.empresa}>Añadir incidente +</Text>
       </Pressable>
@@ -349,7 +387,13 @@ export function HomeScreen() {
               />
             </TouchableOpacity>
           </View>
-
+          <Button
+            title={recording ? 'Stop Recording' : 'Start Recording'}
+            onPress={recording ? stopRecording : startRecording}
+          />
+          {recordedText !== '' && (
+            <Text style={styles.text}>Recorded Text: {recordedText}</Text>
+          )}
           <View style={styles.rowContainer}>
             <TouchableOpacity
               onPress={() => handleEnvio(selected)}
@@ -541,5 +585,9 @@ const styles = StyleSheet.create({
     elevation: 2,
     marginHorizontal: 20,
     backgroundColor: '#4a4e69',
+  },
+  text: {
+    marginTop: 10,
+    fontSize: 16,
   },
 });
