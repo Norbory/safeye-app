@@ -43,11 +43,6 @@ export function HomeScreen() {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [capturedPhotoUri, setCapturedPhotoUri] = useState("");
 
-  //Audio settings
-  const [recording, setRecording] = useState();
-  const [permissionResponse, requestPermission] = Audio.usePermissions();
-  const [recordedText, setRecordedText] = useState('');  
-
   const openCamera = () => {
     setIsCameraOpen(true);
   };
@@ -102,55 +97,39 @@ export function HomeScreen() {
   
   const [selected, setSelected] = useState("");
 
-  //Audio functions
-  async function startRecording() {
-    try {
-      if (permissionResponse?.status !== 'granted') {
-        console.log('Requesting permission..');
-        await requestPermission();
-      }
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      });
-
-      console.log('Starting recording..');
-      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HighQuality);
-      setRecording(recording);
-      console.log('Recording started');
-    } catch (err) {
-      console.error('Failed to start recording', err);
-    }
-  }
-
-  async function stopRecording() {
-    console.log('Stopping recording..');
-    setRecording(undefined);
-    await recording.stopAndUnloadAsync();
-    await Audio.setAudioModeAsync(
-      {
-        allowsRecordingIOS: false,
-      }
-    );
-    const uri = recording.getURI();
-    console.log('Recording stopped and stored at', uri);
-    await transcribeRecording(uri);
-  }
-
-  async function transcribeRecording(uri: any) {
-    try {
-      const text = await SpeechToText.transcribeFromFile(uri, {
-        apiKey: 'TU_API_KEY', //Reemplaza TU_API_KEY con tu clave de API de Google Cloud
-        languageCode: 'es-PE',
-      });
-      console.log('Transcription:', text);
-      setRecordedText(text);
-    } catch (err) {
-      console.error('Failed to transcribe recording', err);
-    }
-  }
-
   const data = areaList.map((area: Area) => ({key: area._id, value: area.name}));
+
+  //Voice settings
+  let [started, setStarted] = useState(false);
+  let [results, setResults] = useState([]);
+
+  //Recording settings
+  useEffect(() => {
+    Voice.onSpeechError = onSpeechError;
+    Voice.onSpeechResults = onSpeechResults;
+
+    return () => {
+      Voice.destroy().then(Voice.removeAllListeners);
+    }
+  }, []);
+
+  const startSpeechToText = async () => {
+    await Voice.start("en-US");
+    setStarted(true);
+  };
+
+  const stopSpeechToText = async () => {
+    await Voice.stop();
+    setStarted(false);
+  };
+
+  const onSpeechResults = (result: any) => {
+    setResults(result.value);
+  };
+
+  const onSpeechError = (error: any) => {
+    console.log(error);
+  };
 
   const addNewCard = async () =>{
     setModal1(true);
@@ -162,7 +141,7 @@ export function HomeScreen() {
 
   useEffect(() => {
     // Configura el socket y suscripción al evento 'server:updateCards'
-    const socket = io('https://rest-ai-dev-cmqn.2.us-1.fl0.io');
+    const socket = io(`${URL}`);
   
     // Limpia el efecto al desmontar el componente
     return () => {
@@ -387,13 +366,9 @@ export function HomeScreen() {
               />
             </TouchableOpacity>
           </View>
-          <Button
-            title={recording ? 'Stop Recording' : 'Start Recording'}
-            onPress={recording ? stopRecording : startRecording}
-          />
-          {recordedText !== '' && (
-            <Text style={styles.text}>Recorded Text: {recordedText}</Text>
-          )}
+          {!started ? <Button title='Start Speech to Text' onPress={startSpeechToText} /> : undefined}
+          {started ? <Button title='Stop Speech to Text' onPress={stopSpeechToText} /> : undefined}
+          {results.map((result, index) => <Text key={index}>{result}</Text>)}
           <View style={styles.rowContainer}>
             <TouchableOpacity
               onPress={() => handleEnvio(selected)}
