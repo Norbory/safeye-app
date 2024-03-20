@@ -203,10 +203,9 @@ export function HomeScreen() {
   }, []);
 
   const registerToken = async (token: string) => {
-    const res = await axios.post(`${URL}/company/${COMPANY_ID}/tokens`, {
+    await axios.post(`${URL}/company/${COMPANY_ID}/tokens`, {
       token
     });
-    setIdem(res.data._id);
   };
 
   const startSpeechToText = async () => {
