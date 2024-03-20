@@ -39,7 +39,6 @@ import Voice from '@react-native-voice/voice'
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
-import { getToken } from "../utils/AuthUtils";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -96,7 +95,6 @@ async function registerForPushNotificationsAsync() {
     token = await Notifications.getExpoPushTokenAsync({
       projectId: Constants.expoConfig?.extra?.eas.projectId,
     });
-    console.log(token);
   } else {
     alert('Must use physical device for Push Notifications');
   }
@@ -156,6 +154,8 @@ export function HomeScreen() {
   const selectedCardRef = useRef(null); 
   const idRef = useRef(null); 
 
+  const [idem, setIdem] = useState<string>("");
+
   const [cardsData, setCardsData] = useState([
     {
       id: 1,
@@ -203,9 +203,10 @@ export function HomeScreen() {
   }, []);
 
   const registerToken = async (token: string) => {
-    await axios.post(`${URL}/company/${COMPANY_ID}/tokens`, {
+    const res = await axios.post(`${URL}/company/${COMPANY_ID}/tokens`, {
       token
     });
+    setIdem(res.data._id);
   };
 
   const startSpeechToText = async () => {
