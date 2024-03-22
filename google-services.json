@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "117615229827",
+    "firebase_url": "https://harkai-2024-default-rtdb.firebaseio.com",
+    "project_id": "harkai-2024",
+    "storage_bucket": "harkai-2024.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117615229827:android:6b329d6d69b50103f754b6",
+        "android_client_info": {
+          "package_name": "com.norbory.safeyeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL4VxhofkDuobcb7qFdowOOOi1sImthTw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

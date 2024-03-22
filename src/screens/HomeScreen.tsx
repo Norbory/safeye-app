@@ -114,7 +114,7 @@ export function HomeScreen() {
   const responseListener = useRef();
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    registerForPushNotificationsAsync().then(token => {setExpoPushToken(token);registerToken(token);});
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
@@ -325,11 +325,11 @@ export function HomeScreen() {
     handleUpdateCards();
   }, [reportList]);
 
-  useEffect(() => {
-    if (expoPushToken){
-      registerToken(expoPushToken);
-    }
-  }, [expoPushToken]);
+  // useEffect(() => {
+  //   if (expoPushToken){
+  //     registerToken(expoPushToken);
+  //   }
+  // }, [expoPushToken]);
 
   useEffect(() => {
     if (isButtonSend) {
@@ -393,7 +393,7 @@ export function HomeScreen() {
           </View>
         )}
       </ScrollView>
-
+      <Text>{expoPushToken}</Text>
       {isModalVisible && (
         <CustomModal
           isModalVisible={isModalVisible}
