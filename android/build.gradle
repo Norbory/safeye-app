@@ -19,6 +19,7 @@ buildscript {
     dependencies {
         classpath('com.android.tools.build:gradle:7.4.2')
         classpath('com.facebook.react:react-native-gradle-plugin')
+        classpath('com.google.gms:google-services:4.3.3')
     }
 }
 
@@ -42,3 +43,5 @@ allprojects {
         maven { url 'https://www.jitpack.io' }
     }
 }
+
+apply plugin: 'com.google.gms.google-services'
