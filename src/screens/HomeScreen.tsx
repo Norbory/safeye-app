@@ -11,6 +11,7 @@ import {
   Pressable,
   Modal,
   TouchableOpacity,
+  Image
 } from "react-native";
 import { SelectList } from 'react-native-dropdown-select-list'
 import { Ionicons } from "@expo/vector-icons";
@@ -26,25 +27,15 @@ import useAreas  from "../hooks/useAreas";
 import { Report, Area } from "../types";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
-// import CameraComponent from "../components/cameraIn";
+import * as ImagePicker from 'expo-image-picker';
 
 export function HomeScreen() {
-  //Camara settings
-  // const [isCameraOpen, setIsCameraOpen] = useState(false);
-  // const [capturedPhotoUri, setCapturedPhotoUri] = useState("");
 
-  // const openCamera = () => {
-  //   setIsCameraOpen(true);
-  // };
-
-  // const closeCamera = (photoUri: string) => {
-  //   setIsCameraOpen(false);
-  //   setCapturedPhotoUri(photoUri);
-  // };
   const { user } = useAuth();
 
   const [showMessage, setShowMessage] = useState(false);
   const [message, setMessage] = useState('');
+  const [imagenPerfil, setImagenPerfil] = useState("");
 
   const reportList = useReports();
   const areaList = useAreas();
@@ -81,7 +72,91 @@ export function HomeScreen() {
     setModal1(false);
   }
 
-  
+  const takeProfilePicture = async () => {
+    try {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Lo siento, necesitamos permisos de cámara para tomar una foto');
+            return;
+        }
+        let result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            cameraType: ImagePicker.CameraType.front,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+        if (!result.canceled) {
+            saveImage(result.assets[0].uri);
+        }
+
+    } catch (error) {
+        alert('Error al tomar la foto');
+    }
+}
+
+const saveImage = async (image: any) => {
+    try {
+        setImagenPerfil(image);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const changeProfilePicture = async () => {
+    try{
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Lo siento, necesitamos permisos de galería para seleccionar una foto');
+            return;
+        }
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [1, 1],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            saveImage(result.assets[0].uri);
+        }
+    } catch (error) {
+        alert('Error al seleccionar la foto');
+    }
+  }
+
+  const cloudinaryUpload = async (photo: string) => {
+    const data = new FormData();
+    const photoSplit = photo.split('/');
+    const name = photoSplit.pop() || 'uploaded_image';
+    const match = /\.(\w+)$/.exec(name);
+    const type = match ? `image/${match[1]}` : `image`;
+
+    const photoBlob = await fetch(photo).then(r => r.blob());
+
+    data.append('file', { uri: photo, name, type, blob: photoBlob });
+    data.append('upload_preset', 'my_incidents');
+    data.append("cloud_name", "dmbtlv0hg");
+
+    fetch("https://api.cloudinary.com/v1_1/dmbtlv0hg/image/upload", {
+        method: "post",
+        body: data
+    }).then(res => res.json()).
+    then(async(data) => {
+      console.log(data.secure_url);
+      // const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents/image`, {
+      //     ID_area: selected, // Adjuntar el ID del área
+      //     ID_Cam: "6505633501f1e713f9f60f70",
+      //     supervisor: user?.name, // Adjuntar el nombre del supervisor
+      //     imageUrls: [data.secure_url], // Adjuntar url de la imagen
+      // });
+      // if (response.status === 200) {
+      //   Alert.alert('Exito', 'Incidente registrado con éxito');
+      // }
+    }).catch(error => {
+        Alert.alert('Error', error.message);
+    });
+  }
 
   const handleRedButtonPress = async (id: number) => {
     const updatedCardsData = [...cardsData]; // Hacer una copia de las cartas existentes
@@ -132,7 +207,7 @@ export function HomeScreen() {
       setModalVisible(true);
   }};
 
-  const handleEnvio = async (area: string) => {
+  const handleEnvio = async () => {
     Alert.alert(
       "¿Estás seguro de registrar este incidente?",
       "Una vez registrado, no podrás modificar la información.",
@@ -146,17 +221,16 @@ export function HomeScreen() {
           text: "Sí, registrar",
           onPress: async () => {
             try {
-              const response = await axios.post(`${URL}/company/${COMPANY_ID}/incidents`, {
-                ID_area: area,
-                ID_Cam: "6505633501f1e713f9f60f70",
-                supervisor: user?.name,
-              });
+              if (selected === "") {
+                Alert.alert('Error', 'Por favor selecciona un área');
+                return;
+              } else {
+                cloudinaryUpload(imagenPerfil);
+              }
               setModal1(false);
               setMessage('El incidente fue registrado exitosamente.');
               setShowMessage(true);
               setTimeout(() => setShowMessage(false), 3000);
-              setSelectedId(response.data._id);
-              setModalVisible(true);
             } catch (error) {
               console.error("Error al enviar:", error);
             }
@@ -209,7 +283,7 @@ export function HomeScreen() {
     }
   }, [isButtonSend, cardsData]);
 
-  const activeCardsData = cardsData.filter((cardData) => !cardData.deleted).filter(cardData => cardData.epp.length > 0);
+  const activeCardsData = cardsData.filter((cardData) => !cardData.deleted);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -296,6 +370,38 @@ export function HomeScreen() {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
           <Text style={styles.title}>Añade una desviación</Text>
+          <Image 
+            source={{ uri: imagenPerfil !== "" ? imagenPerfil : LAST_IMG }}
+            style={{ width: 200, height: 200, borderRadius: 10, paddingVertical: 20, alignSelf: "center"}}
+          />
+          <View style={{flexDirection:"row", justifyContent:"space-around"}}>
+            <TouchableOpacity
+                style={{
+                    
+                    padding: 10,
+                    borderRadius: 20,
+                    
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+                onPress={takeProfilePicture}
+            >
+                <Ionicons name="scan" size={24} color={'#000'}/>
+                <Text style={{fontSize:16, color:'#000'}}>Foto</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={{
+                    padding: 10,
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+                onPress={changeProfilePicture}
+            >
+                <Ionicons name="images" size={24} color={'#000'}/>
+                <Text style={{fontSize:16, color:'#000'}}>Galería</Text>
+            </TouchableOpacity>
+          </View>
+
           <Text style={styles.subtitle}>Zona donde ocurrio:</Text>
           <SelectList 
             setSelected={(key: React.SetStateAction<string>) => setSelected(key)} 
@@ -304,7 +410,7 @@ export function HomeScreen() {
           />
           <View style={styles.rowContainer}>
             <TouchableOpacity
-              onPress={() => handleEnvio(selected)}
+              onPress={() => handleEnvio()}
               style={styles.buttonSend}>
               <Text style={styles.modales}>REGISTRAR</Text>
             </TouchableOpacity>
